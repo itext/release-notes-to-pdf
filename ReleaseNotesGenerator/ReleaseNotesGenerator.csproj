@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>8</LangVersion>
+        <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
+      <PackageReference Include="itext.bouncy-castle-adapter" Version="9.0.0" />
+        <PackageReference Include="itext.commons" Version="9.0.0" />
+      <PackageReference Include="itext7.pdfhtml" Version="6.0.0" />
+        <PackageReference Include="Pkcs11Interop" Version="5.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="resources\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="resources\kb.itextpdf.com\__assets-c2adfbc7-08e1-45d7-9879-4f5707dce348\css\" />
+      <Folder Include="resources\kb.itextpdf.com\__assets-c8b5fc36-7492-425a-8d1f-0ecc2748ed70\css\" />
+      <Folder Include="resources\kb.itextpdf.com\__theme\css\" />
+    </ItemGroup>
+</Project>

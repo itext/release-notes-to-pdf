@@ -1,0 +1,70 @@
+<div>
+    <h3>Addendum: Verify the signature using iText (C#)</h3>
+    <style>
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: .6em;
+        }
+        .keyword { color: #0000FF; font-weight: bold; }
+        .type { color: #2B91AF; }
+        .string { color: #A31515; }
+        .comment { color: #008000; }
+        .method { color: #74531F; }
+        .namespace { color: #3A6F7E; }
+    </style>
+    <pre>
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> iText.Commons.Bouncycastle.Cert;
+<span class="keyword">using</span> iText.Commons.Bouncycastle.Crypto;
+<span class="keyword">using</span> iText.Commons.Utils;
+<span class="keyword">using</span> iText.Kernel.Exceptions;
+<span class="keyword">using</span> iText.Kernel.Pdf;
+<span class="keyword">using</span> iText.Signatures;
+<span class="keyword">using</span> iText.Signatures.Validation;
+<span class="keyword">using</span> iText.Signatures.Validation.Context;
+<span class="keyword">using</span> iText.Signatures.Validation.Report;
+
+<span class="keyword">namespace</span> <span class="namespace">ValidationExample</span> {
+    <span class="keyword">class</span> <span class="type">Program</span> {
+        <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Main</span>(<span class="type">string</span>[] args) {
+            <span class="keyword">var</span> path = <span class="string">@"&lt;path/to/signed/pdf&gt;"</span>;
+            <span class="keyword">var</span> properties = <span class="method">GetSignatureValidationProperties</span>();
+            properties.<span class="method">AddOcspClient</span>(<span class="keyword">new</span> <span class="type">ValidationOcspClient</span>());
+            properties.<span class="method">AddCrlClient</span>(<span class="keyword">new</span> <span class="type">CrlClientOnline</span>());
+            <span class="keyword">var</span> certificateRetriever = <span class="keyword">new</span> <span class="type">IssuingCertificateRetriever</span>();
+            <span class="keyword">var</span> validatorChainBuilder = <span class="keyword">new</span> <span class="type">ValidatorChainBuilder</span>();
+            validatorChainBuilder
+                .<span class="method">WithIssuingCertificateRetrieverFactory</span>(
+                    () => certificateRetriever)
+                .<span class="method">WithSignatureValidationProperties</span>(properties);
+            <span class="type">ValidationReport</span> report;
+            <span class="keyword">using</span> (<span class="keyword">var</span> document = <span class="keyword">new</span> <span class="type">PdfDocument</span>(<span class="keyword">new</span> <span class="type">PdfReader</span>(path))) {
+                <span class="keyword">var</span> validator = validatorChainBuilder.<span class="method">BuildSignatureValidator</span>(document);
+                <span class="comment">// Validate all signatures in the document.</span>
+                report = validator.<span class="method">ValidateSignatures</span>();
+            }
+            <span class="type">Console</span>.<span class="method">WriteLine</span>(report.<span class="method">ToString</span>());
+        }
+
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">SignatureValidationProperties</span> <span class="method">GetSignatureValidationProperties</span>() {
+            <span class="keyword">var</span> properties = <span class="keyword">new</span> <span class="type">SignatureValidationProperties</span>();
+            properties.<span class="method">SetRevocationOnlineFetching</span>(<span class="type">ValidatorContexts</span>.<span class="method">All</span>(), <span class="type">CertificateSources</span>.<span class="method">All</span>()
+                 , <span class="type">TimeBasedContexts</span>.<span class="method">All</span>(),
+                  <span class="type">SignatureValidationProperties</span>.OnlineFetching.ALWAYS_FETCH);
+             properties.<span class="method">SetFreshness</span>(<span class="type">ValidatorContexts</span>.<span class="method">All</span>(), <span class="type">CertificateSources</span>.<span class="method">All</span>(), <span class="type">TimeBasedContexts</span>.<span class="method">Of</span>(
+                 <span class="type">TimeBasedContext</span>.HISTORICAL), <span class="type">TimeSpan</span>.<span class="method">FromDays</span>(-5));
+             properties.<span class="method">SetContinueAfterFailure</span>(
+                 <span class="type">ValidatorContexts</span>.<span class="method">Of</span>(<span class="type">ValidatorContext</span>.OCSP_VALIDATOR, 
+                 <span class="type">ValidatorContext</span>.CRL_VALIDATOR),
+                 <span class="type">CertificateSources</span>.<span class="method">Of</span>(<span class="type">CertificateSource</span>.CRL_ISSUER,
+                 <span class="type">CertificateSource</span>.OCSP_ISSUER, <span class="type">CertificateSource</span>
+                     .CERT_ISSUER), <span class="keyword">false</span>);
+            <span class="keyword">return</span> properties;
+        }
+    }
+}
+</pre>
+</div>

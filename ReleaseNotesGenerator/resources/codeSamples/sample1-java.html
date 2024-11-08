@@ -1,0 +1,71 @@
+<div style="font-size: .8em">
+    <style>
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: .6em;
+        }
+        .keyword { color: #0000FF; font-weight: bold; }
+        .type { color: #2B91AF; }
+        .string { color: #A31515; }
+        .comment { color: #008000; }
+        .method { color: #74531F; }
+        .package { color: #3A6F7E; }
+    </style> 
+    <h3>Addendum: Signature validation example java</h3>
+    <pre>
+<span class="keyword">package</span> <span class="package">com.itextpdf.signatures</span>;
+<span class="keyword">import</span> com.itextpdf.kernel.pdf.PdfDocument;
+<span class="keyword">import</span> com.itextpdf.kernel.pdf.PdfReader;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.SignatureValidationProperties;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.SignatureValidator;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.ValidationOcspClient;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.ValidatorChainBuilder;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.CertificateSource;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.CertificateSources;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.TimeBasedContext;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.TimeBasedContexts;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.ValidatorContext;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.context.ValidatorContexts;
+<span class="keyword">import</span> com.itextpdf.signatures.validation.report.ValidationReport;
+<span class="keyword">import</span> java.io.IOException;
+<span class="keyword">import</span> java.time.Duration;
+
+<span class="keyword">public class</span> <span class="type">ValidationExample</span> {
+    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
+        <span class="type">String</span> path = <span class="string">"&lt;path/to/signed/pdf&gt;"</span>;
+        <span class="type">SignatureValidationProperties</span> properties = <span class="method">GetSignatureValidationProperties</span>();
+        properties.<span class="method">addOcspClient</span>(<span class="keyword">new</span> <span class="type">ValidationOcspClient</span>());
+        properties.<span class="method">addCrlClient</span>(<span class="keyword">new</span> <span class="type">CrlClientOnline</span>());
+        <span class="type">IssuingCertificateRetriever</span> certificateRetriever = <span class="keyword">new</span> <span class="type">IssuingCertificateRetriever</span>();
+        <span class="type">ValidatorChainBuilder</span> validatorChainBuilder = <span class="keyword">new</span> <span class="type">ValidatorChainBuilder</span>();
+        validatorChainBuilder.<span class="method">withIssuingCertificateRetrieverFactory</span>(
+                () -> certificateRetriever).<span class="method">withSignatureValidationProperties</span>(properties);
+        <span class="type">ValidationReport</span> report;
+        <span class="keyword">try</span> (<span class="type">PdfDocument</span> document = <span class="keyword">new</span> <span class="type">PdfDocument</span>(<span class="keyword">new</span> <span class="type">PdfReader</span>(path))) {
+            <span class="type">SignatureValidator</span> validator = validatorChainBuilder.<span class="method">buildSignatureValidator</span>(document);
+            <span class="comment">// Validate all signatures in the document.</span>
+            report = validator.<span class="method">validateSignatures</span>();
+        } <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
+            <span class="keyword">throw new</span> <span class="type">RuntimeException</span>(e);
+        }
+        <span class="type">System</span>.out.<span class="method">println</span>(report);
+    }
+
+    <span class="keyword">private static</span> <span class="type">SignatureValidationProperties</span> <span class="method">GetSignatureValidationProperties</span>() {
+        <span class="type">SignatureValidationProperties</span> properties = <span class="keyword">new</span> <span class="type">SignatureValidationProperties</span>();
+        properties.<span class="method">setRevocationOnlineFetching</span>(<span class="type">ValidatorContexts</span>.<span class="method">all</span>(), <span class="type">CertificateSources</span>.<span class="method">all</span>(), <span class="type">TimeBasedContexts</span>
+                .<span class="method">all</span>(), <span class="type">SignatureValidationProperties</span>.OnlineFetching.ALWAYS_FETCH);
+        properties.<span class="method">setFreshness</span>(<span class="type">ValidatorContexts</span>.<span class="method">All</span>(), <span class="type">CertificateSources</span>.<span class="method">all</span>(), <span class="type">TimeBasedContexts</span>.<span class="method">of</span>(
+                <span class="type">TimeBasedContext</span>.HISTORICAL), <span class="type">Duration</span>.<span class="method">ofDays</span>(-5));
+        properties.<span class="method">setContinueAfterFailure</span>(
+                <span class="type">ValidatorContexts</span>.<span class="method">of</span>(<span class="type">ValidatorContext</span>.OCSP_VALIDATOR, <span class="type">ValidatorContext</span>.CRL_VALIDATOR),
+                <span class="type">CertificateSources</span>.<span class="method">of</span>(<span class="type">CertificateSource</span>.CRL_ISSUER, <span class="type">CertificateSource</span>.OCSP_ISSUER, <span class="type">CertificateSource</span>
+                        .CERT_ISSUER), <span class="keyword">false</span>);
+        <span class="keyword">return</span> properties;
+    }
+}
+</pre>
+</div>
