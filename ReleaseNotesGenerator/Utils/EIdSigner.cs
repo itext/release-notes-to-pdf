@@ -47,7 +47,7 @@ namespace ReleaseNotesGenerator.Utils {
         }
 
 
-        public void Sign(int pageNumber, int xCoordinate, int yCoordinate, string reason, string location) {
+        public void Sign(string fieldName, string reason, string location) {
             using var signature = new Pkcs11Signature(EidRelatedConfigs[countryToUseForSigning].Item1);
             using var pdfReader = new PdfReader(fileName);
             using var result = File.Create(fileToSign);
@@ -88,7 +88,7 @@ namespace ReleaseNotesGenerator.Utils {
 
             var signerProperties = new SignerProperties();
 
-            signerProperties.SetFieldName("signature");
+            signerProperties.SetFieldName(fieldName);
             pdfSigner.SetSignerProperties(signerProperties);
 
             var imageData = ImageDataFactory.Create(Path.Combine(Directory.GetCurrentDirectory(),
@@ -106,9 +106,7 @@ namespace ReleaseNotesGenerator.Utils {
             var font = PdfFontFactory.CreateFont(Path.Combine(Directory.GetCurrentDirectory(), resourceDirectory,
                 "font", "NotoSans-Regular.ttf"));
             signatureAppearance.SetFont(font);
-            signerProperties.SetPageNumber(pageNumber)
-                .SetPageRect(new Rectangle(xCoordinate, yCoordinate, 400, 200))
-                .SetSignatureAppearance(signatureAppearance);
+            signerProperties.SetSignatureAppearance(signatureAppearance);
 
             pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 1024 * 10,
                 PdfSigner.CryptoStandard.CMS);

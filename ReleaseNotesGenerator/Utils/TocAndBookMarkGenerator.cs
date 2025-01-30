@@ -1,8 +1,8 @@
 using System;
+using System.Text;
 using HtmlAgilityPack;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Action;
-using iText.Kernel.Pdf.Navigation;
 
 namespace ReleaseNotesGenerator.Utils {
     /// <summary>
@@ -17,48 +17,82 @@ namespace ReleaseNotesGenerator.Utils {
             this.pdfDocument = pdfDocument;
         }
 
-        public void AddTocAndBookMark() {
+        public void AddTocAndBookMark()
+        {
+            StringBuilder tocStyles = new StringBuilder();
+            var tocElements = htmDocument.DocumentNode.SelectNodes("//h2");
+
+            foreach (HtmlNode elem in tocElements)
+            {
+                string id = elem.GetAttributeValue("id", Guid.NewGuid().ToString());
+                elem.SetAttributeValue("id", id);
+
+                tocStyles.Append("*[data-toc-id=\"")
+                    .Append(id)
+                    .Append("\"] .toc-page-ref::after {\ncontent: target-counter(\"#")
+                    .Append(id)
+                    .Append("\", page) \n }\n");
+            }
+
             var tableOfContentsTitle = "Table of Contents";
-            var tocTitleNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) {
-                Name = "h2",
-                InnerHtml = tableOfContentsTitle
-            };
+            var tocTitleNode =
+                new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "h2", InnerHtml = tableOfContentsTitle };
             htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(3, tocTitleNode);
-            var tocTableNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) {
-                Name = "ul"
-            };
-            tocTableNode.SetAttributeValue("class", "page-break-me");
+
+            var tocTableNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "table" };
+            tocTableNode.SetAttributeValue("style", "width: 100%; border: none; border-collapse: collapse;");
 
             var bookMarks = pdfDocument.GetOutlines(false);
             bookMarks.SetTitle("Bookmarks");
 
-            //Get all h1 nodes and add a class to them
-            var nodesThatShouldBeInTocAndBookMarks = htmDocument.DocumentNode.SelectNodes("//h2");
-            foreach (var h1Node in nodesThatShouldBeInTocAndBookMarks) {
-                if (h1Node.InnerText == tableOfContentsTitle) {
+            foreach (var h2Node in tocElements)
+            {
+                if (h2Node.InnerText == tableOfContentsTitle)
+                {
                     continue;
                 }
 
-                var tdNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) {
-                    Name = "li"
-                };
-                var aNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) {
-                    Name = "a"
-                };
-                if (string.IsNullOrEmpty(h1Node.Id)) {
-                    h1Node.Id = Guid.NewGuid().ToString();
+                if (string.IsNullOrEmpty(h2Node.Id))
+                {
+                    h2Node.Id = Guid.NewGuid().ToString();
                 }
 
-                aNode.Attributes.Append("href", "#" + h1Node.Id);
-                aNode.InnerHtml = h1Node.InnerText;
-                tdNode.ChildNodes.Append(aNode);
-                tocTableNode.ChildNodes.Append(tdNode);
+                var tocRow = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "tr" };
+                tocRow.SetAttributeValue("data-toc-id", h2Node.Id);
+                tocRow.SetAttributeValue("style", "border: none;");
 
-                var outline = bookMarks.AddOutline(h1Node.InnerText);
-                outline.AddAction(PdfAction.CreateGoTo(h1Node.Id));
+                var titleCell = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "td" };
+                titleCell.SetAttributeValue("style", "border: none;");
+
+                var titleLink =
+                    new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "a", InnerHtml = h2Node.InnerText };
+                titleLink.SetAttributeValue("href", "#" + h2Node.Id);
+
+                titleCell.AppendChild(titleLink);
+                tocRow.AppendChild(titleCell);
+
+                var pageCell = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "td" };
+                pageCell.SetAttributeValue("style", "border: none;");
+
+                var pageLink = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "a" };
+                pageLink.SetAttributeValue("href", "#" + h2Node.Id);
+
+                var pageRef = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "span" };
+                pageRef.SetAttributeValue("class", "toc-page-ref");
+
+                pageLink.AppendChild(pageRef);
+                pageCell.AppendChild(pageLink);
+                tocRow.AppendChild(pageCell);
+
+                tocTableNode.AppendChild(tocRow);
+
+                var outline = bookMarks.AddOutline(h2Node.InnerText);
+                outline.AddAction(PdfAction.CreateGoTo(h2Node.Id));
             }
 
             htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(4, tocTableNode);
+            htmDocument.DocumentNode.SelectSingleNode("//head")
+                ?.ChildNodes.Insert(0, HtmlNode.CreateNode("<style>\n\n " + tocStyles + "</style>"));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ReleaseNotesGenerator {
 
 
         //You can change these variables 
-        private const string Version = "9.0.0";
+        private const string Version = "9.1.0-SNAPSHOT";
         private const string Password = "itext";
         private static readonly string FileName = $"release_notes_{Version}.pdf";
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
@@ -34,9 +34,7 @@ namespace ReleaseNotesGenerator {
         private const string PageToConvert = "release-itext-core-9-0.html";
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
-        private const int SignaturePageNumber = 7;
-        private const int SignatureYCoordinate = 300;
-        private const int SignatureXCoordinate = 50;
+        private const string SignatureFieldName = "signature_id";
 
 
         static void Main(string[] args) {
@@ -90,7 +88,7 @@ namespace ReleaseNotesGenerator {
         private static void SignDocument() {
             var signedFileName = FileName.Replace(".pdf", "") + "-pkcs11-signed.pdf";
             new EIdSigner(ResourceDirectory, FileName, signedFileName, CountryToUseForSigning)
-                .Sign(SignaturePageNumber, SignatureXCoordinate, SignatureYCoordinate, SigningReason, SigningLocation);
+                .Sign(SignatureFieldName, SigningReason, SigningLocation);
             var fileInfo = new FileInfo(signedFileName);
             Console.WriteLine("Generated signed release notes for version " + Version + " in " + fileInfo.FullName);
         }

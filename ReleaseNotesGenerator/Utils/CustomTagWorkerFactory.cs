@@ -18,6 +18,11 @@ namespace ReleaseNotesGenerator.Utils {
                 return new SvgWorker(tag, context);
             }
 
+            if (tag.Name().Equals("signature-field"))
+            {
+                return new CustomSignatureTagWorker(tag, context);
+            }
+
             return HTags.Contains(tag.Name())
                 ? new CustomHTagWorker(tag, context)
                 : base.GetCustomTagWorker(tag, context);

@@ -28,60 +28,53 @@
 ```xml
 <report>
    <buildInformation>
-      <releaseDetails id="core" version="1.26.1" buildDate="2024-05-16T16:30:00+02:00"/>
-      <releaseDetails id="validation-model" version="1.26.1" buildDate="2024-05-16T18:13:00+02:00"/>
-      <releaseDetails id="gui" version="1.26.2" buildDate="2024-05-19T13:33:00+02:00"/>
+      <releaseDetails id="core" version="1.26.5" buildDate="2025-01-10T12:08:00+03:00"/>
+      <releaseDetails id="validation-model" version="1.26.5" buildDate="2025-01-10T12:10:00+03:00"/>
+      <releaseDetails id="gui" version="1.26.5" buildDate="2025-01-10T12:43:00+03:00"/>
    </buildInformation>
    <jobs>
       <job>
-         <item size="4010404">
-            <name>
-               D:\other\ReleaseNotesGenerator\ReleaseNotesGenerator\bin\Debug\net8.0\release_notes_9.0.0.pdf
-            </name>
+         <item size="4240502">
+            <name>C:\Users\Admin\Downloads\release_notes_9.1.0-SNAPSHOT-pkcs11-signed.pdf</name>
          </item>
          <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
-            <details passedRules="1744" failedRules="0" passedChecks="58589" failedChecks="0"/>
+            <details passedRules="1744" failedRules="0" passedChecks="80418" failedChecks="0"/>
          </validationReport>
-         <duration start="1731931966000" finish="1731931966298">00:00:00.298</duration>
+         <duration start="1738935478873" finish="1738935479742">00:00:00.869</duration>
       </job>
    </jobs>
    <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
       <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
       <featureReports failedJobs="0">0</featureReports>
       <repairReports failedJobs="0">0</repairReports>
-      <duration start="1731931965996" finish="1731931966304">00:00:00.308</duration>
+      <duration start="1738935478865" finish="1738935479759">00:00:00.894</duration>
    </batchSummary>
 </report>
 ```
 
 ```xml
-This XML file does not appear to have any style information associated with it. The document tree is shown below.
 <report>
-    <buildInformation>
-        <releaseDetails id="core" version="1.26.1" buildDate="2024-05-16T16:30:00+02:00"/>
-        <releaseDetails id="validation-model" version="1.26.1" buildDate="2024-05-16T18:13:00+02:00"/>
-        <releaseDetails id="gui" version="1.26.2" buildDate="2024-05-19T13:33:00+02:00"/>
-    </buildInformation>
-    <jobs>
-        <job>
-            <item size="4010404">
-                <name>
-                    D:\other\ReleaseNotesGenerator\ReleaseNotesGenerator\bin\Debug\net8.0\release_notes_9.0.0.pdf
-                </name>
-            </item>
-            <validationReport jobEndStatus="normal" profileName="PDF/A-4F validation profile"
-                              statement="PDF file is compliant with Validation Profile requirements."
-                              isCompliant="true">
-                <details passedRules="108" failedRules="0" passedChecks="26598" failedChecks="0"/>
-            </validationReport>
-            <duration start="1731931881493" finish="1731931881751">00:00:00.258</duration>
-        </job>
-    </jobs>
-    <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
-        <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
-        <featureReports failedJobs="0">0</featureReports>
-        <repairReports failedJobs="0">0</repairReports>
-        <duration start="1731931881489" finish="1731931881757">00:00:00.268</duration>
-    </batchSummary>
+   <buildInformation>
+      <releaseDetails id="core" version="1.26.5" buildDate="2025-01-10T12:08:00+03:00"/>
+      <releaseDetails id="validation-model" version="1.26.5" buildDate="2025-01-10T12:10:00+03:00"/>
+      <releaseDetails id="gui" version="1.26.5" buildDate="2025-01-10T12:43:00+03:00"/>
+   </buildInformation>
+   <jobs>
+      <job>
+         <item size="4240502">
+            <name>C:\Users\Admin\Downloads\release_notes_9.1.0-SNAPSHOT-pkcs11-signed.pdf</name>
+         </item>
+         <validationReport jobEndStatus="normal" profileName="PDF/A-4F validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
+            <details passedRules="108" failedRules="0" passedChecks="38702" failedChecks="0"/>
+         </validationReport>
+         <duration start="1738935627968" finish="1738935628464">00:00:00.496</duration>
+      </job>
+   </jobs>
+   <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
+      <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
+      <featureReports failedJobs="0">0</featureReports>
+      <repairReports failedJobs="0">0</repairReports>
+      <duration start="1738935627962" finish="1738935628467">00:00:00.505</duration>
+   </batchSummary>
 </report>
 ```

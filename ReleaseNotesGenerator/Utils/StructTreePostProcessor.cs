@@ -1,4 +1,5 @@
 using System;
+using iText.Commons.Utils;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Tagging;
 
@@ -20,6 +21,15 @@ namespace ReleaseNotesGenerator {
                         str.GetPdfObject().Remove(PdfName.Lang);
                         str.SetModified();
                     }
+                }
+
+                if (StandardRoles.FORM.Equals(str.GetRole().GetValue())) {
+                    PdfDictionary f = (PdfDictionary)str.GetK();
+                    Console.WriteLine();
+                    PdfDictionary signature = f.GetAsDictionary(PdfName.Obj);
+                    signature.Put(PdfName.Contents, new PdfString("Signature"));
+                    str.SetModified();
+                    signature.SetModified();
                 }
             }
 
