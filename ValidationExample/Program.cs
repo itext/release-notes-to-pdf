@@ -1,8 +1,4 @@
 ﻿using System;
-using iText.Commons.Bouncycastle.Cert;
-using iText.Commons.Bouncycastle.Crypto;
-using iText.Commons.Utils;
-using iText.Kernel.Exceptions;
 using iText.Kernel.Pdf;
 using iText.Signatures;
 using iText.Signatures.Validation;

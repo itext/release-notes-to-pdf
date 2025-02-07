@@ -1,0 +1,16 @@
+rect.scaledRect {
+  color: #0c66e4;
+}
+
+tspan.external {
+  fill: cornflowerblue;
+  stroke: darkblue;
+  stroke-width: 0.3;
+}
+
+tspan.code {
+  font-weight: bold;
+  fill: #c32e5F;
+  stroke: rgb(182,130,140);
+  stroke-width: 0.7;
+}

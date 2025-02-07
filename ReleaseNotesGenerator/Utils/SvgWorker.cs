@@ -15,7 +15,7 @@ namespace ReleaseNotesGenerator.Utils {
             base.ProcessEnd(element, context);
             var elementResult = GetElementResult();
             if (elementResult is IAccessibleElement ae) {
-                ae.GetAccessibilityProperties().SetAlternateDescription("Logo iText");
+                ae.GetAccessibilityProperties().SetAlternateDescription(element.GetAttribute("aria-description"));
             }
         }
     }

@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 690 842"
+     style="background-color: white" preserveAspectRatio="xMidYMid meet">
+    <?xml-stylesheet type="text/css" href="svgStyle.css"?>
+    <style>
+        tspan.attachment {
+            fill: blue;
+            text-decoration:underline;
+        }
+    </style>
+    <defs>
+        <circle id="point1" r="2" fill="currentColor"/>
+        <circle id="point2" r="2" stroke="currentColor" fill="none"/>
+        <clipPath id="textClip">
+            <use x="52" y="176" href="#point2"/>
+            <text x="64" y="180">text clipping path</text>
+        </clipPath>
+        <linearGradient id="gradient" x1="0" x2="0.5">
+            <stop offset="0" stop-color="yellow"/>
+            <stop offset="0.5" stop-color="green"/>
+            <stop offset="1" stop-color="blue"/>
+        </linearGradient>
+        <pattern id="pattern" x="13" y="13" width="10" height="10" patternUnits="userSpaceOnUse">
+            <polygon points="0,0 2,5 0,10 5,8 10,10 8,5 10,0 5,2"/>
+            <polygon fill="cyan" points="3,3 5,8 3,13 8,11 13,13 11,8 13,3 8,5"/>
+        </pattern>
+    </defs>
+    <text x="50%" y="30" font-size="20" font-weight="bold" text-anchor="middle">
+        SVG to PDF conversion by iText
+    </text>
+    <g transform="translate(0, 10)">
+        <text x="40" y="59" font-size="14">
+            The SVG module is a core component of iText which performs the operations of converting an
+            <tspan x="20" dy="20">
+                SVG image into a PDF document, or low-level PDF syntax for actual document pages. Note, that
+            </tspan>
+            <tspan x="20" dy="20">
+                current page and banner on the first page are created by converting two SVG files using external
+            </tspan>
+            <tspan x="20" dy="20">
+                CSS styles into PDF syntax. See attached <tspan class="attachment"> svgOverview.svg</tspan>,
+                <tspan class="attachment"> svgExample.svg</tspan> and <tspan class="attachment"> svgStyle.css</tspan> to
+            </tspan>
+            <tspan x="20" dy="20">
+                check how it looks in browser.
+            </tspan>
+        </text>
+        <g id="list" font-size="14" transform="translate(0, 90)">
+            <use x="32" y="76" href="#point1"/>
+            <text x="44" y="80">SVG is converted into vector image, so it is possible to e.g. copy text, unlike a
+                rasterized image
+            </text>
+
+            <use x="32" y="101" href="#point1"/>
+            <text x="44" y="105">Text and <tspan font-style="italic"> tspan</tspan> elements support:
+            </text>
+            <use x="52" y="126" href="#point2"/>
+            <text x="64" y="130">
+                interaction with <tspan class="code"> pdfCalligraph</tspan> for complex scripts
+            </text>
+            <use x="52" y="151" href="#point2"/>
+            <text x="0" y="125">
+                <tspan dx="64" dy="30">relative and</tspan>
+                <tspan dx="3" y="155">absolute positioning for text</tspan>
+            </text>
+            <rect x="40" y="160" clip-path="url(#textClip)" width="150" height="30" fill="green"/>
+            <use x="52" y="201" href="#point2"/>
+            <text x="64" y="205" text-decoration="underline overline" stroke="lightblue" fill="blue" stroke-width="0.5">
+                text-decoration property
+            </text>
+            <use x="52" y="225" href="#point2"/>
+            <text x="64" y="230" text-anchor="end" direction="rtl">
+                text-anchor and direction properties
+            </text>
+
+            <use x="32" y="251" href="#point1"/>
+            <text x="44" y="255">Basic shapes such as ellipse, circle, rectangle, line, path, polygon, polyline are
+                supported,
+                <tspan x="44" dy="20">
+                    same for <tspan class="code"> group</tspan>, <tspan class="code"> image</tspan>,
+                    <tspan class="code"> marker</tspan>, <tspan class="code"> symbol</tspan>,
+                    <tspan class="code"> use</tspan>
+                    tags
+                </tspan>
+            </text>
+
+            <use x="32" y="296" href="#point1"/>
+            <text x="44" y="300">Most common SVG and CSS attributes</text>
+            <use x="52" y="321" href="#point2"/>
+            <text x="64" y="325">
+                CSS is supported in <tspan class="code"> style</tspan> attribute or tag and
+                <tspan class="external"> as external stylesheet</tspan>
+            </text>
+
+            <use x="32" y="346" href="#point1"/>
+            <text x="44" y="350">Relative values support (percents, <tspan class="code"> em</tspan>,
+                <tspan class="code"> rem</tspan>)
+            </text>
+
+            <use x="32" y="371" href="#point1"/>
+            <text x="44" y="375">Clipping paths support</text>
+
+            <use x="32" y="396" href="#point1"/>
+            <text x="44" y="400">
+                <tspan fill="url(#gradient)">Linear gradient</tspan>
+                and
+                <tspan font-size="20" font-weight="900" fill="url(#pattern)" stroke="black" stroke-width="0.3">
+                    pattern
+                </tspan>
+                support
+            </text>
+
+            <use x="32" y="421" href="#point1"/>
+            <use x="52" y="446" href="#point2"/>
+            <use x="52" y="471" href="#point2"/>
+            <use x="52" y="496" href="#point2"/>
+
+            <text x="44" y="425">
+                <tspan class="code">svg</tspan>
+                tag support:
+                <tspan x="64" dy="25">
+                    nested SVGs
+                </tspan>
+                <tspan x="64" dy="25">
+                    <tspan class="code"> preserveAspectRatio</tspan>
+                    attribute
+                </tspan>
+                <tspan x="64" dy="25">
+                    relative values for
+                    <tspan class="code"> width</tspan>
+                    and
+                    <tspan class="code"> height</tspan>
+                </tspan>
+            </text>
+
+            <use x="32" y="521" href="#point1"/>
+            <text x="44" y="525">
+                Non-scaling-stroke <tspan class="code"> vector-effect</tspan> is supported for basic shapes
+            </text>
+        </g>
+    </g>
+</svg>

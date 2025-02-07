@@ -1,0 +1,241 @@
+<svg role="img" aria-description="HappyAnniversary to iText" xmlns="http://www.w3.org/2000/svg"
+     width="100%" height="100%" viewBox="-5 -5 970 690" preserveAspectRatio="xMidYMid meet">
+    <style type="text/css">
+        @font-face {
+        font-family: 'NotoSansMalayalam';
+        font-weight: 400;
+        font-style: regular;
+        src: url('../fonts/NotoSansMalayalam-Regular.ttf')
+        format('TrueType');
+        }
+        .cls-1 {
+        fill: url(#linear-gradient-2);
+        }
+        .cls-1, .cls-2, .cls-3, .cls-4 {
+        fill-rule: evenodd;
+        }
+        .cls-2 {
+        fill: url(#linear-gradient-3);
+        }
+        .cls-3 {
+        fill: url(#linear-gradient-4);
+        }
+        .cls-5 {
+        fill: #758592;
+        }
+        .cls-4 {
+        fill: url(#linear-gradient);
+        }
+    </style>
+    <defs>
+        <clipPath id="textClip">
+            <text transform="translate(170, 50) scale(0.3326,0.3326)" text-anchor="middle"
+                  style="fill: rgb(2, 48, 89);  font-size: 80px">
+                祝 iText 25 周年快乐！
+            </text>
+        </clipPath>
+
+        <linearGradient id="template">
+            <stop offset="0" stop-color="rgb(2, 48, 89)" stop-opacity="1"/>
+            <stop offset="0.3" stop-color="rgb(191, 94, 10)" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="rgb(63, 126, 166)" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="gradient" href="#template"/>
+
+        <linearGradient id="linear-gradient" x1="141.47" y1="107.321" x2="324.744" y2="107.321"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#042d4c"/>
+            <stop offset=".733" stop-color="#004167"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1="0" y1="116.735" x2="174.337" y2="116.735"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#013557"/>
+            <stop offset="1" stop-color="#004167"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-3" x1="62.836" y1="222.906" x2="350.455" y2="222.911"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fe9032"/>
+            <stop offset="1" stop-color="#f57f34"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-4" x1="61.36" y1="229.921" x2="351.004" y2="229.926"
+                        gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#fe9032"/>
+            <stop offset="1" stop-color="#fe9032"/>
+        </linearGradient>
+    </defs>
+
+    <g clip-path="url(#textClip)" fill-opacity="1">
+        <rect x="0" y="0" width="300" height="140" fill="url(#linear-gradient)"/>
+    </g>
+
+    <g id="itextLogo" transform="matrix(0.5, 0, 0, 0.5, 410, 260)">
+        <path class="cls-5"
+              d="M43.426,288.451l-.005,27.429h-15.368l.003-27.426-23.063-43.857h16.756l13.99,28.034,13.991-28.034h16.755l-23.059,43.853Z"/>
+        <path class="cls-5"
+              d="M93.989,257.455v15.427l27.723.012v12.857l-27.724-.01v17.272l29.355.01v12.858l-29.357-.009v.007h-15.368l.004-71.283h13.237v-.002l31.484.011v12.857l-29.354-.009Z"/>
+        <path class="cls-5"
+              d="M176.315,299.318l-22.778-.006-4.898,16.568-16.009-.002,23.867-71.276,3.646-.002v-.003h9.565v.003l3.646.002,23.865,71.276-16.009.002-4.896-16.562ZM172.514,286.459l-7.589-25.679-7.587,25.675,15.177.004Z"/>
+        <path class="cls-4"
+              d="M302.642,211.345c13.707-13.437,22.102-32.166,22.102-56.062,0-45.36-34.757-79.301-79.419-81.108-15.065-.616-30.227,3.124-43.435,12.385l5.886-34.307h101.3V3.297h-145.137l-20.108,132.205h58.861c5.958-9.108,17.005-13.77,28.954-13.77,21.457,0,32.92,14.442,34.347,29.839,1.642,17.608-9.801,36.46-34.347,36.46-9.13,0-16.804-2.431-23.018-7.355-6.157-4.918-9.613-11.395-10.375-19.553h-56.783c.277,10.508,2.293,20.066,6.04,28.668,23.529.014,47.571,3.907,68.308,7.614,25.129,4.48,50.514,10.126,75.872,12.944,3.47.388,7.148.734,10.951.997Z"/>
+        <path class="cls-1"
+              d="M174.337,184.25v7.024c-30.365-3.089-62.317-2.245-87.433,11.477-12.419,6.781-22.421,16.235-30.165,28.059l-1.745,2.659H3.219v-35.601l67.754-60.302c13.998-12.592,24.963-23.501,32.741-32.796,6.546-7.993,10.002-16.748,10.328-26.258,0-9.08-2.702-16.16-8.111-21.237-5.347-5.022-12.69-7.563-21.985-7.563-8.644,0-15.668,2.757-21.077,8.263-5.347,5.569-8.049,12.807-8.049,21.777l.325,3.948L.033,80.727c-.595-24.367,6.968-43.934,22.747-58.68C38.558,7.349,59.795,0,86.482,0c25.448,0,46.144,7.03,62.192,21.022,16.048,14.047,24.098,32.146,24.098,54.303,0,11.179-2.431,22.04-7.239,32.526-4.808,10.536-11.187,20.26-19.13,29.23-7.993,8.963-18.536,19.019-31.605,30.199l-20.094,16.969h79.633Z"/>
+        <path class="cls-2"
+              d="M350.773,210.508c-75.283,101.81-194.064-29.382-289.413,23.336,58.383-89.151,223.197,8.893,289.413-23.336Z"/>
+        <path class="cls-3"
+              d="M350.773,210.508c-75.283,101.81-194.064-29.382-289.413,23.336,75.069-71.662,227.298,43.58,289.413-23.336Z"/>
+        <path class="cls-5"
+              d="M299.468,272.354c-8.886-3.186-10.233-3.954-10.233-8.348,0-4.988,1.676-7.705,11.092-7.705,5.412,0,13.34.917,18.608,1.952v-12.147c-13.039,6.823-27.646,10.171-44.258,10.3-.816,2.622-1.191,5.572-1.191,8.84,0,13.732,6.111,15.815,22.122,21.355,8.667,3.023,10.329,4.472,10.329,8.95,0,6.686-3.561,8.626-11.903,8.626-5.552,0-12.762-.848-20.529-2.611v12.96c6.873,1.488,14.049,2.576,21.427,2.576,16.458,0,26.752-5.374,26.752-22.448,0-14.248-7.198-16.965-22.216-22.301Z"/>
+        <path class="cls-5"
+              d="M260.873,266.234c.009-4.236-.653-7.703-1.889-10.568-16.175-1.606-32.714-5.576-49.814-10.172l-.004,70.387h15.368l.002-28.008h7.634l14.708,28.008h16.889l-16.402-29.423c8.895-2.529,13.53-8.68,13.507-20.224ZM233.678,275.696h-9.139v-18.924h9.139c8.696,0,11.69,1.959,11.655,9.504.035,7.488-2.889,9.42-11.655,9.42Z"/>
+    </g>
+
+    <rect class="scaledRect" x="0" y="0" rx="500" ry="5" width="9600" height="68" transform="scale(0.1, 10)" fill="none"
+          stroke="#0c66e4" stroke-width="5pt" vector-effect="non-scaling-stroke"/>
+    <g transform="translate(470, 355) scale(0.3326,0.3326)">
+        <text x="172" y="490" text-anchor="middle" fill="#0c66e4" font-size="6rem"
+              stroke="url(#gradient)" stroke-width="1.5" stroke-opacity="0.5">
+            iTextக்கு 25வது ஆண்டு விழாவிற்கு வாழ்த்துகள்!
+            <tspan x="-1114" y="-723" text-anchor="start" stroke="rgb(191, 94, 10)" stroke-width="3"
+                   fill="none" font-size="91px">
+                Šťastné 25. výročí iTextu!
+            </tspan>
+            <tspan style="fill: rgb(191, 94, 10); font-size: 80px" text-anchor="start" x="-1300" dy="970">
+                iText के 25वें वर्षगांठ की शुभकामनाएँ!
+                <tspan style="fill: rgb(2, 48, 89)" font-size="75px" dx="-50" dy="-790" stroke="none">
+                    Gefeliciteerd met de 25e verjaardag van iText!
+                </tspan>
+            </tspan>
+        </text>
+        <text x="90" y="-320" text-anchor="middle" fill="rgb(63, 126, 166)" font-size="5.5em">
+            Happy 25th Anniversary to iText!
+            <tspan style="fill: #0c66e4;  font-size: 65px" dx="-800" dy="-315">
+                iText-কে ২৫তম বার্ষিকীর শুভেচ্ছা!
+            </tspan>
+            <tspan x="1300" y="690" text-anchor="end" style="fill: rgb(217, 158, 50);  font-size: 63px">
+                iText కు 25వ వార్షికోత్సవ శుభాకాంక్షలు!
+            </tspan>
+        </text>
+        <text text-anchor="end" style="fill: rgb(191, 94, 10);  font-size: 54px"
+              transform="translate(1150, -730)">
+            iTextને 25મી વર્ષગાંઠની શુભકામનાઓ!
+            <tspan fill="url(#gradient)" style="font-size: 65px" dx="-2500" dy="760">
+                عيد ميلاد سعيد الخامس والعشرون لـ iText!
+            </tspan>
+        </text>
+        <text text-anchor="middle" fill="rgb(63, 126, 166)" font-size="70px"
+              stroke="#004068" stroke-width="5" stroke-opacity="0.3" transform="translate(-300, -950)"
+              text-decoration="underline">
+            Szczęśliwej 25. rocznicy dla iText!
+            <tspan text-anchor="middle" style="fill: #0c66e4" dx="-1950" dy="1300">
+                С 25-летием, iText!
+            </tspan>
+        </text>
+        <text text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 50px" transform="translate(-850, 670)">
+            iText-тің 25 жылдығымен құттықтаймыз!
+            <tspan x="2100" y="-380" text-anchor="start" direction="rtl"
+                   style="fill: rgb(191, 94, 10);  font-size: 70px">
+                iText کے 25ویں سالگرہ کی مبارکباد!
+                <tspan fill="rgb(2, 48, 89)" font-size="60px" dx="-1750" dy="60">
+                    Feliz 25º aniversário iText!
+                </tspan>
+            </tspan>
+        </text>
+        <text text-anchor="middle" style="fill: rgb(63, 126, 166);  font-size: 60px"
+              transform="translate(-800, -620)" text-decoration="underline">
+            Joyeux 25e anniversaire à iText !
+        </text>
+        <text text-anchor="middle" text-decoration="underline"
+              style="fill: #0c66e4;  font-size: 85px"
+              transform="translate(390, 610)">
+            Herzlichen Glückwunsch zum 25. Jubiläum, iText!
+            <tspan style="fill: #0c66e4;  font-size: 55px" dx="-900" dy="-440">
+                iText-in 25 illik yubileyi mübarək!
+            </tspan>
+        </text>
+        <text text-anchor="middle"
+              style="fill: rgb(217, 158, 50);  font-size: 65px"
+              transform="translate(850, -50)">
+            Buon 25° anniversario a iText!
+        </text>
+        <text x="-800" y="120" text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 50px">
+            Feliz 25º aniversário para iText!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 50px" transform="translate(100, 755)">
+            iTextの25周年おめでとうございます！
+        </text>
+        <text style="fill: rgb(63, 126, 166);  font-size: 65px" transform="translate(-1350, 790)">
+            iText의 25주년을 축하합니다!
+        </text>
+        <text x="1250" y="70" text-anchor="end" fill="rgb(2, 48, 89)" font-size="80px">
+            З 25-річчям, iText!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 60px"
+              text-decoration="underline" transform="translate(900, -460)">
+            З 25-годдзем, iText!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 55px"
+              transform="translate(1000, -270)">
+            Su 25-uoju iText jubiliejumi!
+        </text>
+        <text text-anchor="middle"
+              style="fill: rgb(63, 126, 166);  font-size: 50px"
+              transform="translate(760, 383)">
+            Apsveicam iText ar 25. jubileju!
+        </text>
+        <text text-anchor="middle" style="fill: #0c66e4;  font-size: 50px"
+              transform="translate(-1000, -420)">
+            iText'in 25. yıl dönümünü kutlarız!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 60px"
+              transform="translate(1000, -850)">
+            iText को 25वीं वर्षगांठ की शुभकामनाएँ!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 50px"
+              transform="translate(-1000, 570)">
+            יום הולדת 25 שמח ל-iText!
+        </text>
+        <text style="fill: rgb(63, 126, 166);  font-size: 50px" transform="translate(300, 825)">
+            Sugeng tanggap warsa kaping 25 kanggo iText!
+        </text>
+        <text text-anchor="middle" style="fill: #0c66e4;  font-size: 50px"
+              transform="translate(900, -400)">
+            iTextning 25 yillik yubileyi bilan tabriklaymiz!
+        </text>
+        <text text-anchor="middle"
+              style="fill: rgb(63, 126, 166);  font-size: 50px"
+              transform="translate(25, -800)">
+            iTextның 25 еллык юбилее белән котлыйбыз!
+        </text>
+        <text text-anchor="end" style="fill: rgb(191, 94, 10);  font-size: 55px" transform="translate(-330, -200)">
+            Selamat ulang tahun ke-25 untuk iText!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 65px"
+              transform="translate(-900, -80)">
+            iText ਨੂੰ 25ਵੇਂ ਸਾਲਗਿਰਹ ਦੀਆਂ ਵਧਾਈਆਂ!
+        </text>
+        <text text-anchor="middle"
+              style="fill: rgb(217, 158, 50);  font-size: 50px"
+              transform="translate(-1000, -520)">សូមអបអរសាទរ​ឆ្នាំទី 25 សម្រាប់ iText!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(63, 126, 166);  font-size: 50px"
+              transform="translate(-1000, -310)">
+            สุขสันต์วันครบรอบ 25 ปี iText!
+        </text>
+        <text text-anchor="middle"
+              style="fill: #0c66e4;  font-size: 50px"
+              transform="translate(-100, -870)">
+            iText ಗೆ 25ನೇ ವಾರ್ಷಿಕೋತ್ಸವದ ಶುಭಾಶಯಗಳು!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 70px"
+              transform="translate(-180, 900)" font-family="NotoSansMalayalam">
+            iText-ന് 25-ാം വാർഷികം ആശംസകൾ!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 45px"
+              transform="translate(-180, -480)">
+            iText အတွက် 25 နှစ်ပြည့်နေ့ကို ဂုဏ်ပြုပါသည်!
+        </text>
+        <text text-anchor="middle" style="fill: rgb(63, 126, 166);  font-size: 75px"
+              transform="translate(850, -150)">iText ପାଇଁ 25ତମ ବର୍ଷଗାଠିର ଶୁଭେଚ୍ଛା!
+        </text>
+    </g>
+</svg>

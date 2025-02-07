@@ -5,9 +5,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
+using iText.Commons.Utils;
 using iText.Html2pdf;
 using iText.Html2pdf.Resolver.Font;
 using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Mac;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Event;
@@ -18,6 +20,9 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using iText.Pdfa;
+using iText.Svg.Converter;
+using iText.Svg.Processors;
+using iText.Svg.Processors.Impl;
 using ReleaseNotesGenerator.Utils;
 using Path = System.IO.Path;
 
@@ -26,9 +31,8 @@ namespace ReleaseNotesGenerator {
         //Don't change these variables
         private const string ResourceDirectory = "resources";
 
-
         //You can change these variables 
-        private const string Version = "9.1.0-SNAPSHOT";
+        private const string Version = "9.1.0";
         private const string Password = "itext";
         private static readonly string FileName = $"release_notes_{Version}.pdf";
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
@@ -39,6 +43,7 @@ namespace ReleaseNotesGenerator {
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
         private const string SignatureFieldName = "signature_id";
+        private const string SvgExampleFile = "happyAnniversary";
 
 
         static void Main(string[] args) {
@@ -60,8 +65,8 @@ namespace ReleaseNotesGenerator {
                 sw.Stop();
                 Console.WriteLine("Generating a table with " + NumberOfCellsInHugeTable + " cells takes " + sw.ElapsedMilliseconds + " milliseconds.");
             }
-            
-            GeneratePdfFromHtml(pdfDocument);
+
+            GeneratePdfFromHtmlAndSvg(pdfDocument);
             var fileInfo = new FileInfo(FileName);
             Console.WriteLine("Generated release notes for version " + Version + " in " +
                               fileInfo.FullName);
@@ -145,8 +150,6 @@ namespace ReleaseNotesGenerator {
             }
            
             Console.WriteLine(projectDirectory);
-            
-            
 
             using (var zip = ZipFile.Open("./source-code.zip", ZipArchiveMode.Create)) {
                 if (projectDirectory == null) {
@@ -166,6 +169,34 @@ namespace ReleaseNotesGenerator {
             var spec = PdfFileSpec.CreateEmbeddedFileSpec(document, fileBytes, fileDescription, fileTitle + "x", null,
                 null, PdfName.Data);
             document.AddFileAttachment(fileTitle, spec);
+            
+            // Add svg files and css stylesheet.
+            const string svgOverview = "./resources/svg/svgOverview.svg";
+            const string svgOverviewTitle = "svgOverview.svg";
+            const string svgOverviewDescription = "This SVG file contains a list describing some of the features " +
+                                                  "for converting SVG to PDF using iText.";
+            var svgOverviewBytes = File.ReadAllBytes(svgOverview);
+
+            var svgOverviewSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, svgOverviewBytes, svgOverviewDescription,
+                svgOverviewTitle, null, null, PdfName.Data);
+            document.AddFileAttachment(svgOverviewTitle, svgOverviewSpec);
+
+            string svgExample = $"./resources/svg/{SvgExampleFile}.svg";
+            const string svgExampleTitle = "svgExample.svg";
+            const string svgExampleDescription = "This SVG file contains an example of the main capabilities of " +
+                                                 "iText for converting SVG to PDF.";
+            var svgExampleBytes = File.ReadAllBytes(svgExample);
+            var svgExampleSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, svgExampleBytes, svgExampleDescription,
+                svgExampleTitle, null, null, PdfName.Data);
+            document.AddFileAttachment(svgExampleTitle, svgExampleSpec);
+
+            const string cssStyle = "./resources/svg/svgStyle.css";
+            const string cssStyleTitle = "svgStyle.css";
+            const string cssStyleDescription = "This CSS file is used as embedded stylesheet while converting SVG to PDF.";
+            var cssStyleBytes = File.ReadAllBytes(cssStyle);
+            var cssStyleSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, cssStyleBytes, cssStyleDescription,
+                cssStyleTitle, null, null, PdfName.Data);
+            document.AddFileAttachment(cssStyleTitle, cssStyleSpec);
         }
 
 
@@ -176,12 +207,12 @@ namespace ReleaseNotesGenerator {
                     EncryptionConstants.ENCRYPTION_AES_256,
                     new MacProperties(MacProperties.MacDigestAlgorithm.SHA_256));
             var pdfDocument = new PdfDocument(new PdfWriter(MacProtectedName, writerProperties));
-            GeneratePdfFromHtml(pdfDocument);
+            GeneratePdfFromHtmlAndSvg(pdfDocument);
             pdfDocument.Close();
         }
 
 
-        private static void GeneratePdfFromHtml(PdfDocument pdfDocument) {
+        private static void GeneratePdfFromHtmlAndSvg(PdfDocument pdfDocument) {
             var fontProvider = new DefaultFontProvider(false, false, false);
             var baseDirectorySite = Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "kb.itextpdf.com",
                 "itext");
@@ -208,6 +239,7 @@ namespace ReleaseNotesGenerator {
 
             customContentInjector.Inject("customhtml/custom_style.html", "//head", 0);
             customContentInjector.Inject("customhtml/logo.html", "//body", 1);
+            customContentInjector.Inject($"customhtml/{SvgExampleFile}.html", "//body//div");
             customContentInjector.Inject("customhtml/custom_content_after_logo.html", "//body", 2);
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
             htmlProcessor.PostCustomContentProcess();
@@ -218,6 +250,13 @@ namespace ReleaseNotesGenerator {
                 HtmlConverter.ConvertToDocument(htmDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
             document.Flush();
 
+            // Convert SVG to PDF
+            PdfPage page = pdfDocument.AddNewPage(PageSize.A4);
+            ISvgConverterProperties properties = new SvgConverterProperties()
+                .SetFontProvider(fontProvider)
+                .SetBaseUri(Path.Combine(ResourceDirectory, "svg"));
+            SvgConverter.DrawOnPage(FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), 
+                ResourceDirectory, "svg/svgOverview.svg")), page, properties);
 
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("sample1", "Signature validation example");
