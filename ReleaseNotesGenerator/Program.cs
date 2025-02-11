@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -11,11 +12,12 @@ using iText.Kernel.Mac;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Event;
 using iText.Kernel.Pdf.Filespec;
-using iText.Kernel.Pdf.Tagutils;
-using iText.Kernel.Validation;
 using iText.Kernel.XMP;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using iText.Pdfa;
-using iText.Pdfua.Checkers;
 using ReleaseNotesGenerator.Utils;
 using Path = System.IO.Path;
 
@@ -30,6 +32,8 @@ namespace ReleaseNotesGenerator {
         private const string Password = "itext";
         private static readonly string FileName = $"release_notes_{Version}.pdf";
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
+        private const string HugeTableLayoutedName = "huge_table_layouted.pdf";
+        private const int NumberOfCellsInHugeTable = 10000;
         private const string CountryToUseForSigning = "belgium"; //or portugal
         private const string PageToConvert = "release-itext-core-9-0.html";
         private const string SigningReason = "Release notes for iText " + Version;
@@ -46,6 +50,17 @@ namespace ReleaseNotesGenerator {
             var pdfDocument = CreateWtpdfDocument();
             AddMacProtectedVersion(pdfDocument);
             AddSourceCodeFiles(pdfDocument);
+            
+            var tableLyoutingPrompt = "Do you want to create a PDF with huge table and attach it to release notes? (y/n)";
+            Console.WriteLine(tableLyoutingPrompt);
+            var layoutTable = Console.ReadLine();
+            if (layoutTable != null && layoutTable.ToLower().Equals("y")) {
+                Stopwatch sw = Stopwatch.StartNew();
+                GenerateAndAttachPdfWithHugeTableToMeasurePerformance(pdfDocument);
+                sw.Stop();
+                Console.WriteLine("Generating a table with " + NumberOfCellsInHugeTable + " cells takes " + sw.ElapsedMilliseconds + " milliseconds.");
+            }
+            
             GeneratePdfFromHtml(pdfDocument);
             var fileInfo = new FileInfo(FileName);
             Console.WriteLine("Generated release notes for version " + Version + " in " +
@@ -214,6 +229,34 @@ namespace ReleaseNotesGenerator {
 
             TraverseOutlines(pdfDocument);
             pdfDocument.Close();
+        }
+
+        private static void GenerateAndAttachPdfWithHugeTableToMeasurePerformance(PdfDocument pdfDocument)
+        {
+            PdfDocument hugeTablePdf = new PdfDocument(new PdfWriter(HugeTableLayoutedName));
+            hugeTablePdf.SetTagged();
+            Document document = new Document(hugeTablePdf);
+            Table table = new Table(5);
+            table.UseAllAvailableWidth();
+            table.SetBorderCollapse(BorderCollapsePropertyValue.COLLAPSE);
+            for (int i = 0; i < NumberOfCellsInHugeTable; i++) {
+                Cell cell = new Cell();
+                cell.Add(new Paragraph("Hello"));
+                cell.SetBorder(new SolidBorder(1));
+                table.AddCell(cell);
+            }
+
+            document.Add(table);
+            document.Close();
+            hugeTablePdf.Close();
+            
+            var hugeTablePdfBytes = File.ReadAllBytes(HugeTableLayoutedName);
+            const string hugeTablePdfTitle = "Pdf with layouted huge table to measure performance.pdf";
+            const string hugeTablePdfDescription =
+                "This PDF consists of huge table which was created by iText to measure performance improvement.";
+            var spec = PdfFileSpec.CreateEmbeddedFileSpec(pdfDocument, hugeTablePdfBytes, hugeTablePdfDescription,
+                hugeTablePdfTitle, null, null, null);
+            pdfDocument.AddFileAttachment(hugeTablePdfTitle, spec);
         }
 
         /// <summary>

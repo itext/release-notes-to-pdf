@@ -10,10 +10,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
-      <PackageReference Include="itext.bouncy-castle-adapter" Version="9.1.0-SNAPSHOT" />
-        <PackageReference Include="itext.commons" Version="9.1.0-SNAPSHOT" />
-      <PackageReference Include="itext7.pdfhtml" Version="6.1.0-SNAPSHOT" />
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
+        <PackageReference Include="itext.bouncy-castle-adapter" Version="9.2.0" />
+        <PackageReference Include="itext.commons" Version="9.2.0" />
+        <PackageReference Include="itext.pdfhtml" Version="6.2.0" />
         <PackageReference Include="Pkcs11Interop" Version="5.1.1" />
     </ItemGroup>
 
