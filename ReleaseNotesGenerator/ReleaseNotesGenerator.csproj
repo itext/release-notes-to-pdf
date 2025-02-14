@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <Content Include="resources\**\*.*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 
