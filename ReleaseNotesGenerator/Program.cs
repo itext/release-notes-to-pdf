@@ -19,6 +19,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using iText.Licensing.Base;
 using iText.Pdfa;
 using iText.Svg.Converter;
 using iText.Svg.Processors;
@@ -48,6 +49,7 @@ namespace ReleaseNotesGenerator {
 
         static void Main(string[] args) {
             Console.WriteLine($"Generating release notes for version {Version}...");
+            LicenseKey.LoadLicenseFile(new FileInfo("../../../resources/all-products.json"));
             GenerateMainPdfDocument();
         }
 
