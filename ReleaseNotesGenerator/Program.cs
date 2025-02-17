@@ -280,6 +280,10 @@ namespace ReleaseNotesGenerator {
             {
                 canvas.CloseTag();
             }
+            
+            var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
+            lcg.AddCodeSample("sample1", "Signature validation example");
+            pagNumberHandler.SetPages(pdfDocument.GetNumberOfPages());
 
             if (pdfDocument.GetStructTreeRoot() != null) {
                 StructTreePostProcessor.Traverse(pdfDocument.GetStructTreeRoot());
