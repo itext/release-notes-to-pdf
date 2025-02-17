@@ -22,24 +22,24 @@ namespace ReleaseNotesGenerator.Utils {
     /// And adapt it to your country specific settings
     /// </summary>
     public class EIdSigner {
-        private static readonly Dictionary<string, Tuple<string, string, string>> EidRelatedConfigs =
-            new Dictionary<string, Tuple<string, string, string>> {
+        private static readonly Dictionary<CountrySigning, Tuple<string, string, string, int>> EidRelatedConfigs =
+            new Dictionary<CountrySigning, Tuple<string, string, string, int>> {
                 {
-                    "portugal", new Tuple<string, string, string>(@"C:\Windows\System32\pteidpkcs11.dll",
-                        "CITIZEN SIGNATURE CERTIFICATE", "Portuguese eID N")
+                    CountrySigning.PORTUGAL, new Tuple<string, string, string, int>(@"C:\Windows\System32\pteidpkcs11.dll",
+                        "CITIZEN SIGNATURE CERTIFICATE", "Portuguese eID N", 2048 * 10)
                 }, {
-                    "belgium", new Tuple<string, string, string>(
+                    CountrySigning.BELGIUM, new Tuple<string, string, string, int>(
                         @"C:\Program Files (x86)\Belgium Identity Card\FireFox Plugin Manifests\beid_ff_pkcs11_64.dll",
-                        "Signature", "Belgium eID")
+                        "Signature", "Belgium eID", 1024 * 10)
                 }
             };
 
         private readonly string resourceDirectory;
         private readonly string fileName;
         private readonly string fileToSign;
-        private readonly string countryToUseForSigning;
+        private readonly CountrySigning countryToUseForSigning;
 
-        public EIdSigner(string resourceDirectory, string fileName, string fileToSign, string countryToUseForSigning) {
+        public EIdSigner(string resourceDirectory, string fileName, string fileToSign, CountrySigning countryToUseForSigning) {
             this.resourceDirectory = resourceDirectory;
             this.fileName = fileName;
             this.fileToSign = fileToSign;
@@ -108,7 +108,7 @@ namespace ReleaseNotesGenerator.Utils {
             signatureAppearance.SetFont(font);
             signerProperties.SetSignatureAppearance(signatureAppearance);
 
-            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 1024 * 20,
+            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, EidRelatedConfigs[countryToUseForSigning].Item4,
                 PdfSigner.CryptoStandard.CMS);
         }
     }
