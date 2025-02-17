@@ -126,7 +126,7 @@ namespace ReleaseNotesGenerator.Utils {
 
 
             pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 
-                (int)cmsContainer.GetSizeEstimation() + 500, PdfSigner.CryptoStandard.CMS);
+                (int)cmsContainer.GetSizeEstimation(), PdfSigner.CryptoStandard.CMS);
         }
     }
 }
