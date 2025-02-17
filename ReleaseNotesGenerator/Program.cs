@@ -12,8 +12,12 @@ using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Mac;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Event;
 using iText.Kernel.Pdf.Filespec;
+using iText.Kernel.Pdf.Tagging;
+using iText.Kernel.Pdf.Tagutils;
+using iText.Kernel.Pdf.Xobject;
 using iText.Kernel.XMP;
 using iText.Layout;
 using iText.Layout.Borders;
@@ -254,15 +258,28 @@ namespace ReleaseNotesGenerator {
 
             // Convert SVG to PDF
             PdfPage page = pdfDocument.AddNewPage(PageSize.A4);
-            ISvgConverterProperties properties = new SvgConverterProperties()
+            SvgConverterProperties properties = new SvgConverterProperties()
                 .SetFontProvider(fontProvider)
                 .SetBaseUri(Path.Combine(ResourceDirectory, "svg"));
-            SvgConverter.DrawOnPage(FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), 
-                ResourceDirectory, "svg/svgOverview.svg")), page, properties);
-
-            var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
-            lcg.AddCodeSample("sample1", "Signature validation example");
-            pagNumberHandler.SetPages(pdfDocument.GetNumberOfPages());
+            properties.SetCustomViewport(page.GetMediaBox());
+            // TODO DEVSIX-8940 SVG: provide an easy way to create PDF/UA-2 compliant document with SVG
+            PdfFormXObject xObject = SvgConverter.ConvertToXObject(
+                FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "svg/svgOverview.svg")),
+                pdfDocument, properties);
+            PdfCanvas canvas = new PdfCanvas(page);
+            if (pdfDocument.IsTagged())
+            {
+                TagTreePointer tagTreePointer = new TagTreePointer(pdfDocument);
+                tagTreePointer.AddTag(StandardRoles.FIGURE);
+                tagTreePointer.SetPageForTagging(page);
+                tagTreePointer.GetProperties().SetActualText("SVG overview");
+                canvas.OpenTag(tagTreePointer.GetTagReference());
+            }
+            canvas.AddXObjectAt(xObject, xObject.GetBBox().GetAsNumber(0).FloatValue(), xObject.GetBBox().GetAsNumber(1).FloatValue());
+            if (pdfDocument.IsTagged())
+            {
+                canvas.CloseTag();
+            }
 
             if (pdfDocument.GetStructTreeRoot() != null) {
                 StructTreePostProcessor.Traverse(pdfDocument.GetStructTreeRoot());
