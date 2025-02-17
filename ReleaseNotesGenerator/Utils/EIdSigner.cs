@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using iText.Bouncycastle;
 using iText.Bouncycastle.X509;
+using iText.Bouncycastleconnector;
+using iText.Commons.Bouncycastle;
 using iText.Commons.Bouncycastle.Cert;
 using iText.Forms.Fields.Properties;
 using iText.Forms.Form.Element;
@@ -12,6 +15,7 @@ using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Signatures;
+using iText.Signatures.Cms;
 using Path = System.IO.Path;
 
 namespace ReleaseNotesGenerator.Utils {
@@ -38,6 +42,7 @@ namespace ReleaseNotesGenerator.Utils {
         private readonly string fileName;
         private readonly string fileToSign;
         private readonly CountrySigning countryToUseForSigning;
+        private readonly IBouncyCastleFactory FACTORY = BouncyCastleFactoryCreator.GetFactory();
 
         public EIdSigner(string resourceDirectory, string fileName, string fileToSign, CountrySigning countryToUseForSigning) {
             this.resourceDirectory = resourceDirectory;
@@ -45,6 +50,8 @@ namespace ReleaseNotesGenerator.Utils {
             this.fileToSign = fileToSign;
             this.countryToUseForSigning = countryToUseForSigning;
         }
+
+
 
 
         public void Sign(string fieldName, string reason, string location) {
@@ -107,9 +114,19 @@ namespace ReleaseNotesGenerator.Utils {
                 "font", "NotoSans-Regular.ttf"));
             signatureAppearance.SetFont(font);
             signerProperties.SetSignatureAppearance(signatureAppearance);
+            // create a temp cms container to calculate the size of the signature
+            CMSContainer cmsContainer = new CMSContainer();
+            cmsContainer.AddCertificates(certificateWrappers);
+            cmsContainer.GetSignerInfo().SetSigningCertificateAndAddToSignedAttributes(
+                FACTORY.CreateX509Certificate(
+                    key.Certificate.GetEncoded()), 
+                DigestAlgorithms.GetAllowedDigest(signature.GetDigestAlgorithmName()));
+            cmsContainer.GetSignerInfo().SetDigestAlgorithm(
+                new AlgorithmIdentifier(DigestAlgorithms.GetAllowedDigest(signature.GetDigestAlgorithmName())));
 
-            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, EidRelatedConfigs[countryToUseForSigning].Item4,
-                PdfSigner.CryptoStandard.CMS);
+
+            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 
+                (int)cmsContainer.GetSizeEstimation() + 500, PdfSigner.CryptoStandard.CMS);
         }
     }
 }
