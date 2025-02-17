@@ -39,7 +39,7 @@ namespace ReleaseNotesGenerator {
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
         private const string HugeTableLayoutedName = "huge_table_layouted.pdf";
         private const int NumberOfCellsInHugeTable = 10000;
-        private const string CountryToUseForSigning = "belgium"; //or portugal
+        private const string CountryToUseForSigning = "portugal"; //or portugal
         private const string PageToConvert = "release-itext-core-9-1.html";
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";

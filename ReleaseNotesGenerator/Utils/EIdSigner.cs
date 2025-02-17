@@ -108,7 +108,7 @@ namespace ReleaseNotesGenerator.Utils {
             signatureAppearance.SetFont(font);
             signerProperties.SetSignatureAppearance(signatureAppearance);
 
-            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 1024 * 10,
+            pdfSigner.SignDetached(signature, certificateWrappers, null, null, null, 1024 * 20,
                 PdfSigner.CryptoStandard.CMS);
         }
     }
