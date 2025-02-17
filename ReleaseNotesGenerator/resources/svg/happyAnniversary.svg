@@ -132,10 +132,10 @@
         </text>
         <text text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 60px" transform="translate(-800, 730)">
             iText-тің 25 жылдығымен құттықтаймыз!
-            <tspan x="2100" y="-410" text-anchor="start" direction="rtl"
+            <tspan x="2150" y="-410" text-anchor="start" direction="rtl"
                    style="fill: rgb(191, 94, 10);  font-size: 70px">
                 iText کے 25ویں سالگرہ کی مبارکباد!
-                <tspan fill="rgb(2, 48, 89)" font-size="60px" dx="-1750" dy="30">
+                <tspan fill="rgb(2, 48, 89)" font-size="60px" dx="-1800" dy="30">
                     Feliz 25º aniversário iText!
                 </tspan>
             </tspan>
