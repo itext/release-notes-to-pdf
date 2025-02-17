@@ -245,7 +245,7 @@ namespace ReleaseNotesGenerator {
 
             customContentInjector.Inject("customhtml/custom_style.html", "//head", 0);
             customContentInjector.Inject("customhtml/logo.html", "//body", 1);
-            customContentInjector.Inject($"customhtml/{SvgExampleFile}.html", "//body//div");
+            customContentInjector.Inject($"svg/{SvgExampleFile}.svg", "//body//div");
             customContentInjector.Inject("customhtml/custom_content_after_logo.html", "//body", 2);
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
             htmlProcessor.PostCustomContentProcess();

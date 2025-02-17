@@ -2,36 +2,36 @@
      width="100%" height="100%" viewBox="-5 -5 970 690" preserveAspectRatio="xMidYMid meet">
     <style type="text/css">
         @font-face {
-        font-family: 'NotoSansMalayalam';
-        font-weight: 400;
-        font-style: regular;
-        src: url('../fonts/NotoSansMalayalam-Regular.ttf')
-        format('TrueType');
+          font-family: 'NotoSansMalayalam';
+          font-weight: 400;
+          font-style: regular;
+          src: url('../fonts/NotoSansMalayalam-Regular.ttf')
+          format('TrueType');
         }
         .cls-1 {
-        fill: url(#linear-gradient-2);
+          fill: url(#linear-gradient-2);
         }
         .cls-1, .cls-2, .cls-3, .cls-4 {
-        fill-rule: evenodd;
+          fill-rule: evenodd;
         }
         .cls-2 {
-        fill: url(#linear-gradient-3);
+          fill: url(#linear-gradient-3);
         }
         .cls-3 {
-        fill: url(#linear-gradient-4);
+          fill: url(#linear-gradient-4);
         }
         .cls-5 {
-        fill: #758592;
+          fill: #758592;
         }
         .cls-4 {
-        fill: url(#linear-gradient);
+          fill: url(#linear-gradient);
         }
     </style>
     <defs>
         <clipPath id="textClip">
-            <text transform="translate(170, 50) scale(0.3326,0.3326)" text-anchor="middle"
-                  style="fill: rgb(2, 48, 89);  font-size: 80px">
-                祝 iText 25 周年快乐！
+            <text transform="translate(220, 30) scale(0.3326,0.3326)" text-anchor="middle"
+                  style="fill: rgb(2, 48, 89);  font-size: 60px">
+                Apsveicam iText ar 25. jubileju!
             </text>
         </clipPath>
 
@@ -42,10 +42,10 @@
         </linearGradient>
         <linearGradient id="gradient" href="#template"/>
 
-        <linearGradient id="linear-gradient" x1="141.47" y1="107.321" x2="324.744" y2="107.321"
+        <linearGradient id="linear-gradient" x1="0" y1="116.735" x2="174.337" y2="116.735"
                         gradientUnits="userSpaceOnUse">
             <stop offset="0" stop-color="#042d4c"/>
-            <stop offset=".733" stop-color="#004167"/>
+            <stop offset="1" stop-color="#004167"/>
         </linearGradient>
         <linearGradient id="linear-gradient-2" x1="0" y1="116.735" x2="174.337" y2="116.735"
                         gradientUnits="userSpaceOnUse">
@@ -65,7 +65,7 @@
     </defs>
 
     <g clip-path="url(#textClip)" fill-opacity="1">
-        <rect x="0" y="0" width="300" height="140" fill="url(#linear-gradient)"/>
+        <rect x="0" y="0" width="400" height="140" fill="url(#linear-gradient)"/>
     </g>
 
     <g id="itextLogo" transform="matrix(0.5, 0, 0, 0.5, 410, 260)">
@@ -95,7 +95,7 @@
         <text x="172" y="490" text-anchor="middle" fill="#0c66e4" font-size="6rem"
               stroke="url(#gradient)" stroke-width="1.5" stroke-opacity="0.5">
             iTextக்கு 25வது ஆண்டு விழாவிற்கு வாழ்த்துகள்!
-            <tspan x="-1114" y="-723" text-anchor="start" stroke="rgb(191, 94, 10)" stroke-width="3"
+            <tspan x="-1200" y="-723" text-anchor="start" stroke="rgb(191, 94, 10)" stroke-width="3"
                    fill="none" font-size="91px">
                 Šťastné 25. výročí iTextu!
             </tspan>
@@ -111,7 +111,7 @@
             <tspan style="fill: #0c66e4;  font-size: 65px" dx="-800" dy="-315">
                 iText-কে ২৫তম বার্ষিকীর শুভেচ্ছা!
             </tspan>
-            <tspan x="1300" y="690" text-anchor="end" style="fill: rgb(217, 158, 50);  font-size: 63px">
+            <tspan x="1200" y="730" text-anchor="end" style="fill: rgb(217, 158, 50);  font-size: 63px">
                 iText కు 25వ వార్షికోత్సవ శుభాకాంక్షలు!
             </tspan>
         </text>
@@ -123,19 +123,19 @@
             </tspan>
         </text>
         <text text-anchor="middle" fill="rgb(63, 126, 166)" font-size="70px"
-              stroke="#004068" stroke-width="5" stroke-opacity="0.3" transform="translate(-300, -950)"
+              stroke="#004068" stroke-width="5" stroke-opacity="0.3" transform="translate(-100, -950)"
               text-decoration="underline">
             Szczęśliwej 25. rocznicy dla iText!
-            <tspan text-anchor="middle" style="fill: #0c66e4" dx="-1950" dy="1300">
+            <tspan text-anchor="middle" style="fill: #0c66e4" dx="-2350" dy="1300">
                 С 25-летием, iText!
             </tspan>
         </text>
-        <text text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 50px" transform="translate(-850, 670)">
+        <text text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 60px" transform="translate(-800, 730)">
             iText-тің 25 жылдығымен құттықтаймыз!
-            <tspan x="2100" y="-380" text-anchor="start" direction="rtl"
+            <tspan x="2100" y="-410" text-anchor="start" direction="rtl"
                    style="fill: rgb(191, 94, 10);  font-size: 70px">
                 iText کے 25ویں سالگرہ کی مبارکباد!
-                <tspan fill="rgb(2, 48, 89)" font-size="60px" dx="-1750" dy="60">
+                <tspan fill="rgb(2, 48, 89)" font-size="60px" dx="-1750" dy="30">
                     Feliz 25º aniversário iText!
                 </tspan>
             </tspan>
@@ -160,12 +160,6 @@
         <text x="-800" y="120" text-anchor="middle" style="fill: rgb(217, 158, 50);  font-size: 50px">
             Feliz 25º aniversário para iText!
         </text>
-        <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 50px" transform="translate(100, 755)">
-            iTextの25周年おめでとうございます！
-        </text>
-        <text style="fill: rgb(63, 126, 166);  font-size: 65px" transform="translate(-1350, 790)">
-            iText의 25주년을 축하합니다!
-        </text>
         <text x="1250" y="70" text-anchor="end" fill="rgb(2, 48, 89)" font-size="80px">
             З 25-річчям, iText!
         </text>
@@ -177,11 +171,6 @@
               transform="translate(1000, -270)">
             Su 25-uoju iText jubiliejumi!
         </text>
-        <text text-anchor="middle"
-              style="fill: rgb(63, 126, 166);  font-size: 50px"
-              transform="translate(760, 383)">
-            Apsveicam iText ar 25. jubileju!
-        </text>
         <text text-anchor="middle" style="fill: #0c66e4;  font-size: 50px"
               transform="translate(-1000, -420)">
             iText'in 25. yıl dönümünü kutlarız!
@@ -190,11 +179,11 @@
               transform="translate(1000, -850)">
             iText को 25वीं वर्षगांठ की शुभकामनाएँ!
         </text>
-        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 50px"
-              transform="translate(-1000, 570)">
+        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 60px"
+              transform="translate(-1000, 590)">
             יום הולדת 25 שמח ל-iText!
         </text>
-        <text style="fill: rgb(63, 126, 166);  font-size: 50px" transform="translate(300, 825)">
+        <text style="fill: rgb(63, 126, 166);  font-size: 50px" transform="translate(320, 835)">
             Sugeng tanggap warsa kaping 25 kanggo iText!
         </text>
         <text text-anchor="middle" style="fill: #0c66e4;  font-size: 50px"
@@ -222,12 +211,12 @@
             สุขสันต์วันครบรอบ 25 ปี iText!
         </text>
         <text text-anchor="middle"
-              style="fill: #0c66e4;  font-size: 50px"
-              transform="translate(-100, -870)">
+              style="fill: #0c66e4;  font-size: 70px"
+              transform="translate(-600, -870)">
             iText ಗೆ 25ನೇ ವಾರ್ಷಿಕೋತ್ಸವದ ಶುಭಾಶಯಗಳು!
         </text>
-        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 70px"
-              transform="translate(-180, 900)" font-family="NotoSansMalayalam">
+        <text text-anchor="middle" style="fill: rgb(191, 94, 10);  font-size: 75px"
+              transform="translate(-500, 885)" font-family="NotoSansMalayalam">
             iText-ന് 25-ാം വാർഷികം ആശംസകൾ!
         </text>
         <text text-anchor="middle" style="fill: rgb(2, 48, 89);  font-size: 45px"
@@ -235,7 +224,8 @@
             iText အတွက် 25 နှစ်ပြည့်နေ့ကို ဂုဏ်ပြုပါသည်!
         </text>
         <text text-anchor="middle" style="fill: rgb(63, 126, 166);  font-size: 75px"
-              transform="translate(850, -150)">iText ପାଇଁ 25ତମ ବର୍ଷଗାଠିର ଶୁଭେଚ୍ଛା!
+              transform="translate(850, -150)">
+            iText ପାଇଁ 25ତମ ବର୍ଷଗାଠିର ଶୁଭେଚ୍ଛା!
         </text>
     </g>
 </svg>

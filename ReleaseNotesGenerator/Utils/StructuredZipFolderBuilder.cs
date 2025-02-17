@@ -27,8 +27,7 @@ namespace ReleaseNotesGenerator.Utils {
                         || file.Contains(".zip")
                         || file.Contains("ValidationExample")
                         || file.Contains(".idea")
-                        || file.Contains(".user")
-                        || file.Contains("ArialUni.ttf")) {
+                        || file.Contains(".user")) {
                         continue;
                     }
 
