@@ -18,7 +18,6 @@ namespace ReleaseNotesGenerator.Utils {
             this.font = font;
         }
 
-
         protected override void OnAcceptedEvent(AbstractPdfDocumentEvent @event) {
             var docEvent = (PdfDocumentEvent)@event;
             var page = docEvent.GetPage();

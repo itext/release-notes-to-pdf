@@ -26,7 +26,6 @@ using iText.Layout.Properties;
 using iText.Licensing.Base;
 using iText.Pdfa;
 using iText.Svg.Converter;
-using iText.Svg.Processors;
 using iText.Svg.Processors.Impl;
 using ReleaseNotesGenerator.Utils;
 using Path = System.IO.Path;
@@ -48,13 +47,14 @@ namespace ReleaseNotesGenerator {
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
         private const string SignatureFieldName = "signature_id";
-        private const string SvgExampleFile = "happyAnniversary";
+        private const string SvgExampleFile = "svgExample";
 
 
         static void Main(string[] args) {
             Console.WriteLine($"Generating release notes for version {Version}...");
             LicenseKey.LoadLicenseFile(new FileInfo("../../../resources/all-products.json"));
             GenerateMainPdfDocument();
+            CheckPdfCompliance();
         }
 
         private static void GenerateMainPdfDocument() {
@@ -83,6 +83,13 @@ namespace ReleaseNotesGenerator {
             if (sign != null && sign.ToLower().Equals("y")) {
                 SignDocument();
             }
+        }
+
+        private static void CheckPdfCompliance() {
+            // CustomVeraPdfValidator will be removed after
+            // TODO DEVSIX-9041 pdfTest: Allow specify conformance to check in VeraPdfValidator
+            new CustomVeraPdfValidator().Validate(FileName, "4f");
+            new CustomVeraPdfValidator().Validate(FileName, "ua2");
         }
 
         private static PdfDocument CreateWtpdfDocument() {

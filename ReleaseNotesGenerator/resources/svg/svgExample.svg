@@ -32,46 +32,38 @@
               font-size="175" text-decoration="underline" text-anchor="middle">
             Release Notes
         </text>
-        <text x="-520" y="-900" text-anchor="end" style="fill: rgb(244, 159, 99)">
+        <text x="-300" y="-900" text-anchor="end" style="fill: rgb(244, 159, 99)">
             Kiadási megjegyzések
-            <tspan dx="-955" dy="170" fill="rgb(50, 65, 21)">
+            <tspan dx="-1170" dy="220" fill="rgb(50, 65, 21)">
                 ਿਰਲੀਜ਼ ਨੋਟਸ
-                <tspan dx="-850" dy="130" style="fill: rgb(150, 192, 134)">
-                    Versionshinweise
+                <tspan dx="-650" dy="210" style="fill: rgb(150, 192, 134)">
+                    Шығарылым жазбалары
                 </tspan>
             </tspan>
-            <tspan dx="-900" dy="130" fill="rgb(0, 69, 62)" font-size="5rem">
-                Шығарылым жазбалары
+            <tspan dx="-1300" dy="180" fill="rgb(255, 141, 95)" font-size="6rem">
+                Versionshinweise
             </tspan>
         </text>
 
-        <text text-anchor="middle" fill="rgb(255, 233, 240)" transform="translate(-100, 1300)" font-size="140"
-              text-decoration="underline">
+        <text text-anchor="middle" fill="rgb(255, 190, 200)" transform="translate(-100, 1300)" font-size="140" text-decoration="underline">
             Sürüm Notları
         </text>
-        <text text-anchor="middle" style="fill: rgb(250, 246, 255); font-size: 160px;" transform="translate(-1200, -70)">
-            릴리스 노트
-        </text>
-        <text x="1000" y="20" text-anchor="middle" fill="rgb(225, 255, 246)" font-size="1.4em">
-            发布说明
-        </text>
-        <text text-anchor="middle" font-size="100" style="fill: rgb(162, 185, 198)" transform="translate(-50, 790)">
+        <text text-anchor="middle" font-size="100" style="fill: rgb(162, 185, 198)" transform="translate(0, 790)">
             ெவளியீட்டு குறிப்புகள்
         </text>
-        <text x="-780" y="446" text-anchor="middle" font-size="100" style="fill: rgb(0, 66, 90)">
+        <text x="1270" y="46" text-anchor="middle" font-size="100" style="fill: rgb(0, 66, 90)">
             Poznámky k vydání
         </text>
         <text text-anchor="middle" style="fill: rgb(239, 0, 17)" transform="translate(-1000, 685)">
             िरलीज नोट्स
         </text>
-        <text text-anchor="middle" style="stroke: url(#gradient); stroke-width: 2px"
-              transform="translate(1100, 1350)" fill="none">
+        <text text-anchor="middle" style="stroke: url(#gradient); stroke-width: 2px" transform="translate(1100, 1350)" fill="none">
             Release-opmerkingen
         </text>
         <text text-anchor="middle" fill="rgb(255, 241, 217)" font-size="125" transform="translate(-1200, 280)">
             విడుదల గమనికలు
         </text>
-        <text text-anchor="middle" style="fill: rgb(150, 191, 162)" transform="translate(330, -557)">
+        <text text-anchor="middle" style="fill: rgb(150, 191, 162)" font-size="90" transform="translate(330, -580)">
             িরিলজ েনাটস
         </text>
         <text x="1600" y="-750" text-anchor="end" fill="rgb(239, 0, 0)">
@@ -80,68 +72,58 @@
         <text x="-28" y="-950" text-anchor="middle" style="fill: rgb(255, 125, 104)">
             ملاحظات الإصدار
         </text>
-        <text text-anchor="middle" style="fill: rgb(255, 239, 233)" transform="translate(1250, -580)"
-              text-decoration="underline">
+        <text text-anchor="middle" style="fill: rgb(255, 190, 200)" transform="translate(1250, -600)" text-decoration="underline">
             Notatki o wersji
         </text>
-        <text text-anchor="middle" fill="rgb(141, 188, 216)" font-size="100"
-              transform="translate(1200, -950)">
+        <text text-anchor="middle" fill="rgb(141, 188, 216)" font-size="100" transform="translate(1200, -950)">
             Примечания к релизу
         </text>
         <text x="-730" y="-600" text-anchor="end" direction="rtl" font-size="130" style="fill: rgb(250, 0, 0)">
             ریلیز نوٹس
         </text>
-        <text x="1200" y="680" text-anchor="middle" fill="rgb(242, 161, 50)" font-size="110">
+        <text x="1180" y="670" text-anchor="middle" fill="rgb(242, 161, 50)" font-size="110">
             Notas de versão
         </text>
-        <text text-anchor="middle" style="fill: rgb(207, 255, 223)" transform="translate(185, 963)">
+        <text text-anchor="middle" style="fill: rgb(207, 255, 223)" transform="translate(285, 963)">
             Notes de version
         </text>
-        <text text-anchor="middle" font-size="130" style="fill: rgb(71, 56, 62)" transform="translate(0, 600)">
+        <text text-anchor="middle" font-size="130" style="fill: rgb(71, 56, 62)" transform="translate(0, 570)">
             Buraxılış qeydləri
         </text>
         <text x="200" y="-850" text-anchor="start" fill="rgb(227, 253, 255)" font-size="90">
             Note di rilascio
         </text>
-        <text style="fill: rgb(250, 246, 255)" transform="translate(700, 1000)">
-            リリースノート
-        </text>
-        <text text-anchor="middle" font-size="100" style="fill: rgb(137, 192, 182)" transform="translate(-1230, 540)">
+        <text text-anchor="middle" font-size="120" style="fill: rgb(137, 192, 182)" transform="translate(-1180, 470)">
             Примітки до релізу
         </text>
         <text text-anchor="middle" font-size="110" style="fill: rgb(59, 60, 66)" transform="translate(115, -740)">
             Нататкі да рэлізу
         </text>
-        <text x="1230" y="-160" text-anchor="middle" fill="rgb(247, 0, 31)" font-size="95">
+        <text x="1120" y="-140" text-anchor="middle" fill="rgb(247, 0, 31)" font-size="95">
             Leidimo pastabos
         </text>
-        <text text-anchor="middle"
-              style="fill: rgb(255, 141, 95); "
-              transform="translate(-1200, 830)">Izlaides piezīmes
+        <text text-anchor="middle" style="fill: rgb(255, 141, 95);" transform="translate(-1200, 830)">
+              Izlaides piezīmes
         </text>
-        <text x="550" y="170" fill="rgb(179, 181, 192)" font-size="100">
-            නිකුත් කිරීමේ සටහන්
-        </text>
-        <text text-anchor="middle" font-size="140" fill="rgb(62, 61, 22)" transform="translate(-1300, -300)">
+        <text text-anchor="middle" font-size="140" fill="rgb(62, 61, 22)" transform="translate(-1300, -100)">
             הודעות שחרור
         </text>
-        <text x="1170" y="330" text-anchor="middle" fill="rgb(255, 233, 240)">
+        <text x="1000" y="250" text-anchor="middle" fill="rgb(255, 190, 200)">
             Cathetan Rilis
         </text>
-        <text text-anchor="middle" font-size="110" style="fill: rgb(249, 154, 127)" transform="translate(1100, 830)">
+        <text text-anchor="middle" font-size="110" style="fill: rgb(249, 154, 127)" transform="translate(1195, 850)">
             Chiqarish eslatmalari
         </text>
-        <text x="-1050" y="100" text-anchor="middle" stroke-width="4" stroke="rgb(239, 0, 0)" fill="none"
-              text-decoration="underline">
+        <text x="-1050" y="30" text-anchor="middle" stroke-width="4" stroke="rgb(239, 0, 0)" fill="none" text-decoration="underline">
             Искәрмәләр
         </text>
-        <text text-anchor="middle" font-size="75" style="fill: rgb(144, 188, 212)" transform="translate(-600, -760)">
+        <text text-anchor="middle" font-size="75" style="fill: rgb(144, 188, 212)" transform="translate(-650, -760)">
             Catatan Rilis
         </text>
         <text text-anchor="middle" style="fill: rgb(225, 0, 2)" transform="translate(700, 1150)">
             កំណត់ចំណាំៃនការេចញផ្សាយ
         </text>
-        <text x="1250" y="-310" text-anchor="middle" stroke="rgb(255, 129, 59)" stroke-width="5"
+        <text x="1250" y="-270" text-anchor="middle" stroke="rgb(255, 129, 59)" stroke-width="5"
               fill="none" font-size="130">
             บันทึกประจำรุ่น
         </text>
@@ -154,8 +136,7 @@
         <text text-anchor="middle" font-size="140" style="fill: rgb(64, 58, 65)" transform="translate(-1100, 1200)">
             ြဖန့်ချိေရးမှတ်စုများ
         </text>
-        <text x="800" y="200" text-anchor="end" style="fill: rgb(150, 192, 134)" font-size="160"
-              transform="translate(760, 320)">
+        <text x="740" y="70" text-anchor="end" style="fill: rgb(150, 192, 134)" font-size="160" transform="translate(760, 420)">
             ପ୍ରକାଶନ ଟିପ୍ପଣୀ
         </text>
     </g>
