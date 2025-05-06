@@ -52,7 +52,21 @@ namespace ReleaseNotesGenerator {
 
         static void Main(string[] args) {
             Console.WriteLine($"Generating release notes for version {Version}...");
-            LicenseKey.LoadLicenseFile(new FileInfo("../../../resources/all-products.json"));
+            //Prompt the user for the license key
+
+            string? licenseKey = null;
+            while (true) {
+                Console.Write("Please enter path to your iText license key:");
+                licenseKey = Console.ReadLine();
+                if (File.Exists(licenseKey)) {
+                    Console.WriteLine("License key file found.");
+                    break;
+                }
+                Console.WriteLine("License key file not found. Please enter a valid license key file path.");
+            }
+
+
+            LicenseKey.LoadLicenseFile(new FileInfo(licenseKey));
             GenerateMainPdfDocument();
             CheckPdfCompliance();
         }
@@ -61,15 +75,17 @@ namespace ReleaseNotesGenerator {
             var pdfDocument = CreateWtpdfDocument();
             AddMacProtectedVersion(pdfDocument);
             AddSourceCodeFiles(pdfDocument);
-            
-            var tableLyoutingPrompt = "Do you want to create a PDF with huge table and attach it to release notes? (y/n)";
+
+            var tableLyoutingPrompt =
+                "Do you want to create a PDF with huge table and attach it to release notes? (y/n)";
             Console.WriteLine(tableLyoutingPrompt);
             var layoutTable = Console.ReadLine();
             if (layoutTable != null && layoutTable.ToLower().Equals("y")) {
                 Stopwatch sw = Stopwatch.StartNew();
                 GenerateAndAttachPdfWithHugeTableToMeasurePerformance(pdfDocument);
                 sw.Stop();
-                Console.WriteLine("Generating a table with " + NumberOfCellsInHugeTable + " cells takes " + sw.ElapsedMilliseconds + " milliseconds.");
+                Console.WriteLine("Generating a table with " + NumberOfCellsInHugeTable + " cells takes " +
+                                  sw.ElapsedMilliseconds + " milliseconds.");
             }
 
             GeneratePdfFromHtmlAndSvg(pdfDocument);
@@ -152,16 +168,16 @@ namespace ReleaseNotesGenerator {
                 File.Delete(sourceCodeZipFolder);
             }
 
-           
+
             //If executed from the bin folder, we need to go up 4 levels to get to the project directory
             var projectDirectory =
                 Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.Parent?.FullName;
-           
+
             // If executed from the project directory, have to go up 1 level
             if (projectDirectory == null) {
                 projectDirectory = Directory.GetParent(Directory.GetCurrentDirectory())?.FullName;
             }
-           
+
             Console.WriteLine(projectDirectory);
 
             using (var zip = ZipFile.Open("./source-code.zip", ZipArchiveMode.Create)) {
@@ -182,7 +198,7 @@ namespace ReleaseNotesGenerator {
             var spec = PdfFileSpec.CreateEmbeddedFileSpec(document, fileBytes, fileDescription, fileTitle + "x", null,
                 null, PdfName.Data);
             document.AddFileAttachment(fileTitle, spec);
-            
+
             // Add svg files and css stylesheet.
             const string svgOverview = "./resources/svg/svgOverview.svg";
             const string svgOverviewTitle = "svgOverview.svg";
@@ -205,7 +221,8 @@ namespace ReleaseNotesGenerator {
 
             const string cssStyle = "./resources/svg/svgStyle.css";
             const string cssStyleTitle = "svgStyle.css";
-            const string cssStyleDescription = "This CSS file is used as embedded stylesheet while converting SVG to PDF.";
+            const string cssStyleDescription =
+                "This CSS file is used as embedded stylesheet while converting SVG to PDF.";
             var cssStyleBytes = File.ReadAllBytes(cssStyle);
             var cssStyleSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, cssStyleBytes, cssStyleDescription,
                 cssStyleTitle, null, null, PdfName.Data);
@@ -271,23 +288,24 @@ namespace ReleaseNotesGenerator {
             properties.SetCustomViewport(page.GetMediaBox());
             // TODO DEVSIX-8940 SVG: provide an easy way to create PDF/UA-2 compliant document with SVG
             PdfFormXObject xObject = SvgConverter.ConvertToXObject(
-                FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "svg/svgOverview.svg")),
+                FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory,
+                    "svg/svgOverview.svg")),
                 pdfDocument, properties);
             PdfCanvas canvas = new PdfCanvas(page);
-            if (pdfDocument.IsTagged())
-            {
+            if (pdfDocument.IsTagged()) {
                 TagTreePointer tagTreePointer = new TagTreePointer(pdfDocument);
                 tagTreePointer.AddTag(StandardRoles.FIGURE);
                 tagTreePointer.SetPageForTagging(page);
                 tagTreePointer.GetProperties().SetActualText("SVG overview");
                 canvas.OpenTag(tagTreePointer.GetTagReference());
             }
-            canvas.AddXObjectAt(xObject, xObject.GetBBox().GetAsNumber(0).FloatValue(), xObject.GetBBox().GetAsNumber(1).FloatValue());
-            if (pdfDocument.IsTagged())
-            {
+
+            canvas.AddXObjectAt(xObject, xObject.GetBBox().GetAsNumber(0).FloatValue(),
+                xObject.GetBBox().GetAsNumber(1).FloatValue());
+            if (pdfDocument.IsTagged()) {
                 canvas.CloseTag();
             }
-            
+
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("sample1", "Signature validation example");
             pagNumberHandler.SetPages(pdfDocument.GetNumberOfPages());
@@ -300,8 +318,7 @@ namespace ReleaseNotesGenerator {
             pdfDocument.Close();
         }
 
-        private static void GenerateAndAttachPdfWithHugeTableToMeasurePerformance(PdfDocument pdfDocument)
-        {
+        private static void GenerateAndAttachPdfWithHugeTableToMeasurePerformance(PdfDocument pdfDocument) {
             PdfDocument hugeTablePdf = new PdfDocument(new PdfWriter(HugeTableLayoutedName));
             hugeTablePdf.SetTagged();
             Document document = new Document(hugeTablePdf);
@@ -318,7 +335,7 @@ namespace ReleaseNotesGenerator {
             document.Add(table);
             document.Close();
             hugeTablePdf.Close();
-            
+
             var hugeTablePdfBytes = File.ReadAllBytes(HugeTableLayoutedName);
             const string hugeTablePdfTitle = "Pdf with layouted huge table to measure performance.pdf";
             const string hugeTablePdfDescription =

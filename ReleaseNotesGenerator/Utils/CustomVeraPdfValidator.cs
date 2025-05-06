@@ -33,6 +33,7 @@ namespace ReleaseNotesGenerator.Utils
 
             HandleOutputAndWriteReport(p, dest, flavour);
             p.WaitForExit();
+            Console.WriteLine($"Validation {flavour} finished with exit code: {p.ExitCode}");
         }
 
         private void HandleOutputAndWriteReport(Process p, String dest, String flavour) {
