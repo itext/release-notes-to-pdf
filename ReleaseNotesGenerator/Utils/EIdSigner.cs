@@ -14,6 +14,7 @@ using iText.Kernel.Crypto;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Validation;
 using iText.Signatures;
 using iText.Signatures.Cms;
 using Path = System.IO.Path;
@@ -87,14 +88,14 @@ namespace ReleaseNotesGenerator.Utils {
             // Select the key and certificate to be used
             signature.SelectSigningKeyAndCertificate(key);
 
-            var pdfSigner = new CustomPdfSigner(pdfReader, result, new StampingProperties().UseAppendMode());
+            var pdfSigner = new PdfSigner(pdfReader, result, new StampingProperties().UseAppendMode());
+            pdfSigner.GetDocument().GetDiContainer().Register(typeof(ValidationContainer), new ValidationContainer());
             IX509Certificate[] certificateWrappers =
                 signature.GetChain().Select(e => new X509CertificateBC(e)).ToArray();
 
             signature.SetDigestAlgorithmName(DigestAlgorithms.SHA256);
 
             var signerProperties = new SignerProperties();
-
             signerProperties.SetFieldName(fieldName);
             pdfSigner.SetSignerProperties(signerProperties);
 

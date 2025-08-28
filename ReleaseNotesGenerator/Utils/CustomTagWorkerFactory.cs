@@ -9,23 +9,12 @@ namespace ReleaseNotesGenerator.Utils {
     /// This is mainly related to PDF/UA support not 100% there for html2pdf
     /// </summary>
     public class CustomTagWorkerFactory : DefaultTagWorkerFactory {
-        private static readonly HashSet<string> HTags = new HashSet<string> {
-            "h1", "h2", "h3", "h4", "h5", "h6"
-        };
-
         public override ITagWorker GetCustomTagWorker(IElementNode tag, ProcessorContext context) {
-            if (tag.Name() == "svg") {
-                return new SvgWorker(tag, context);
-            }
-
             if (tag.Name().Equals("signature-field"))
             {
-                return new CustomSignatureTagWorker(tag, context);
+                return new CustomSignatureTagWorker(tag);
             }
-
-            return HTags.Contains(tag.Name())
-                ? new CustomHTagWorker(tag, context)
-                : base.GetCustomTagWorker(tag, context);
+            return base.GetCustomTagWorker(tag, context);
         }
     }
 }

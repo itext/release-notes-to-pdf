@@ -2,26 +2,26 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
         <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
         <PublishAot>true</PublishAot>
         <InvariantGlobalization>false</InvariantGlobalization>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="itext.bouncy-castle-adapter" Version="9.1.0" />
-        <PackageReference Include="itext.commons" Version="9.1.0" />
-        <PackageReference Include="itext" Version="9.1.0" />
-        <PackageReference Include="itext.pdftest" Version="9.1.0" />
-        <PackageReference Include="itext.pdfhtml" Version="6.1.0" />
-        <PackageReference Include="itext.pdfcalligraph" Version="5.0.1" />
-        <PackageReference Include="itext.licensing.base" Version="4.2.1" />
+        <PackageReference Include="itext.bouncy-castle-adapter" Version="9.3.0-SNAPSHOT" />
+        <PackageReference Include="itext.commons" Version="9.3.0-SNAPSHOT" />
+        <PackageReference Include="itext" Version="9.3.0-SNAPSHOT" />
+        <PackageReference Include="itext.pdftest" Version="9.3.0-SNAPSHOT" />
+        <PackageReference Include="itext.pdfhtml" Version="6.2.1-SNAPSHOT" />
+        <PackageReference Include="itext.pdfcalligraph" Version="5.0.2" />
+        <PackageReference Include="itext.licensing.base" Version="4.2.2" />
 
         <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
         <PackageReference Include="Pkcs11Interop" Version="5.1.1" />
         <!-- Required for CustomVeraPdfValidator and pdfTest -->
-        <PackageReference Include="NUnit" Version="4.3.2" />
+        <PackageReference Include="NUnit" Version="3.7.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,5 +34,10 @@
       <Folder Include="resources\kb.itextpdf.com\__assets-c2adfbc7-08e1-45d7-9879-4f5707dce348\css\" />
       <Folder Include="resources\kb.itextpdf.com\__assets-c8b5fc36-7492-425a-8d1f-0ecc2748ed70\css\" />
       <Folder Include="resources\kb.itextpdf.com\__theme\css\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="source-code.zip" />
+      <None Remove="test.html" />
     </ItemGroup>
 </Project>

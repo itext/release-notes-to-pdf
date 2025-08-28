@@ -13,11 +13,11 @@ namespace ReleaseNotesGenerator.Utils
     {
         private SignatureFieldAppearance signatureFieldAppearance;
 
-        public CustomSignatureTagWorker(IElementNode tag, ProcessorContext context) {
+        public CustomSignatureTagWorker(IElementNode tag) {
             String signatureFieldId = tag.GetAttribute("id");
             signatureFieldAppearance = new SignatureFieldAppearance(signatureFieldId);
             var font = PdfFontFactory.CreateFont(Path.Combine(Directory.GetCurrentDirectory(), "resources",
-                "font", "NotoSans-Regular.ttf"));
+                "font", "NotoSans-Regular.ttf"), PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
             signatureFieldAppearance.SetFont(font);
             signatureFieldAppearance.SetFontSize(12);
             signatureFieldAppearance.SetContent("Signature field");

@@ -1,32 +1,29 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using HtmlAgilityPack;
-using iText.Commons.Utils;
 using iText.Html2pdf;
+using iText.Html2pdf.Attach;
+using iText.Html2pdf.Attach.Impl;
 using iText.Html2pdf.Resolver.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Mac;
 using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Event;
 using iText.Kernel.Pdf.Filespec;
-using iText.Kernel.Pdf.Tagging;
-using iText.Kernel.Pdf.Tagutils;
-using iText.Kernel.Pdf.Xobject;
+using iText.Kernel.Validation;
 using iText.Kernel.XMP;
-using iText.Layout;
-using iText.Layout.Borders;
-using iText.Layout.Element;
-using iText.Layout.Properties;
+using iText.Layout.Tagging;
 using iText.Licensing.Base;
 using iText.Pdfa;
+using iText.Pdfua.Checkers;
+using iText.StyledXmlParser.Node;
 using iText.Svg.Converter;
 using iText.Svg.Processors.Impl;
+using iText.Test.Pdfa;
 using ReleaseNotesGenerator.Utils;
 using Path = System.IO.Path;
 
@@ -36,13 +33,12 @@ namespace ReleaseNotesGenerator {
         private const string ResourceDirectory = "resources";
 
         //You can change these variables 
-        private const string Version = "9.1.0";
+        private const string Version = "9.2.0";
         private const string Password = "itext";
         private static readonly string FileName = $"release_notes_{Version}.pdf";
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
-        private const string HugeTableLayoutedName = "huge_table_layouted.pdf";
-        private const int NumberOfCellsInHugeTable = 10000;
-        private const CountrySigning CountryUsedForSigning = CountrySigning.PORTUGAL;
+        private const CountrySigning CountryUsedForSigning = CountrySigning.BELGIUM;
+
         private const string PageToConvert = "release-itext-core-9-1.html";
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
@@ -62,6 +58,7 @@ namespace ReleaseNotesGenerator {
                     Console.WriteLine("License key file found.");
                     break;
                 }
+
                 Console.WriteLine("License key file not found. Please enter a valid license key file path.");
             }
 
@@ -75,18 +72,6 @@ namespace ReleaseNotesGenerator {
             var pdfDocument = CreateWtpdfDocument();
             AddMacProtectedVersion(pdfDocument);
             AddSourceCodeFiles(pdfDocument);
-
-            var tableLyoutingPrompt =
-                "Do you want to create a PDF with huge table and attach it to release notes? (y/n)";
-            Console.WriteLine(tableLyoutingPrompt);
-            var layoutTable = Console.ReadLine();
-            if (layoutTable != null && layoutTable.ToLower().Equals("y")) {
-                Stopwatch sw = Stopwatch.StartNew();
-                GenerateAndAttachPdfWithHugeTableToMeasurePerformance(pdfDocument);
-                sw.Stop();
-                Console.WriteLine("Generating a table with " + NumberOfCellsInHugeTable + " cells takes " +
-                                  sw.ElapsedMilliseconds + " milliseconds.");
-            }
 
             GeneratePdfFromHtmlAndSvg(pdfDocument);
             var fileInfo = new FileInfo(FileName);
@@ -104,8 +89,11 @@ namespace ReleaseNotesGenerator {
         private static void CheckPdfCompliance() {
             // CustomVeraPdfValidator will be removed after
             // TODO DEVSIX-9041 pdfTest: Allow specify conformance to check in VeraPdfValidator
-            new CustomVeraPdfValidator().Validate(FileName, "4f");
-            new CustomVeraPdfValidator().Validate(FileName, "ua2");
+            var result = new VeraPdfValidator().Validate(FileName);
+            if (!string.IsNullOrEmpty(result)) {
+                Console.WriteLine(result);
+                throw new Exception("Validation failed");
+            }
         }
 
         private static PdfDocument CreateWtpdfDocument() {
@@ -121,6 +109,11 @@ namespace ReleaseNotesGenerator {
                 outputIntent);
             var xmpMeta = XMPMetaFactory.Parse(File.Open(Path.Combine(ResourceDirectory, "simplePdfUA2.xmp"),
                 FileMode.Open, FileAccess.Read));
+            pdfDocument.GetDiContainer().Register(typeof(ProhibitedTagRelationsResolver),
+                new ProhibitedTagRelationsResolver(pdfDocument));
+
+            var container = pdfDocument.GetDiContainer().GetInstance<ValidationContainer>();
+            container.AddChecker(new PdfUA2Checker(pdfDocument));
 
             pdfDocument.SetXmpMetadata(xmpMeta);
             pdfDocument.SetTagged();
@@ -154,6 +147,13 @@ namespace ReleaseNotesGenerator {
             pdfDocument.AddFileAttachment(macProtectedPdfTitle, spec);
         }
 
+        /// <summary>
+        /// By default everything in the resources directory is added to a zip file,
+        /// additionally the README.md file is added as plain attachment at base level of the pdf document so its easie
+        /// to find the build instructions
+        /// </summary>
+        /// <param name="document"></param>
+        /// <exception cref="Exception"></exception>
         private static void AddSourceCodeFiles(PdfDocument document) {
             const string sourceCodeZipFolder = "./source-code.zip";
             const string fileTitle = "source-code.zip";
@@ -193,40 +193,10 @@ namespace ReleaseNotesGenerator {
                 null, null, null);
             document.AddFileAttachment("README.md", readmeSpec);
 
-
             var fileBytes = File.ReadAllBytes(sourceCodeZipFolder);
             var spec = PdfFileSpec.CreateEmbeddedFileSpec(document, fileBytes, fileDescription, fileTitle + "x", null,
                 null, PdfName.Data);
             document.AddFileAttachment(fileTitle, spec);
-
-            // Add svg files and css stylesheet.
-            const string svgOverview = "./resources/svg/svgOverview.svg";
-            const string svgOverviewTitle = "svgOverview.svg";
-            const string svgOverviewDescription = "This SVG file contains a list describing some of the features " +
-                                                  "for converting SVG to PDF using iText.";
-            var svgOverviewBytes = File.ReadAllBytes(svgOverview);
-
-            var svgOverviewSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, svgOverviewBytes, svgOverviewDescription,
-                svgOverviewTitle, null, null, PdfName.Data);
-            document.AddFileAttachment(svgOverviewTitle, svgOverviewSpec);
-
-            string svgExample = $"./resources/svg/{SvgExampleFile}.svg";
-            const string svgExampleTitle = "svgExample.svg";
-            const string svgExampleDescription = "This SVG file contains an example of the main capabilities of " +
-                                                 "iText for converting SVG to PDF.";
-            var svgExampleBytes = File.ReadAllBytes(svgExample);
-            var svgExampleSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, svgExampleBytes, svgExampleDescription,
-                svgExampleTitle, null, null, PdfName.Data);
-            document.AddFileAttachment(svgExampleTitle, svgExampleSpec);
-
-            const string cssStyle = "./resources/svg/svgStyle.css";
-            const string cssStyleTitle = "svgStyle.css";
-            const string cssStyleDescription =
-                "This CSS file is used as embedded stylesheet while converting SVG to PDF.";
-            var cssStyleBytes = File.ReadAllBytes(cssStyle);
-            var cssStyleSpec = PdfFileSpec.CreateEmbeddedFileSpec(document, cssStyleBytes, cssStyleDescription,
-                cssStyleTitle, null, null, PdfName.Data);
-            document.AddFileAttachment(cssStyleTitle, cssStyleSpec);
         }
 
 
@@ -248,9 +218,12 @@ namespace ReleaseNotesGenerator {
                 "itext");
             Directory.GetFiles(Path.Combine(ResourceDirectory, "font"), "*.ttf")
                 .ToList().ForEach(file => fontProvider.AddFont(file));
+
+            var outlineHandler = OutlineHandler.CreateStandardHandler();
             var converterProperties = new ConverterProperties()
                 .SetBaseUri(baseDirectorySite)
                 .SetImmediateFlush(false)
+                .SetOutlineHandler(outlineHandler)
                 .SetTagWorkerFactory(new CustomTagWorkerFactory())
                 .SetFontProvider(fontProvider);
 
@@ -272,94 +245,33 @@ namespace ReleaseNotesGenerator {
             customContentInjector.Inject($"svg/{SvgExampleFile}.svg", "//body//div");
             customContentInjector.Inject("customhtml/custom_content_after_logo.html", "//body", 2);
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
-            htmlProcessor.PostCustomContentProcess();
+            // We need full html before post processing
             new TocAndBookMarkGenerator(htmDocument, pdfDocument).AddTocAndBookMark();
+            htmlProcessor.PostCustomContentProcess();
 
 
             var document =
                 HtmlConverter.ConvertToDocument(htmDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
             document.Flush();
 
+
             // Convert SVG to PDF
-            PdfPage page = pdfDocument.AddNewPage(PageSize.A4);
-            SvgConverterProperties properties = new SvgConverterProperties()
+            var page = pdfDocument.AddNewPage(PageSize.A4);
+            var svgString = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "svg",
+                "svgOverview.svg"));
+
+            var properties = new SvgConverterProperties()
                 .SetFontProvider(fontProvider)
                 .SetBaseUri(Path.Combine(ResourceDirectory, "svg"));
-            properties.SetCustomViewport(page.GetMediaBox());
-            // TODO DEVSIX-8940 SVG: provide an easy way to create PDF/UA-2 compliant document with SVG
-            PdfFormXObject xObject = SvgConverter.ConvertToXObject(
-                FileUtil.GetInputStreamForFile(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory,
-                    "svg/svgOverview.svg")),
-                pdfDocument, properties);
-            PdfCanvas canvas = new PdfCanvas(page);
-            if (pdfDocument.IsTagged()) {
-                TagTreePointer tagTreePointer = new TagTreePointer(pdfDocument);
-                tagTreePointer.AddTag(StandardRoles.FIGURE);
-                tagTreePointer.SetPageForTagging(page);
-                tagTreePointer.GetProperties().SetActualText("SVG overview");
-                canvas.OpenTag(tagTreePointer.GetTagReference());
-            }
+            properties.GetAccessibilityProperties().SetAlternateDescription("Svg overview");
 
-            canvas.AddXObjectAt(xObject, xObject.GetBBox().GetAsNumber(0).FloatValue(),
-                xObject.GetBBox().GetAsNumber(1).FloatValue());
-            if (pdfDocument.IsTagged()) {
-                canvas.CloseTag();
-            }
+            SvgConverter.DrawOnPage(svgString, page, properties);
 
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("sample1", "Signature validation example");
             pagNumberHandler.SetPages(pdfDocument.GetNumberOfPages());
 
-            if (pdfDocument.GetStructTreeRoot() != null) {
-                StructTreePostProcessor.Traverse(pdfDocument.GetStructTreeRoot());
-            }
-
-            TraverseOutlines(pdfDocument);
             pdfDocument.Close();
-        }
-
-        private static void GenerateAndAttachPdfWithHugeTableToMeasurePerformance(PdfDocument pdfDocument) {
-            PdfDocument hugeTablePdf = new PdfDocument(new PdfWriter(HugeTableLayoutedName));
-            hugeTablePdf.SetTagged();
-            Document document = new Document(hugeTablePdf);
-            Table table = new Table(5);
-            table.UseAllAvailableWidth();
-            table.SetBorderCollapse(BorderCollapsePropertyValue.COLLAPSE);
-            for (int i = 0; i < NumberOfCellsInHugeTable; i++) {
-                Cell cell = new Cell();
-                cell.Add(new Paragraph("Hello"));
-                cell.SetBorder(new SolidBorder(1));
-                table.AddCell(cell);
-            }
-
-            document.Add(table);
-            document.Close();
-            hugeTablePdf.Close();
-
-            var hugeTablePdfBytes = File.ReadAllBytes(HugeTableLayoutedName);
-            const string hugeTablePdfTitle = "Pdf with layouted huge table to measure performance.pdf";
-            const string hugeTablePdfDescription =
-                "This PDF consists of huge table which was created by iText to measure performance improvement.";
-            var spec = PdfFileSpec.CreateEmbeddedFileSpec(pdfDocument, hugeTablePdfBytes, hugeTablePdfDescription,
-                hugeTablePdfTitle, null, null, null);
-            pdfDocument.AddFileAttachment(hugeTablePdfTitle, spec);
-        }
-
-        /// <summary>
-        /// For each outline in the document, we Add the SD entry to satisfy the PDF/UA2 conformance.
-        /// </summary>
-        /// <param name="pdfDocument">The Pdf document</param>
-        private static void TraverseOutlines(PdfDocument pdfDocument) {
-            var catalog = pdfDocument.GetCatalog().GetPdfObject();
-            var outlines = catalog.GetAsDictionary(PdfName.Outlines);
-
-
-            var current = outlines.GetAsDictionary(PdfName.First);
-            while (current != null) {
-                var action = current.GetAsDictionary(PdfName.A);
-                action.Put(PdfName.SD, new PdfArray());
-                current = current.GetAsDictionary(PdfName.Next);
-            }
         }
     }
 }

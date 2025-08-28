@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using HtmlAgilityPack;
 using iText.Kernel.Pdf;
@@ -85,9 +86,6 @@ namespace ReleaseNotesGenerator.Utils {
                 tocRow.AppendChild(pageCell);
 
                 tocTableNode.AppendChild(tocRow);
-
-                var outline = bookMarks.AddOutline(h2Node.InnerText);
-                outline.AddAction(PdfAction.CreateGoTo(h2Node.Id));
             }
 
             htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(4, tocTableNode);
