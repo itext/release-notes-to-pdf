@@ -25,10 +25,10 @@ namespace ReleaseNotesGenerator.Utils {
             var canvas = new PdfCanvas(page);
             canvas.SetDrawingOnPage(true);
             canvas.BeginText();
-            canvas.SetFontAndSize(font, 12);
+            canvas.SetFontAndSize(font, 10);
             canvas.BeginMarkedContent(PdfName.Artifact);
-            canvas.MoveText(450, 20);
-            canvas.ShowText($"Page {pageNum} of {pages}");
+            canvas.MoveText(550, 90);
+            canvas.ShowText($"{pageNum}");
             canvas.EndText();
             canvas.Stroke();
             canvas.EndMarkedContent();

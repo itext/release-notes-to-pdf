@@ -21,7 +21,7 @@ namespace ReleaseNotesGenerator.Utils {
         public void AddTocAndBookMark()
         {
             StringBuilder tocStyles = new StringBuilder();
-            var tocElements = htmDocument.DocumentNode.SelectNodes("//h2");
+            var tocElements = htmDocument.DocumentNode.SelectNodes("//h2 | //h1 | //h3 | //h4");
 
             foreach (HtmlNode elem in tocElements)
             {
@@ -41,7 +41,7 @@ namespace ReleaseNotesGenerator.Utils {
             htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(3, tocTitleNode);
 
             var tocTableNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "table" };
-            tocTableNode.SetAttributeValue("style", "width: 100%; border: none; border-collapse: collapse;");
+            tocTableNode.SetAttributeValue("style", "width: 100%; border: none; border-collapse: collapse; page-break-after: always;");
 
             var bookMarks = pdfDocument.GetOutlines(false);
             bookMarks.SetTitle("Bookmarks");
@@ -68,12 +68,16 @@ namespace ReleaseNotesGenerator.Utils {
                 var titleLink =
                     new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "a", InnerHtml = h2Node.InnerText };
                 titleLink.SetAttributeValue("href", "#" + h2Node.Id);
+                if ("h3".Equals(h2Node.Name) || "h4".Equals(h2Node.Name))
+                {
+                    titleLink.SetAttributeValue("style", "padding-left: 30pt;");
+                }
 
                 titleCell.AppendChild(titleLink);
                 tocRow.AppendChild(titleCell);
 
                 var pageCell = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "td" };
-                pageCell.SetAttributeValue("style", "border: none;");
+                pageCell.SetAttributeValue("style", "border: none; text-align: right;");
 
                 var pageLink = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "a" };
                 pageLink.SetAttributeValue("href", "#" + h2Node.Id);
