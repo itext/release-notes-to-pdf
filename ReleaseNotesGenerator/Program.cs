@@ -19,8 +19,6 @@ using iText.Licensing.Base;
 using iText.Pdfa;
 using iText.Pdfua.Checkers;
 using iText.StyledXmlParser.Resolver.Font;
-using iText.Svg.Converter;
-using iText.Svg.Processors.Impl;
 using iText.Test.Pdfa;
 using ReleaseNotesGenerator.Utils;
 using Path = System.IO.Path;
@@ -41,7 +39,6 @@ namespace ReleaseNotesGenerator {
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
         private const string SignatureFieldName = "signature_id";
-        private const string SvgExampleFile = "svgExample";
 
 
         static void Main(string[] args) {
@@ -71,7 +68,7 @@ namespace ReleaseNotesGenerator {
             AddMacProtectedVersion(pdfDocument);
             AddSourceCodeFiles(pdfDocument);
 
-            GeneratePdfFromHtmlAndSvg(pdfDocument);
+            GeneratePdfFromHtml(pdfDocument);
             var fileInfo = new FileInfo(FileName);
             Console.WriteLine("Generated release notes for version " + Version + " in " +
                               fileInfo.FullName);
@@ -205,12 +202,12 @@ namespace ReleaseNotesGenerator {
                     EncryptionConstants.ENCRYPTION_AES_256,
                     new MacProperties(MacProperties.MacDigestAlgorithm.SHA_256));
             var pdfDocument = new PdfDocument(new PdfWriter(MacProtectedName, writerProperties));
-            GeneratePdfFromHtmlAndSvg(pdfDocument);
+            GeneratePdfFromHtml(pdfDocument);
             pdfDocument.Close();
         }
 
 
-        private static void GeneratePdfFromHtmlAndSvg(PdfDocument pdfDocument) {
+        private static void GeneratePdfFromHtml(PdfDocument pdfDocument) {
             var fontProvider = new BasicFontProvider(false, false, false);
             var baseDirectorySite = Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "kb.itextpdf.com",
                 "itext");
@@ -241,7 +238,6 @@ namespace ReleaseNotesGenerator {
             customContentInjector.Inject("customhtml/custom_style.html", "//head", 0);
             customContentInjector.Inject("customhtml/footer.html", "//body", 0);
             customContentInjector.Inject("customhtml/logo.html", "//body", 1);
-            //customContentInjector.Inject($"svg/{SvgExampleFile}.svg", "//body//div");
             customContentInjector.Inject("customhtml/custom_content_after_logo.html", "//body", 2);
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
             // We need full html before post processing
@@ -252,19 +248,6 @@ namespace ReleaseNotesGenerator {
                 HtmlConverter.ConvertToDocument(htmDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
             document.Flush();
 
-            // Convert SVG to PDF
-            /*
-            var page = pdfDocument.AddNewPage(PageSize.A4);
-            var svgString = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), ResourceDirectory, "svg",
-                "svgOverview.svg"));
-
-            var properties = new SvgConverterProperties()
-                .SetFontProvider(fontProvider)
-                .SetBaseUri(Path.Combine(ResourceDirectory, "svg"));
-            properties.GetAccessibilityProperties().SetAlternateDescription("Svg overview");
-
-            SvgConverter.DrawOnPage(svgString, page, properties);
-            */
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("sample1", "Signature validation example");
             pagNumberHandler.SetPages(pdfDocument.GetNumberOfPages());
