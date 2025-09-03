@@ -1,71 +1,75 @@
-<div style="font-size: .8em" lang="en-US">
-    <style>
-        pre {
-            background-color: #f4f4f4;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-size: .6em;
-        }
-        .keyword { color: #0000FF; font-weight: bold; }
-        .type { color: #2B91AF; }
-        .string { color: #A31515; }
-        .comment { color: #008000; }
-        .method { color: #74531F; }
-        .package { color: #3A6F7E; }
-    </style> 
-    <h3>Addendum: Signature validation example java</h3>
-    <pre>
-<span class="keyword">package</span> <span class="package">com.itextpdf.signatures</span>;
-<span class="keyword">import</span> com.itextpdf.kernel.pdf.PdfDocument;
-<span class="keyword">import</span> com.itextpdf.kernel.pdf.PdfReader;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.SignatureValidationProperties;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.SignatureValidator;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.ValidationOcspClient;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.ValidatorChainBuilder;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.CertificateSource;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.CertificateSources;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.TimeBasedContext;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.TimeBasedContexts;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.ValidatorContext;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.context.ValidatorContexts;
-<span class="keyword">import</span> com.itextpdf.signatures.validation.report.ValidationReport;
-<span class="keyword">import</span> java.io.IOException;
-<span class="keyword">import</span> java.time.Duration;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Java Code — Syntax Highlighted</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; margin: 0; background: #0b0f17; color: #e5e7eb; }
+    header { padding: 20px 24px; border-bottom: 1px solid #1f2937; background: #0f172a; position: sticky; top: 0; }
+    h1 { margin: 0; font-size: 11px; letter-spacing: .2px; }
+    .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+    .card { background: #0b1220; border: 1px solid #1f2937; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #d1d5db; }
+    .footer { color: #9ca3af; font-size: 8px; margin-top: 14px; }
+    /* Simple manual highlighting */
+    .keyword { color: #569cd6; }
+    .class-name { color: #4ec9b0; }
+    .string { color: #ce9178; }
+    .comment { color: #6a9955; font-style: italic; }
+    .import { color: #c586c0; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <header>
+        Addendum: Verify the signature using iText (Java)
+      </header>
 
-<span class="keyword">public class</span> <span class="type">ValidationExample</span> {
-    <span class="keyword">public static void</span> <span class="method">main</span>(<span class="type">String</span>[] args) {
-        <span class="type">String</span> path = <span class="string">"&lt;path/to/signed/pdf&gt;"</span>;
-        <span class="type">SignatureValidationProperties</span> properties = <span class="method">GetSignatureValidationProperties</span>();
-        properties.<span class="method">addOcspClient</span>(<span class="keyword">new</span> <span class="type">ValidationOcspClient</span>());
-        properties.<span class="method">addCrlClient</span>(<span class="keyword">new</span> <span class="type">CrlClientOnline</span>());
-        <span class="type">IssuingCertificateRetriever</span> certificateRetriever = <span class="keyword">new</span> <span class="type">IssuingCertificateRetriever</span>();
-        <span class="type">ValidatorChainBuilder</span> validatorChainBuilder = <span class="keyword">new</span> <span class="type">ValidatorChainBuilder</span>();
-        validatorChainBuilder.<span class="method">withIssuingCertificateRetrieverFactory</span>(
-                () -> certificateRetriever).<span class="method">withSignatureValidationProperties</span>(properties);
-        <span class="type">ValidationReport</span> report;
-        <span class="keyword">try</span> (<span class="type">PdfDocument</span> document = <span class="keyword">new</span> <span class="type">PdfDocument</span>(<span class="keyword">new</span> <span class="type">PdfReader</span>(path))) {
-            <span class="type">SignatureValidator</span> validator = validatorChainBuilder.<span class="method">buildSignatureValidator</span>(document);
-            <span class="comment">// Validate all signatures in the document.</span>
-            report = validator.<span class="method">validateSignatures</span>();
-        } <span class="keyword">catch</span> (<span class="type">IOException</span> e) {
-            <span class="keyword">throw new</span> <span class="type">RuntimeException</span>(e);
-        }
-        <span class="type">System</span>.out.<span class="method">println</span>(report);
-    }
+      <pre><code>
+<span class="keyword">package</span> com.itextpdf.samples.sandbox.signatures.validation;
 
-    <span class="keyword">private static</span> <span class="type">SignatureValidationProperties</span> <span class="method">GetSignatureValidationProperties</span>() {
-        <span class="type">SignatureValidationProperties</span> properties = <span class="keyword">new</span> <span class="type">SignatureValidationProperties</span>();
-        properties.<span class="method">setRevocationOnlineFetching</span>(<span class="type">ValidatorContexts</span>.<span class="method">all</span>(), <span class="type">CertificateSources</span>.<span class="method">all</span>(), <span class="type">TimeBasedContexts</span>
-                .<span class="method">all</span>(), <span class="type">SignatureValidationProperties</span>.OnlineFetching.ALWAYS_FETCH);
-        properties.<span class="method">setFreshness</span>(<span class="type">ValidatorContexts</span>.<span class="method">All</span>(), <span class="type">CertificateSources</span>.<span class="method">all</span>(), <span class="type">TimeBasedContexts</span>.<span class="method">of</span>(
-                <span class="type">TimeBasedContext</span>.HISTORICAL), <span class="type">Duration</span>.<span class="method">ofDays</span>(-5));
-        properties.<span class="method">setContinueAfterFailure</span>(
-                <span class="type">ValidatorContexts</span>.<span class="method">of</span>(<span class="type">ValidatorContext</span>.OCSP_VALIDATOR, <span class="type">ValidatorContext</span>.CRL_VALIDATOR),
-                <span class="type">CertificateSources</span>.<span class="method">of</span>(<span class="type">CertificateSource</span>.CRL_ISSUER, <span class="type">CertificateSource</span>.OCSP_ISSUER, <span class="type">CertificateSource</span>
-                        .CERT_ISSUER), <span class="keyword">false</span>);
-        <span class="keyword">return</span> properties;
-    }
+<span class="import">import</span> com.itextpdf.kernel.pdf.PdfDocument;
+<span class="import">import</span> com.itextpdf.kernel.pdf.PdfReader;
+<span class="import">import</span> com.itextpdf.signatures.validation.SignatureValidator;
+<span class="import">import</span> com.itextpdf.signatures.validation.ValidatorChainBuilder;
+<span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlCountryCodeConstants;
+<span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlFetchingProperties;
+<span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlService;
+<span class="import">import</span> com.itextpdf.signatures.validation.lotl.RemoveOnFailingCountryData;
+<span class="import">import</span> com.itextpdf.signatures.validation.report.ValidationReport;
+
+<span class="import">import</span> java.io.IOException;
+
+<span class="keyword">public class</span> <span class="class-name">LotlSimpleSignatureValidation</span> {
+
+    <span class="keyword">public static final</span> String SRC = <span class="string">"./src/main/resources/pdfs"</span>
+            + <span class="string">"/super_official_document_signed.pdf"</span>;
+
+
+    <span class="keyword">public static void</span> main(String[] args) <span class="keyword">throws</span> IOException {
+            ValidatorChainBuilder builder = <span class="keyword">new</span> ValidatorChainBuilder();
+            builder.trustEuropeanLotl(<span class="keyword">true</span>);
+            LotlFetchingProperties fetchingProperties = <span class="keyword">new</span> LotlFetchingProperties(
+                <span class="keyword">new</span> RemoveOnFailingCountryData());
+
+      <span class="comment">// Add other country codes if needed</span>
+            fetchingProperties.setCountryNames(LotlCountryCodeConstants.PORTUGAL);
+            LotlService.initializeGlobalCache(fetchingProperties);
+
+      <span class="keyword">try</span> (PdfDocument document = <span class="keyword">new</span> PdfDocument(<span class="keyword">new</span> PdfReader(SRC))) {
+                SignatureValidator validator = builder.buildSignatureValidator(document);
+                ValidationReport report = validator.validateSignatures();
+        <span class="comment">// Do something with the report and its validation results</span>
+            } <span class="keyword">catch</span> (IOException e) {
+        <span class="keyword">throw new</span> RuntimeException(e);
+            }
+        }
 }
-</pre>
-</div>
+</code></pre>
+    </section>
+
+  </main>
+</body>
+</html>
