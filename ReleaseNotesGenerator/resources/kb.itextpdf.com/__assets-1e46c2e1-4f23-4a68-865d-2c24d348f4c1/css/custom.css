@@ -1,6 +1,6 @@
 /**
  * Multi-Platform GitHub Code Block Styles
- * Version: 1.2.6 (synchronized across all platforms)
+ * Version: 1.2.7 (synchronized across all platforms)
  * 
  * Unified styling for GitHub code blocks across:
  * - Scroll Viewport
@@ -635,4 +635,32 @@
         background: #161b22;
         color: #8b949e;
     }
+}
+
+/* === Panel Macro Styles === */
+
+.panel-macro--info {
+    --color-background: var(--K15t-background-information);
+    margin: auto;
+    clear: both;
+}
+
+/* === Fix for un-styled text nodes after macros === */
+/*
+ * This addresses a layout issue where raw text nodes that are not wrapped
+ * in any element (e.g., <p>) appear directly after a macro. In a grid layout,
+ * these text nodes become grid items and are often forced into a narrow column,
+ * causing them to render vertically.
+ *
+ * The following rule adds a pseudo-element after the macro, styles it as a
+ * full-width block that spans all grid columns, and gives it zero height.
+ * This acts as a "clearing" element, forcing the subsequent orphan text
+ * onto a new line where it can occupy the full available width.
+ */
+.panel-macro::after,
+.stackoverflow-question-block::after {
+    content: '';
+    display: block;
+    grid-column: 1 / -1;
+    height: 0;
 }

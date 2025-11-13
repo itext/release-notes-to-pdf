@@ -37,16 +37,17 @@
 <span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlCountryCodeConstants;
 <span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlFetchingProperties;
 <span class="import">import</span> com.itextpdf.signatures.validation.lotl.LotlService;
+<span class="import">import</span> com.itextpdf.signatures.validation.lotl.QualifiedValidator;
 <span class="import">import</span> com.itextpdf.signatures.validation.lotl.RemoveOnFailingCountryData;
 <span class="import">import</span> com.itextpdf.signatures.validation.report.ValidationReport;
 
 <span class="import">import</span> java.io.IOException;
+<span class="import">import</span> java.util.Map;
 
 <span class="keyword">public class</span> <span class="class-name">LotlSimpleSignatureValidation</span> {
 
     <span class="keyword">public static final</span> String SRC = <span class="string">"./src/main/resources/pdfs"</span>
             + <span class="string">"/super_official_document_signed.pdf"</span>;
-
 
     <span class="keyword">public static void</span> main(String[] args) <span class="keyword">throws</span> IOException {
             ValidatorChainBuilder builder = <span class="keyword">new</span> ValidatorChainBuilder();
@@ -58,14 +59,21 @@
             fetchingProperties.setCountryNames(LotlCountryCodeConstants.PORTUGAL);
             LotlService.initializeGlobalCache(fetchingProperties);
 
-      <span class="keyword">try</span> (PdfDocument document = <span class="keyword">new</span> PdfDocument(<span class="keyword">new</span> PdfReader(SRC))) {
+      <span class="comment">// To perform Qualification validation, provide QualifiedValidator instance.</span>
+      <span class="comment">// You can use this same instance to obtain the results after validation.</span>
+            QualifiedValidator qualifiedValidator = <span class="keyword">new</span> QualifiedValidator();
+            builder.withQualifiedValidator(qualifiedValidator);
+
+      <span class="keyword">try</span> (PdfDocument document = <span class="keyword">new</span> PdfDocument(<span class="keyword">new</span> PdfReader(<span class="import">SRC</span>))) {
                 SignatureValidator validator = builder.buildSignatureValidator(document);
                 ValidationReport report = validator.validateSignatures();
-        <span class="comment">// Do something with the report and its validation results</span>
+        <span class="comment">// Separately, now you can obtain Qualification results</span>
+                Map<span>&lt</span>String, QualifiedValidator.QualificationValidationData> result = 
+                        qualifiedValidator.obtainAllSignaturesValidationResults();
             } <span class="keyword">catch</span> (IOException e) {
         <span class="keyword">throw new</span> RuntimeException(e);
             }
-        }
+    }
 }
 </code></pre>
     </section>

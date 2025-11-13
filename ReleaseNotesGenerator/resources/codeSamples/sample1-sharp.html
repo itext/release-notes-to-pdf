@@ -29,6 +29,7 @@
 
       <pre><code>
 <span class="namespace">using</span> System;
+<span class="namespace">using</span> System.Collections.Generic;
 <span class="namespace">using</span> iText.Kernel.Pdf;
 <span class="namespace">using</span> iText.Signatures.Validation;
 <span class="namespace">using</span> iText.Signatures.Validation.Lotl;
@@ -49,10 +50,18 @@
             fetchingProperties.SetCountryNames(LotlCountryCodeConstants.PORTUGAL);
             LotlService.InitializeGlobalCache(fetchingProperties);
 
+      <span class="comment">// If you want to additionally perform Qualification validation, you need to </span>
+      <span class="comment">// provide QualifiedValidator instance. You can use this same instance to </span>
+      <span class="comment">// obtain the results after validation.</span>
+            QualifiedValidator qualifiedValidator = <span class="keyword">new</span> QualifiedValidator();
+            builder.WithQualifiedValidator(qualifiedValidator);
+
       <span class="keyword">using</span> (PdfDocument document = <span class="keyword">new</span> PdfDocument(<span class="keyword">new</span> PdfReader(SRC))) {
                 SignatureValidator validator = builder.BuildSignatureValidator(document);
                 ValidationReport report = validator.ValidateSignatures();
-        <span class="comment">// Do something with the report and its validation results</span>
+        <span class="comment">// Separately, now you can obtain Qualification results</span>
+                Map<span>&lt</span>String, QualifiedValidator.QualificationValidationData> result =
+                        qualifiedValidator.ObtainAllSignaturesValidationResults();
             }
         }
     }
