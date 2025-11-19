@@ -1,8 +1,5 @@
-using System;
 using System.Linq;
 using HtmlAgilityPack;
-using J2N.Collections.Generic;
-using J2N.Text;
 
 namespace ReleaseNotesGenerator.Utils {
     /// <summary>
@@ -50,38 +47,6 @@ namespace ReleaseNotesGenerator.Utils {
                     if (!href.StartsWith("http") && !href.StartsWith("#")) {
                         selectNode.SetAttributeValue("href",
                             "https://kb.itextpdf.com/itext/" + href.Replace(".html", ""));
-                    }
-                }
-            }
-
-            var linksToRemoveDuplicatesFrom = htmlDocument.DocumentNode.SelectNodes("//a");
-            var destinations = new Dictionary<string, List<string>>();
-
-            if (aNodes != null) {
-                foreach (var selectNode in linksToRemoveDuplicatesFrom) {
-                    var href = selectNode.GetAttributeValue("href", "");
-                    if (href.StartsWith("#")) {
-                        if (destinations.ContainsKey(href)) {
-                            string newHref = href + "-" + (destinations[href].Count + 1);
-                            selectNode.SetAttributeValue("href", newHref);
-                            destinations[href].Add(newHref);
-                        }
-                        else {
-                            destinations.Add(href, new List<string>());
-                        }
-                    }
-                }
-            }
-
-            foreach (var keyValuePair in destinations) {
-                var id = keyValuePair.Key.Replace("#", "");
-                var nodesWithId = htmlDocument.DocumentNode.SelectNodes($"//*[@id='{id}']");
-                foreach (var se in keyValuePair.Value) {
-                    //add hidden span with id 
-                    var spanNode = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "div", };
-                    spanNode.SetAttributeValue("id", se.Replace("#", ""));
-                    if (nodesWithId != null && nodesWithId.Count > 0) {
-                        nodesWithId[0].ParentNode.InsertAfter(spanNode, nodesWithId[0]);
                     }
                 }
             }

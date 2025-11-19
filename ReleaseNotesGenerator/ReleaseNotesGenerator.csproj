@@ -10,13 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="itext.bouncy-castle-adapter" Version="9.4.0" />
-        <PackageReference Include="itext.commons" Version="9.4.0" />
-        <PackageReference Include="itext" Version="9.4.0" />
-        <PackageReference Include="itext.pdftest" Version="9.4.0" />
-        <PackageReference Include="itext.pdfhtml" Version="6.3.0" />
-        <PackageReference Include="itext.pdfcalligraph" Version="5.0.4" />
-        <PackageReference Include="itext.licensing.base" Version="4.2.4" />
+        <PackageReference Include="itext.bouncy-castle-adapter" Version="9.5.0-SNAPSHOT" />
+        <PackageReference Include="itext.commons" Version="9.5.0-SNAPSHOT" />
+        <PackageReference Include="itext" Version="9.5.0-SNAPSHOT" />
+        <PackageReference Include="itext.pdftest" Version="9.5.0-SNAPSHOT" />
+        <PackageReference Include="itext.pdfhtml" Version="6.3.1-SNAPSHOT" />
+        <PackageReference Include="itext.pdfcalligraph" Version="5.0.4-SNAPSHOT" />
+        <PackageReference Include="itext.licensing.base" Version="4.2.5-SNAPSHOT" />
 
         <PackageReference Include="HtmlAgilityPack" Version="1.11.70" />
         <PackageReference Include="Pkcs11Interop" Version="5.1.1" />
