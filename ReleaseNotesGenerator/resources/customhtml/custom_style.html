@@ -1,177 +1,211 @@
 ﻿<style>
-table, td, th {
-    border: none;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.panel-macro {
-    border-left: 4.5pt solid #fe9132;
-    padding-left: 11.95pt;
-    vertical-align: top;
-}
-
-code {
-    font-size: 9pt;
-    font-family: NotoSans;
-    color: #dc133b;
-}
-
-.page-break-me {
-    margin-bottom: 200px
-}
-
-/* Scale image with table performance to fit the page width */
-figure img {
-    width: 100%;
-}
-
-/* don't show table with release notes attachments */
-.plugin_attachments_container {
-    display: none;
-}
-
-p {
-    font-size: 11pt;
-    margin-bottom: 0pt;
-    line-height: 16pt;
-}
-
-h1, h2, h3, h4 {
-    margin-top: 36pt;
-    margin-bottom: 6pt;
-    page-break-inside: avoid;
-    page-break-after: avoid;
-}
-
-h1, h2, h3 {
-    font-size: 14pt;
-    color: #0f4761;
-}
-
-h4 {
-    font-size: 11.5pt;
-    /*color: #0f4761;*/
-    color: #fe9132;
-}
-
-ul:nth-of-type(1),
-ul:nth-of-type(2) {
-    padding-top: 14.2pt;
-    padding-bottom: 14.2pt;
-    padding-left: 100pt;
-    background-color: #e8eff6;
-    list-style-type: none;
-}
-
-li > p {
-    margin: 0;
-    padding: 0;
-}
-
-.panel-macros--tip__icon,
-.panel-macros--info__icon,
-.panel-macros--panel-note-adf__icon {
-    display: none;
-}
-
-.confluenceTable .confluenceTd {
-    background-color:#e8eff6;
-    width: 123.65pt;
-    border: 0.75pt solid #e8eff6;
-    padding-top: 9.9pt;
-    padding-right: 5.03pt;
-    padding-left: 5.03pt;
-    vertical-align: middle;
-}
-
-.confluenceTable .confluenceTh {
-    border: 0.75pt solid #e8eff6;
-}
-
-.confluenceTable tr:first-child th:first-child {
-    border: none;
-}
-
-.confluenceTable tr:last-child td {
-    background-color: #f8fbff;
-}
-
-.confluenceTable2,
-.confluenceTable2 .confluenceTd {
-    background-color: #f7e1ce !important;
-    border-left: 4.5pt solid #fe9132;
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.confluenceTable2 .confluenceTd h3 {
-    margin-top: 6pt;
-    margin-bottom: 6pt;
-    font-size: 12pt;
-}
-
-.confluenceTable2 ul {
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    padding-left: 20pt;
-    background-color: #f7e1ce;
-    list-style-type: disc;
-}
-
-.confluenceTable3 .confluenceTd {
-    background-color: #f7e1ce !important;
-    border-left: 4.5pt solid #fe9132;
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.confluenceTable3 ul {
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    padding-left: 20pt;
-    background-color: #f7e1ce;
-    list-style-type: disc;
-}
-
-.confluenceTable3 .confluenceTh h2 {
-    text-align: left;
-}
-
-.confluenceTable3 tr:nth-child(2) td {
-    background-color: white !important;
-    border: none;
-}
-
-.confluenceTable3 {
-    page-break-after: always;
-}
-
-.features-list ul {
-    padding-top: 6pt;
-    padding-bottom: 6pt;
-    padding-left: 20pt;
-    background-color: white;
-    list-style-type: disc;
-}
-
-@page {
-    margin-bottom: 200pt;
-
-    @bottom-left {
-        content: element(bottomleft);
+    table, td, th {
+        border: none;
     }
-}
 
-.bottom-left {
-    position: running(bottomleft);
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .panel-macro {
+        border-left: 4.5pt solid #fe9132;
+        padding-left: 11.95pt;
+        vertical-align: top;
+    }
+
+    code {
+        font-size: 9pt;
+        font-family: NotoSans;
+        color: #dc133b;
+    }
+
+    .page-break-me {
+        margin-bottom: 200px
+    }
+
+    /* Scale image with table performance to fit the page width */
+    figure img {
+        width: 100%;
+    }
+
+    /* don't show table with release notes attachments */
+    .plugin_attachments_container {
+        display: none;
+    }
+
+    p {
+        font-size: 11pt;
+        margin-bottom: 0pt;
+        line-height: 16pt;
+    }
+
+    h1, h2, h3, h4 {
+        margin-top: 36pt;
+        margin-bottom: 6pt;
+        page-break-inside: avoid;
+        page-break-after: avoid;
+    }
+
+    h1, h2, h3 {
+        font-size: 14pt;
+        color: #0f4761;
+    }
+
+    h4 {
+        font-size: 11.5pt;
+        /*color: #0f4761;*/
+        color: #fe9132;
+    }
+
+    ul:nth-of-type(1),
+    ul:nth-of-type(2) {
+        padding-top: 14.2pt;
+        padding-bottom: 14.2pt;
+        padding-left: 100pt;
+        background-color: #e8eff6;
+        list-style-type: none;
+    }
+
+    li > p {
+        margin: 0;
+        padding: 0;
+    }
+
+    .panel-macros--tip__icon,
+    .panel-macros--info__icon,
+    .panel-macros--panel-note-adf__icon {
+        display: none;
+    }
+
+    #ReleasepdfXFAVERSION-Downloads + .table-wrap td,
+    #ReleasepdfSweepVERSION-Downloads + .table-wrap td,
+    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap td,
+    #ReleasepdfOCRVERSION-Downloads + .table-wrap td,
+    #ReleasepdfHTMLVERSION-Downloads + .table-wrap td,
+    #ReleaseiTextCoreVERSION-Downloads + .table-wrap td,
+    #DigitalSignaturesHub-Videos\/Webinars + .sectionColumnWrapper td,
+    #DigitalSignaturesHub-Articles\/Tutorials + .sectionColumnWrapper td,
+    #DigitalSignaturesHub-Resources + .sectionColumnWrapper td,
+    #DigitalSignaturesHub-Examples + .sectionColumnWrapper td,
+    #DigitalSignaturesHub-eBooks + .sectionColumnWrapper td
+    {
+        background-color:#e8eff6;
+        width: 123.65pt;
+        border: 0.75pt solid #e8eff6;
+        padding-top: 9.9pt;
+        padding-right: 5.03pt;
+        padding-left: 5.03pt;
+        vertical-align: middle;
+    }
+
+    #ReleasepdfXFAVERSION-Downloads + .table-wrap th,
+    #ReleasepdfSweepVERSION-Downloads + .table-wrap th,
+    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap th,
+    #ReleasepdfOCRVERSION-Downloads + .table-wrap th,
+    #ReleasepdfHTMLVERSION-Downloads + .table-wrap th,
+    #ReleaseiTextCoreVERSION-Downloads + .table-wrap th
+    {
+        border: 0.75pt solid #e8eff6;
+    }
+
+    #ReleasepdfXFAVERSION-Downloads + .table-wrap tr:first-child th:first-child,
+    #ReleasepdfSweepVERSION-Downloads + .table-wrap tr:first-child th:first-child,
+    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap tr:first-child th:first-child,
+    #ReleasepdfOCRVERSION-Downloads + .table-wrap tr:first-child th:first-child,
+    #ReleasepdfHTMLVERSION-Downloads + .table-wrap tr:first-child th:first-child,
+    #ReleaseiTextCoreVERSION-Downloads + .table-wrap tr:first-child th:first-child
+    {
+        border: none;
+    }
+
+    #ReleasepdfXFAVERSION-Downloads + .table-wrap tr:last-child td,
+    #ReleasepdfSweepVERSION-Downloads + .table-wrap tr:last-child td,
+    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap tr:last-child td,
+    #ReleasepdfOCRVERSION-Downloads + .table-wrap tr:last-child td,
+    #ReleasepdfHTMLVERSION-Downloads + .table-wrap tr:last-child td,
+    #ReleaseiTextCoreVERSION-Downloads + .table-wrap tr:last-child td,
+    #DigitalSignaturesHub-Videos\/Webinars + .sectionColumnWrapper tr:last-child td,
+    #DigitalSignaturesHub-Articles\/Tutorials + .sectionColumnWrapper tr:last-child td,
+    #DigitalSignaturesHub-Resources + .sectionColumnWrapper tr:last-child td,
+    #DigitalSignaturesHub-Examples + .sectionColumnWrapper tr:last-child td,
+    #DigitalSignaturesHub-eBooks + .sectionColumnWrapper tr:last-child td
+    {
+        background-color: #f8fbff;
+    }
+
+    #ReleaseiTextCoreVERSION-Changelog + .table-wrap table,
+    #ReleaseiTextCoreVERSION-Changelog + .table-wrap td {
+        background-color: #f7e1ce !important;
+        border-left: 4.5pt solid #fe9132;
+        padding-top: 6pt;
+        padding-bottom: 6pt;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    #ReleaseiTextCoreVERSION-Changelog + .table-wrap td h3 {
+        margin-top: 6pt;
+        margin-bottom: 6pt;
+        font-size: 12pt;
+    }
+
+    #ReleaseiTextCoreVERSION-Changelog + .table-wrap ul {
+        padding-top: 6pt;
+        padding-bottom: 6pt;
+        padding-left: 20pt;
+        background-color: #f7e1ce;
+        list-style-type: disc;
+    }
+
+    #contributorsTable td {
+        background-color: #f7e1ce !important;
+        border-left: 4.5pt solid #fe9132;
+        padding-top: 6pt;
+        padding-bottom: 6pt;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    #contributorsTable ul {
+        padding-top: 6pt;
+        padding-bottom: 6pt;
+        padding-left: 20pt;
+        background-color: #f7e1ce;
+        list-style-type: disc;
+    }
+
+    #contributorsTable th h2 {
+        text-align: left;
+    }
+
+    #contributorsTable tr:nth-child(2) td {
+        background-color: white !important;
+        border: none;
+    }
+
+    #contributorsTable {
+        page-break-after: always;
+    }
+
+    .features-list ul {
+        padding-top: 6pt;
+        padding-bottom: 6pt;
+        padding-left: 20pt;
+        background-color: white;
+        list-style-type: disc;
+    }
+
+    @page {
+        margin-bottom: 200pt;
+
+        @bottom-left {
+            content: element(bottomleft);
+        }
+    }
+
+    .bottom-left {
+        position: running(bottomleft);
+    }
 
 </style>

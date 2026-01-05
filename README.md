@@ -26,55 +26,31 @@
 # verapdf verification for PDF/UA2 and PDF/A4
 
 ```xml
+<?xml version="1.0" encoding="utf-8"?>
 <report>
-  <buildInformation>
-    <releaseDetails id="core" version="1.26.5" buildDate="2025-01-10T12:08:00+03:00"></releaseDetails>
-    <releaseDetails id="validation-model" version="1.26.5" buildDate="2025-01-10T12:10:00+03:00"></releaseDetails>
-    <releaseDetails id="gui" version="1.26.5" buildDate="2025-01-10T12:43:00+03:00"></releaseDetails>
-  </buildInformation>
-  <jobs>
-    <job>
-      <item size="5118296">
-        <name>C:\Users\Admin\Downloads\release_notes_9.1.0.pdf</name>
-      </item>
-      <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
-        <details passedRules="1744" failedRules="0" passedChecks="103506" failedChecks="0"></details>
-      </validationReport>
-      <duration start="1739801507219" finish="1739801507760">00:00:00.541</duration>
-    </job>
-  </jobs>
-  <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
-    <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
-    <featureReports failedJobs="0">0</featureReports>
-    <repairReports failedJobs="0">0</repairReports>
-    <duration start="1739801507215" finish="1739801507768">00:00:00.553</duration>
-  </batchSummary>
-</report>
-```
-
-```xml
-<report>
-  <buildInformation>
-    <releaseDetails id="core" version="1.26.5" buildDate="2025-01-10T12:08:00+03:00"></releaseDetails>
-    <releaseDetails id="validation-model" version="1.26.5" buildDate="2025-01-10T12:10:00+03:00"></releaseDetails>
-    <releaseDetails id="gui" version="1.26.5" buildDate="2025-01-10T12:43:00+03:00"></releaseDetails>
-  </buildInformation>
-  <jobs>
-    <job>
-      <item size="5118296">
-        <name>C:\Users\Admin\Downloads\release_notes_9.1.0.pdf</name>
-      </item>
-      <validationReport jobEndStatus="normal" profileName="PDF/A-4F validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
-        <details passedRules="108" failedRules="0" passedChecks="47741" failedChecks="0"></details>
-      </validationReport>
-      <duration start="1739801551782" finish="1739801552127">00:00:00.345</duration>
-    </job>
-  </jobs>
-  <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
-    <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
-    <featureReports failedJobs="0">0</featureReports>
-    <repairReports failedJobs="0">0</repairReports>
-    <duration start="1739801551778" finish="1739801552145">00:00:00.367</duration>
-  </batchSummary>
+   <buildInformation>
+      <releaseDetails id="core" version="1.28.2" buildDate="2025-07-15T16:07:00+02:00"></releaseDetails>
+      <releaseDetails id="validation-model" version="1.28.2" buildDate="2025-07-15T16:12:00+02:00"></releaseDetails>
+   </buildInformation>
+   <jobs>
+      <job>
+         <item size="3581970">
+            <name>D:\development\itext\release-notes-to-pdf\ReleaseNotesGenerator\bin\Debug\net8.0\out\release_notes_9.4.0.pdf</name>
+         </item>
+         <validationReport jobEndStatus="normal" profileName="PDF/A-4F validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
+            <details passedRules="109" failedRules="0" passedChecks="34319" failedChecks="0"></details>
+         </validationReport>
+         <validationReport jobEndStatus="normal" profileName="PDF/UA-2 + Tagged PDF validation profile" statement="PDF file is compliant with Validation Profile requirements." isCompliant="true">
+            <details passedRules="1723" failedRules="0" passedChecks="76204" failedChecks="0"></details>
+         </validationReport>
+         <duration start="1767701576605" finish="1767701578081">00:00:01.476</duration>
+      </job>
+   </jobs>
+   <batchSummary totalJobs="1" failedToParse="0" encrypted="0" outOfMemory="0" veraExceptions="0">
+      <validationReports compliant="1" nonCompliant="0" failedJobs="0">1</validationReports>
+      <featureReports failedJobs="0">0</featureReports>
+      <repairReports failedJobs="0">0</repairReports>
+      <duration start="1767701576396" finish="1767701578108">00:00:01.712</duration>
+   </batchSummary>
 </report>
 ```

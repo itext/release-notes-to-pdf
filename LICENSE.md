@@ -1,8 +1,3 @@
-/*
-    This file is part of the iText (R) project.
-    Copyright (c) 1998-2026 Apryse Group NV
-    Authors: Apryse Software.
-
     This program is offered under a commercial and under the AGPL license.
     For commercial licensing, contact us at https://itextpdf.com/sales.  For AGPL licensing, see below.
 
@@ -19,18 +14,3 @@
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-namespace ReleaseNotesGenerator.Utils
-{
-    /// <summary>
-    /// Identifies the country-specific eID/PKCS#11 configuration to use for signing.
-    /// </summary>
-    public enum CountrySigning
-    {
-        /// <summary>Portuguese eID (Cartão de Cidadão).</summary>
-        Portugal,
-
-        /// <summary>Belgian eID.</summary>
-        Belgium
-    }
-}

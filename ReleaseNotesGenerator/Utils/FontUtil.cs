@@ -1,4 +1,4 @@
-/*
+﻿/*
     This file is part of the iText (R) project.
     Copyright (c) 1998-2026 Apryse Group NV
     Authors: Apryse Software.
@@ -20,17 +20,25 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+using System.IO;
+using iText.Kernel.Font;
+
 namespace ReleaseNotesGenerator.Utils
 {
     /// <summary>
-    /// Identifies the country-specific eID/PKCS#11 configuration to use for signing.
+    /// Utility class for font-related operations.
     /// </summary>
-    public enum CountrySigning
+    public static class FontUtil
     {
-        /// <summary>Portuguese eID (Cartão de Cidadão).</summary>
-        Portugal,
-
-        /// <summary>Belgian eID.</summary>
-        Belgium
+        /// <summary>
+        /// Creates a PdfFont instance of the NotoSans-Regular font with an embedded font strategy.
+        /// </summary>
+        /// <param name="resourcesRoot">The root directory containing the resources folder where the font file is located.</param>
+        /// <returns>A PdfFont object representing the NotoSans-Regular font.</returns>
+        public static PdfFont CreateNotoSans(string resourcesRoot)
+        {
+            var fontPath = Path.Combine(resourcesRoot, "font", "NotoSans-Regular.ttf");
+            return PdfFontFactory.CreateFont(fontPath, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+        }
     }
 }
