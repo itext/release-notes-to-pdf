@@ -28,13 +28,13 @@ namespace ReleaseNotesGenerator {
         private const string ResourceDirectory = "resources";
 
         //You can change these variables 
-        private const string Version = "9.4.0";
+        private const string Version = "9.5.0";
         private const string Password = "itext";
         private static readonly string FileName = $"release_notes_{Version}.pdf";
         private const string MacProtectedName = "release_notes_mac_protected.pdf";
         private const CountrySigning CountryUsedForSigning = CountrySigning.BELGIUM;
 
-        private const string PageToConvert = "release-itext-core-9-4-0.html";
+        private const string PageToConvert = "release-itext-core-9-5-0.html";
         private const string SigningReason = "Release notes for iText " + Version;
         private const string SigningLocation = "Ghent (Belgium)";
         private const string SignatureFieldName = "signature_id";

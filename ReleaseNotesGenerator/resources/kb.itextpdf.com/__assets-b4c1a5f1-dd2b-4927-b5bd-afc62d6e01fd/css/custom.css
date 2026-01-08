@@ -1,7 +1,7 @@
 /**
  * Multi-Platform GitHub Code Block Styles
- * Version: 1.2.7 (synchronized across all platforms)
- * 
+ * Version: 1.4.1 (synchronized across all platforms)
+ *
  * Unified styling for GitHub code blocks across:
  * - Scroll Viewport
  * - Scroll Sites
@@ -88,11 +88,24 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: #f6f8fa;
+    background: rgb(239, 240, 244);
     border-bottom: 1px solid #d1d9e0;
     font-size: 13px;
-    color: #656d76;
+    font-weight: 400;
+    color: rgb(121, 132, 161);
     min-height: 44px;
+    box-sizing: border-box;
+}
+
+.github-code-footer {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgb(239, 240, 244);
+    border-top: 1px solid #d1d9e0;
+    font-size: 11px;
+    font-weight: 400;
+    color: rgb(121, 132, 161);
     box-sizing: border-box;
 }
 
@@ -663,4 +676,67 @@
     display: block;
     grid-column: 1 / -1;
     height: 0;
+}
+
+/* === Scroll Viewport Layout Adjustments === */
+/*
+ * Reduces whitespace and snaps navigation to edges for better content area usage.
+ * These override K15T's default spacing which can be too generous.
+ * Version: 1.4.0
+ */
+
+/* CRITICAL: Remove the max-width constraint on main content body */
+.article-page.body,
+.article-page-body,
+section.article-page.body,
+.main-content,
+#main-content {
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Snap left navigation to the left edge */
+.vp-article__aside-left {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.vp-article__aside-left__inner {
+    margin-left: 0 !important;
+    padding-left: 12px !important;
+    padding-right: 8px !important;
+    transition: none !important; /* Prevent floating animation */
+}
+
+/* Reduce padding in main content area */
+.vp-article__content-panel {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
+
+.vp-article__wrapper {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: none !important;
+}
+
+/* Tighten the gap between columns */
+.vp-article {
+    gap: 12px !important;
+}
+
+/* Reduce right TOC whitespace */
+.vp-article__aside-right {
+    padding-left: 8px !important;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Remove auto margins that center content */
+main#article-content,
+main.vp-article__content-panel {
+    margin-left: 0 !important;
+    margin-right: auto !important;
 }
