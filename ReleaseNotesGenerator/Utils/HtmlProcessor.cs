@@ -51,15 +51,16 @@ namespace ReleaseNotesGenerator.Utils {
         /// This method removes any unwanted nodes from the HTML document,
         /// preparing it for further operations or transformations.
         /// </summary>
-        public void PreProcess()
+        /// <param name="version">release version</param>
+        public void PreProcess(string version)
         {
             RemoveUnwantedNodes();
-            InsertIdForContributorsTable();
+            InsertIdForContributorsTable(version);
         }
         
-        private void InsertIdForContributorsTable()
+        private void InsertIdForContributorsTable(string version)
         {
-            var h2 = htmlDocument.DocumentNode.SelectSingleNode("//h2[@id='ReleaseiTextCore9.5.0-Contributors']");
+            var h2 = htmlDocument.DocumentNode.SelectSingleNode($"//h2[@id='ReleaseiTextCore{version}-Contributors']");
             if (h2 == null)
             {
                 throw new InvalidOperationException("Target h2 not found.");

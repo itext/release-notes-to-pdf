@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Java Code — Syntax Highlighted</title>
+    <style>
+        body { margin: 0; background: #FFFFFF; }
+        header { padding: 20px 24px; border-bottom: 1px solid #1f2937; background: #0f172a; position: sticky; top: 0; }
+        .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+        .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+        .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+        p { padding-left: 10px; }
+        p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier}
+        p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #090909; min-height: 16.0px}
+        p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #116d12}
+        p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #001da4}
+        p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #090909}
+        p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #797979}
+        span.s1 {color: #001da4}
+        span.s2 {color: #090909}
+        span.s3 {color: #000000}
+        span.s4 {color: #720082}
+        span.s5 {color: #0a4f67}
+        span.s6 {color: #797979}
+    </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Verify the signature using iText (Java)</header>
+<p class="p1"><span class="s1">package </span>com.itextpdf.samples.sandbox.signatures.validation<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.pdf.PdfDocument<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.pdf.PdfReader<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.SignatureValidator<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.ValidatorChainBuilder<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.lotl.LotlCountryCodeConstants<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.lotl.LotlFetchingProperties<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.lotl.LotlService<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.lotl.QualifiedValidator<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.lotl.RemoveOnFailingCountryData<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.signatures.validation.report.ValidationReport<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">import </span>java.io.IOException<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>java.util.Map<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">public class </span>LotlSimpleSignatureValidation <span class="s2">{</span></p>
+<p class="p3"><span class="s2"><span>    </span></span><span class="s1">public static final </span><span class="s3">String </span><span class="s4"><i>SRC </i></span><span class="s2">= </span>"./src/main/resources/pdfs/super_official_document_signed.pdf"<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s2"><span>    </span></span>public static void <span class="s5">main</span><span class="s2">(</span><span class="s3">String</span><span class="s2">[] </span><span class="s3">args</span><span class="s2">) </span>throws <span class="s3">IOException </span><span class="s2">{</span></p>
+<p class="p5"><span>        </span><span class="s3">ValidatorChainBuilder builder </span>= <span class="s1">new </span>ValidatorChainBuilder().trustEuropeanLotl(<span class="s1">true</span>);</p>
+<p class="p1"><span class="s2"><span>        </span></span>LotlFetchingProperties fetchingProperties <span class="s2">= </span><span class="s1">new </span><span class="s2">LotlFetchingProperties(</span></p>
+<p class="p5"><span>                </span><span class="s1">new </span>RemoveOnFailingCountryData());</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2"><span>        </span></span><i>// Add other country codes if needed.</i></p>
+<p class="p1"><span class="s6"><i><span>        </span></i></span>fetchingProperties<span class="s2">.setCountryNames(</span>LotlCountryCodeConstants<span class="s2">.</span><span class="s4"><i>PORTUGAL</i></span><span class="s2">);</span></p>
+<p class="p5"><span>        </span><span class="s3">LotlService</span>.<i>initializeGlobalCache</i>(<span class="s3">fetchingProperties</span>);</p>
+<p class="p2"><br></p>
+<p class="p6"><span class="s2"><span>        </span></span><i>// To perform Qualification validation, provide QualifiedValidator instance.</i></p>
+<p class="p6"><i><span>        </span>// You can use this same instance to obtain the results after validation.</i></p>
+<p class="p1"><span class="s6"><i><span>        </span></i></span>QualifiedValidator qualifiedValidator <span class="s2">= </span><span class="s1">new </span><span class="s2">QualifiedValidator();</span></p>
+<p class="p5"><span>        </span><span class="s3">builder</span>.withQualifiedValidator(<span class="s3">qualifiedValidator</span>);</p>
+<p class="p2"><br></p>
+<p class="p5"><span>        </span><span class="s1">try </span>(<span class="s3">PdfDocument document </span>= <span class="s1">new </span>PdfDocument(<span class="s1">new </span>PdfReader(<span class="s4"><i>SRC</i></span>))) {</p>
+<p class="p1"><span class="s2"><span>            </span></span>SignatureValidator validator <span class="s2">= </span>builder<span class="s2">.buildSignatureValidator(</span>document<span class="s2">);</span></p>
+<p class="p5"><span>            </span><span class="s3">ValidationReport report </span>= <span class="s3">validator</span>.validateSignatures();</p>
+<p class="p6"><span class="s2"><span>            </span></span><i>// Separately, now you can obtain Qualification results.</i></p>
+<p class="p1"><span class="s6"><i><span>            </span></i></span>Map<span class="s2">&lt;</span>String<span class="s2">, </span>QualifiedValidator<span class="s2">.</span>QualificationValidationData<span class="s2">&gt; </span>result <span class="s2">=</span></p>
+<p class="p5"><span>                    </span><span class="s3">qualifiedValidator</span>.obtainAllSignaturesValidationResults();</p>
+<p class="p5"><span>        </span>} <span class="s1">catch </span>(<span class="s3">IOException e</span>) {</p>
+<p class="p5"><span>            </span><span class="s1">throw new </span>RuntimeException(<span class="s3">e</span>);</p>
+<p class="p5"><span>        </span>}</p>
+<p class="p5"><span>    </span>}</p>
+<p class="p5">}</p>
+<p class="p2"><br></p>
+</section>
+</main>
+</body>
+</html>

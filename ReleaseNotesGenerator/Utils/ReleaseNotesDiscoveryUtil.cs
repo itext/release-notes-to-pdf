@@ -73,7 +73,7 @@ namespace ReleaseNotesGenerator.Utils
                 if (string.IsNullOrEmpty(product) || string.IsNullOrEmpty(versionRaw))
                     continue;
 
-                // Normalize version to dot-separated (9-5-0 -> 9.5.0)
+                // Normalize version to dot-separated (9-6-0 -> 9.6.0)
                 var versionNormalized = versionRaw.Replace("-", ".");
 
                 if (!map.TryGetValue(product, out var existing))
