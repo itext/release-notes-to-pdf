@@ -45,28 +45,29 @@ using Path = System.IO.Path;
 
 namespace ReleaseNotesGenerator {
     internal static class Program {
-        //Don't change these variables
+        // Don't change these variables.
         private const string ResourceDirectory = "resources";
-        
+
         private static string Version;
+        private static string FileName;
         private static string PageToConvert;
         private static string SigningReason;
-        
-        //You can change these variables 
+
+        // You can change these variables.
         private const string Password = "itext";
         private const CountrySigning CountryUsedForSigning = CountrySigning.Belgium;
-        
+
         private const string SigningLocation = "Ghent (Belgium)";
         private const string SignatureFieldName = "signature_id";
 
         private static readonly string ResourceRootPath = Path.Combine(AppContext.BaseDirectory, ResourceDirectory);
         private static readonly string OutputDirectory = Path.Combine(AppContext.BaseDirectory, "out");
-        private static readonly string FileName = Path.Combine(OutputDirectory, $"release_notes_{Version}.pdf");
         private static readonly string MacProtectedName = Path.Combine(OutputDirectory, "release_notes_mac_protected.pdf");
 
         static void Main(string[] args) {
             Directory.CreateDirectory(OutputDirectory);
             Version = ReleaseNotesDiscoveryUtil.GetReleaseProductVersions(ResourceRootPath)["itext-core"];
+            FileName = Path.Combine(OutputDirectory, $"release_notes_{Version}.pdf");
             SigningReason = "Release notes for iText " + Version;
             PageToConvert = "release-itext-core-" + Version.Replace(".", "-") + ".html";
             
@@ -258,7 +259,7 @@ namespace ReleaseNotesGenerator {
             htmDocument.LoadHtml(html);
 
             var htmlProcessor = new HtmlProcessor(htmDocument);
-            htmlProcessor.PreProcess();
+            htmlProcessor.PreProcess(Version);
 
             var customContentInjector = new CustomContentInjector(htmDocument, ResourceRootPath);
             var pathToCustomStyle = ReleaseNotesDiscoveryUtil.ReplaceVersionPlaceholdersInCustomStyle(ResourceRootPath);
@@ -274,7 +275,7 @@ namespace ReleaseNotesGenerator {
             document.Flush();
             
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
-            lcg.AddCodeSample("sample1", "Signature validation example");
+            lcg.AddCodeSample("sample1", "Code sample");
 
             // If you keep layered code samples, ensure they also read resources via ResourceRootPath (see note below).
             document.Close();
