@@ -275,7 +275,7 @@ namespace ReleaseNotesGenerator {
             document.Flush();
             
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
-            lcg.AddCodeSample("sample1", "Code sample");
+            lcg.AddCodeSample("validation-sample", "Signature validation example");
 
             // If you keep layered code samples, ensure they also read resources via ResourceRootPath (see note below).
             document.Close();

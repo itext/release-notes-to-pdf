@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>C# Code — Syntax Highlighted</title>
+    <style>
+        body { margin: 0; background: #FFFFFF; }
+        .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+        .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+        .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+        p { padding-left: 10px; }
+        p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #0e3acc}
+        p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #5714ac}
+        p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #2a2a2a; min-height: 16.0px}
+        p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #2a2a2a}
+        p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #207703}
+        span.s1 {color: #5714ac}
+        span.s2 {color: #2a2a2a}
+        span.s3 {color: #0e3acc}
+        span.s4 {color: #118290}
+        span.s5 {color: #795932}
+        span.s6 {color: #828282}
+        span.s7 {color: #0f744d}
+        span.s8 {color: #207703}
+    </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Verify the signature using iText (C#)</header>
+<p class="p3"><br></p>
+<p class="p1">using <span class="s1">System</span><span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>System<span class="s2">.</span>Collections<span class="s2">.</span>Generic<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Pdf<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Signatures<span class="s2">.</span>Validation<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Signatures<span class="s2">.</span>Validation<span class="s2">.</span>Lotl<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Signatures<span class="s2">.</span>Validation<span class="s2">.</span>Report<span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p2"><span class="s3">namespace </span>iText<span class="s2">.</span>Samples<span class="s2">.</span>Sandbox<span class="s2">.</span>Signatures<span class="s2">.</span>Validation <span class="s2">{</span></p>
+<p class="p2"><span class="s2"><span>    </span></span><span class="s3">public class </span>LotlSimpleSignatureValidation <span class="s2">{</span></p>
+<p class="p3"><br></p>
+<p class="p1"><span class="s2"><span>        </span></span>public static readonly string <span class="s4">SRC </span><span class="s2">= </span><span class="s5">"./path/to/pdf/some.pdf"</span><span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p1"><span class="s2"><span>        </span></span>public static void <span class="s6">Main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s6">args</span><span class="s2">) {</span></p>
+<p class="p2"><span class="s2"><span>            </span></span>ValidatorChainBuilder <span class="s2">builder = </span><span class="s3">new </span>ValidatorChainBuilder<span class="s2">();</span></p>
+<p class="p4"><span>            </span>builder.<span class="s7">TrustEuropeanLotl</span>(<span class="s3">true</span>);</p>
+<p class="p2"><span class="s2"><span>            </span></span>LotlFetchingProperties <span class="s2">fetchingProperties = </span><span class="s3">new </span>LotlFetchingProperties<span class="s2">(</span></p>
+<p class="p2"><span class="s2"><span>                </span></span><span class="s3">new </span>RemoveOnFailingCountryData<span class="s2">());</span></p>
+<p class="p3"><br></p>
+<p class="p5"><span class="s2"><span>            </span></span><i>// Add other country codes if needed</i></p>
+<p class="p2"><span class="s8"><i><span>            </span></i></span><span class="s2">fetchingProperties.</span><span class="s7">SetCountryNames</span><span class="s2">(</span>LotlCountryCodeConstants<span class="s2">.</span><span class="s4"><b>PORTUGAL</b></span><span class="s2">);</span></p>
+<p class="p4"><span>            </span><span class="s1">LotlService</span>.<span class="s7">InitializeGlobalCache</span>(fetchingProperties);</p>
+<p class="p3"><br></p>
+<p class="p5"><span class="s2"><span>            </span></span><i>// If you want to additionally perform Qualification validation, you need to<span> </span></i></p>
+<p class="p5"><i><span>            </span>// provide QualifiedValidator instance. You can use this same instance to<span> </span></i></p>
+<p class="p5"><i><span>            </span>// obtain the results after validation.</i></p>
+<p class="p2"><span class="s8"><i><span>            </span></i></span>QualifiedValidator <span class="s2">qualifiedValidator = </span><span class="s3">new </span>QualifiedValidator<span class="s2">();</span></p>
+<p class="p4"><span>            </span>builder.<span class="s7">WithQualifiedValidator</span>(qualifiedValidator);</p>
+<p class="p3"><br></p>
+<p class="p2"><span class="s2"><span>            </span></span><span class="s3">using </span><span class="s2">(</span>PdfDocument <span class="s2">document = </span><span class="s3">new </span>PdfDocument<span class="s2">(</span><span class="s3">new </span>PdfReader<span class="s2">(</span><span class="s4">SRC</span><span class="s2">))) {</span></p>
+<p class="p4"><span>                </span><span class="s1">SignatureValidator </span>validator = builder.<span class="s7">BuildSignatureValidator</span>(document);</p>
+<p class="p4"><span>                </span><span class="s1">ValidationReport </span><span class="s6">report </span>= validator.<span class="s7">ValidateSignatures</span>();</p>
+<p class="p5"><span class="s2"><span>                </span></span><i>// Separately, now you can obtain Qualification results</i></p>
+<p class="p2"><span class="s8"><i><span>                </span></i></span>IDictionary<span class="s2">&lt;</span>String<span class="s2">, </span>QualifiedValidator<span class="s2">.</span>QualificationValidationData<span class="s2">&gt; </span><span class="s6">result </span><span class="s2">=</span></p>
+<p class="p4"><span>                    </span>qualifiedValidator.<span class="s7">ObtainAllSignaturesValidationResults</span>();</p>
+<p class="p4"><span>            </span>}</p>
+<p class="p4"><span>        </span>}</p>
+<p class="p4"><span>    </span>}</p>
+<p class="p4">}</p>
+<p class="p3"><br></p>
+</section>
+</main>
+</body>
+</html>
