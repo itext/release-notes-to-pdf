@@ -141,12 +141,6 @@ namespace ReleaseNotesGenerator {
             pdfDocument.GetCatalog().SetViewerPreferences(new PdfViewerPreferences().SetDisplayDocTitle(true));
             pdfDocument.GetCatalog().SetLang(new PdfString("en-US"));
 
-            var info = pdfDocument.GetDocumentInfo();
-            info.SetTitle("Release notes for iText " + Version);
-            info.SetAuthor("iText Software");
-            info.SetSubject("Release notes for iText " + Version);
-            info.SetKeywords("iText, release notes, pdf");
-
             return pdfDocument;
         }
 
@@ -276,6 +270,13 @@ namespace ReleaseNotesGenerator {
             
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("validation-sample", "Signature validation example");
+
+            // Update document info.
+            var info = pdfDocument.GetDocumentInfo();
+            info.SetTitle("Release notes for iText " + Version);
+            info.SetAuthor("iText Software");
+            info.SetSubject("Release notes for iText " + Version);
+            info.SetKeywords("iText, release notes, pdf");
 
             // If you keep layered code samples, ensure they also read resources via ResourceRootPath (see note below).
             document.Close();
