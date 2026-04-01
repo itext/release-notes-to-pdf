@@ -1,0 +1,656 @@
+<!doctype html>
+            
+        
+    
+        
+<html class="no-js" lang="en" data-vp-page-id="1624015112" data-vp-page-template="article">
+    
+    
+    
+<head>
+    <!--CDP_HEAD_START-->
+        <!--CDP_HEAD_END-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="repository-base-url" content="../itext">
+                <meta name="source-last-modified" content="2026-04-01T08:44Z">
+    
+    <meta name="Help Center Version"
+          content="1.4">
+    
+        
+    <link rel="icon" href="https://kb.itextpdf.com/__assets-86e4b158-e505-460a-be33-824fa3f28068/image/favicon-itextpdf.ico">
+    <link rel="apple-touch-icon" href="https://kb.itextpdf.com/__assets-86e4b158-e505-460a-be33-824fa3f28068/image/favicon-itextpdf.ico">
+
+            <link rel="canonical" href="release-pdfocr-5-0-0.html">
+                                            <link rel="alternate" hreflang="en" href="release-pdfocr-5-0-0.html">
+
+                                    <link rel="alternate" hreflang="x-default" href="release-pdfocr-5-0-0.html">
+                                        
+    
+
+
+<!-- HelpCenter config -->
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    
+                                                    
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Release pdfOCR 5.0.0">
+            <meta name="description" content="Release date: 01 Apr 2026 This release of the pdfOCR add-on for iText Core not only supports PaddleOCR and EasyOCR models, but also offers some hug...">
+    <meta property="og:description" content="Release date: 01 Apr 2026 This release of the pdfOCR add-on for iText Core not only supports PaddleOCR and EasyOCR models, but also offers some hug...">
+    <meta property="twitter:description" content="Release date: 01 Apr 2026 This release of the pdfOCR add-on for iText Core not only supports PaddleOCR and EasyOCR models, but also offers some hug...">
+
+        
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kb.itextpdf.com/itext/release-pdfocr-5-0-0">
+    <meta property="og:title" content="Release pdfOCR 5.0.0">
+    <meta property="og:image" content="https://kb.itextpdf.com/__assets-86e4b158-e505-460a-be33-824fa3f28068/image/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Release pdfOCR 5.0.0">
+    <meta property="twitter:image" content="https://kb.itextpdf.com/__assets-86e4b158-e505-460a-be33-824fa3f28068/image/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+    
+    <script>
+        var hasCookieNotice = false;
+        var usesCookieOptInStrategy = true;
+        var cookieRelatedFeatures = [];
+
+        function isSitePreview() {
+            var previewStagingUrlMatcher = /\/~preview-([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\//;
+            return previewStagingUrlMatcher.test(window.location.href);
+        }
+
+        function hasSiteViewerGivenConsentForTracking() {
+            try {
+                return window.localStorage.getItem('shc-cookies') === 'enabled';
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function hasSiteViewerRefusedConsentForTracking() {
+            try {
+                return window.localStorage.getItem('shc-cookies') === 'disabled';
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function areCookiesEnabled() {
+                        if (!hasCookieNotice) {
+                return true;
+            }
+
+                        if (usesCookieOptInStrategy) {
+                                if (hasSiteViewerGivenConsentForTracking()) {
+                    return true;
+                }
+            } else {
+                                if (!hasSiteViewerRefusedConsentForTracking()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        var registerCookieRelatedFeature = function (featureFunction) {
+
+                                                
+            if (typeof featureFunction === 'function') {
+                cookieRelatedFeatures.push(featureFunction);
+            }
+        }
+
+        var initializeCookieRelatedFeatures = function () {
+
+                                    
+            if (!areCookiesEnabled()) {
+                return;
+            }
+            window.scrollHelpCenter.areCookiesEnabled = true;
+            for (const cookieRelatedFeature of cookieRelatedFeatures) {
+                try {
+                    cookieRelatedFeature();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        
+        window.scrollHelpCenter = {
+            collection: JSON.parse('{\"members\":[{\"name\":\"iText\",\"prefix\":\"itext\"},{\"name\":\"iText pdf2Data\",\"prefix\":\"2data\"},{\"name\":\"iText 5\",\"prefix\":\"it5kb\"},{\"name\":\"iText DITO\",\"prefix\":\"ditokb\"}],\"currentContentSource\":{\"name\":\"iText\",\"prefix\":\"itext\"}}'),
+            source: {
+                confluenceBaseUrl: 'https://apryse.atlassian.net/wiki',
+                confluencePageId: '1624015112',
+                confluenceSpaceKey: 'IT7KB',
+            },
+            contentSourceKey: 'SPACE:IT7KB',
+            siteKey: 'a0963f93-750e-4dcf-aede-944dfb7a615b',
+            customJsSrc: '../__assets-86e4b158-e505-460a-be33-824fa3f28068/js/custom.js',
+            isSitePreview: isSitePreview(),
+            areCookiesEnabled: areCookiesEnabled(),
+            excludePageLabel: 'scroll-help-center-exclude-page',
+            hasCookieNotice: hasCookieNotice,
+            usesCookieOptInStrategy: usesCookieOptInStrategy,
+            registerCookieRelatedFeature: registerCookieRelatedFeature,
+            initializeCookieRelatedFeatures: initializeCookieRelatedFeatures,
+            isPortal: false,
+            isSearch: false,
+            isError: false,
+            isOverview: false,
+            viewportLink: '../?l=en',
+            relSiteRootPath: '../',
+            siteInstanceId: '86e4b158-e505-460a-be33-824fa3f28068',
+            theme: {
+                root: {
+                    absoluteLink: '../?l=en'
+                },
+                header: {
+                    displaySpaceName: false,
+                    links: JSON.parse('[{\"url\":\"https:\/\/itextpdf.com\/\",\"text\":\" iText Website\"},{\"url\":\"https:\/\/itextpdf.com\/en\/blog\",\"text\":\"Blog\"},{\"url\":\"https:\/\/itextpdf.com\/en\/support\",\"text\":\"Support\"},{\"url\":\"https:\/\/itextpdf.com\/en\/welcome-itext-community\",\"text\":\"Community\"}]'),
+                    logo: {
+                        url: '../__assets-86e4b158-e505-460a-be33-824fa3f28068/image/ITSC-Logo-Horizontal-RGB-300dpi.png',
+                        alt: 'iText Knowledge Base'
+                    },
+                },
+                cookieNotice: {
+                    display: false,
+                    headingText: 'Cookie Notice',
+                    descriptionText: 'Please read our privacy statement.',
+                    link: {
+                        url: '',
+                        text: ''
+                    }
+                }
+            },
+            integrations: {
+                jiraServiceDesk: {
+                    key: ''
+                },
+                intercom: {
+                    appId: ''
+                },
+                zendesk: {
+                    url: ''
+                },
+                aiSearch: {
+                    enabled: false
+                }
+            },
+            repository: {
+                link: '../itext',
+                name: 'iText'
+            },
+            versionLinksForPage: JSON.parse('null'),
+            variantLinksForPage: JSON.parse('null'),
+            languageLinksForPage: JSON.parse('[{\"displayName\":\"English\",\"code\":\"en\",\"toLanguageLink\":\"..\/itext\/release-pdfocr-5-0-0\",\"fallback\":false}]'),
+            defaultLanguageCode: 'en'        };
+    </script>
+
+    
+            
+    
+        <!-- Google Tag Manager -->
+        <script>
+                        window.scrollHelpCenter.registerCookieRelatedFeature(function () {
+                if (!window.scrollHelpCenter.isSitePreview) {
+                    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                    })(window,document,'script','dataLayer','GTM-KLFZM24W');
+                }
+            });
+        </script>
+        <!-- End Google Tag Manager -->
+    
+
+    
+            <meta name="google-site-verification"
+              content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+        
+    <link rel="stylesheet" href="../__theme/css/app--9d49c7a6f16d6f27f169.css">
+
+    
+            <link rel="stylesheet"
+              id="theme-asset-custom-css"
+              href="../__assets-86e4b158-e505-460a-be33-824fa3f28068/css/custom.css">
+    
+    
+<style>
+            :root {
+                        --_vpt-INTERNAL-footer-background: #487bb6;
+        --_vpt-INTERNAL-footer-foreground: #FFF;
+        --_vpt-INTERNAL-header-background: #FFFFFF;
+        --_vpt-INTERNAL-header-foreground: #060000;
+
+        /* @deprecated */
+        --vp-portal-banner-background-image: url('../__assets-86e4b158-e505-460a-be33-824fa3f28068/image/KBbackground.png');
+        /* @deprecated */
+        --vp-portal-banner-text-color: #FFF;
+        /* @deprecated */
+        --vp-space-banner-background-image: url('../__assets-86e4b158-e505-460a-be33-824fa3f28068/image/KBbackground.png');
+        /* @deprecated */
+        --vp-space-banner-text-color: #FFF;
+    }
+</style>
+
+    <title>Release pdfOCR 5.0.0</title>
+
+        </head>
+    <!-- pageid attribute is deprecated - please use data-vp-page-id on html element instead -->
+    <body pageid="1624015112" class="flex flex-col min-h-screen">
+                    <div id="vp-js-cookies__notice"></div>
+            <vp-a11y-skip-controller>
+                <a class="vp-a11y-skip-trigger" href="release-pdfocr-5-0-0.html#content">
+                    <i18n-message i18nkey="navigation.skip.to.main.label">
+                        Skip to main content
+                    </i18n-message>
+                </a>
+            </vp-a11y-skip-controller>
+            <button type="button" class="vp-a11y-skip-trigger vp-js-a11y-navigation-toggle">
+                <i18n-message i18nkey="navigation.open.label">
+                    Show navigation
+                </i18n-message>
+            </button>
+        
+        
+
+<header data-vp-component="header" class="header hc-header-background-color">
+    <div class="header__navigation relative">
+        <div class="hc-header-background-color relative z-10" id="site-navigation">
+            <div class="top-bar header__navigation--large vp-container hc-header-background-color hc-header-font-color">
+                <div class="top-bar-left">
+                    <ul class="flex flex-wrap flex-row gap-4 items-center relative m-0 p-0 list-none hc-header-background-color">
+                        <li class="leading-none align-self-center header__navigation--logo">
+                            <vp-localized-link>
+                                <a href="https://kb.itextpdf.com/?l=en">
+                                    <img src="../__assets-86e4b158-e505-460a-be33-824fa3f28068/image/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+                                    <i18n-message class="sr-only" i18nKey="header.home.label">
+                                        Go to homepage
+                                    </i18n-message>
+                                </a>
+                            </vp-localized-link>
+                        </li>
+                                            </ul>
+                </div>
+                <div class="top-bar-right no-print">
+                    <div class="header__navigation--large__menu hc-header-background-color">
+                        <ul class="flex flex-row m-0 p-0 list-none render-links">
+                            
+    <li class="order-6 lg:order-2 render-links--link
+                              render-links--link--border">
+        <a href="https://itextpdf.com/"
+           class="block px-4 py-3 hc-header-font-color"
+           rel="noopener">
+             iText Website
+        </a>
+    </li>
+        <li class="order-6 lg:order-2 render-links--link
+                              ">
+        <a href="https://itextpdf.com/en/blog"
+           class="block px-4 py-3 hc-header-font-color"
+           rel="noopener">
+            Blog
+        </a>
+    </li>
+        <li class="order-6 lg:order-2 render-links--link
+                              ">
+        <a href="https://itextpdf.com/en/support"
+           class="block px-4 py-3 hc-header-font-color"
+           rel="noopener">
+            Support
+        </a>
+    </li>
+        <li class="order-6 lg:order-2 render-links--link
+                              ">
+        <a href="https://itextpdf.com/en/welcome-itext-community"
+           class="block px-4 py-3 hc-header-font-color"
+           rel="noopener">
+            Community
+        </a>
+    </li>
+                            </ul>
+                                                                            <div class="my-auto list-none ml-4">
+                                    
+
+        
+        
+    
+    <div
+        data-vp-id="search-bar-placeholder"
+        data-vp-component="search-bar"
+        data-vp-variant=""
+        class="vp-search-bar "
+        aria-hidden="true"
+    >
+        <form
+            action="https://kb.itextpdf.com/search.html"
+            method="GET"
+            class="vp-search-bar__input-container"
+        >
+            <div
+                data-vp-component="search-input"
+                data-vp-variant="border"
+                class="vp-search-input vp-search-input--border"
+            >
+                <input
+                    type="search"
+                    autocomplete="off"
+                    value=""
+                    class="vp-search-input__input"
+                    style="margin-right: 0;"
+                >
+            </div>
+        </form>
+    </div>
+
+    
+    <script data-vp-id="search-bar-config" type="application/json">
+        {
+            "hasContentSourceFilter": false,
+            "hasQuickSearch": true,
+            "variant": ""
+        }
+    </script>
+                            </div>
+                                            </div>
+
+                    <button type="button" class="vp-js-header-search-toggle vp-button header__navigation--button hc-header-font-color">
+                        <svg
+                            data-vp-id="header-search-toggle-icon"
+                            data-vp-component="icon"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            aria-hidden="true"
+                        >
+                            <path d="M8.99452 14.5C10.5121 14.5 11.809 13.9669 12.8854 12.9007C13.9618 11.8345 14.5 10.5361 14.5 9.00548C14.5 7.48794 13.9631 6.19097 12.8893 5.11458C11.8155 4.03819 10.519 3.5 9 3.5C7.46786 3.5 6.16816 4.0369 5.1009 5.11071C4.03363 6.18453 3.5 7.48096 3.5 9C3.5 10.5321 4.0331 11.8318 5.09929 12.8991C6.1655 13.9664 7.46391 14.5 8.99452 14.5ZM9 16C8.02913 16 7.11974 15.816 6.27185 15.4479C5.42395 15.0799 4.68056 14.5799 4.04167 13.9479C3.40278 13.316 2.90278 12.576 2.54167 11.728C2.18056 10.88 2 9.97053 2 8.99956C2 8.04152 2.18403 7.13542 2.55208 6.28125C2.92014 5.42708 3.41864 4.68387 4.04758 4.0516C4.67653 3.41935 5.41569 2.91935 6.26508 2.5516C7.11449 2.18387 8.02548 2 8.99806 2C9.95769 2 10.8646 2.18403 11.7188 2.55208C12.5729 2.92014 13.316 3.42014 13.9479 4.05208C14.5799 4.68403 15.0799 5.42612 15.4479 6.27835C15.816 7.13058 16 8.0381 16 9.00094C16 9.83365 15.8615 10.6213 15.5846 11.3638C15.3078 12.1062 14.9254 12.7836 14.4375 13.3958L18 16.9583L16.9375 18L13.375 14.4583C12.7668 14.9459 12.0939 15.3247 11.3564 15.5948C10.6188 15.8649 9.83333 16 9 16Z" fill="currentColor"></path>
+                        </svg>
+                        <i18n-message class="sr-only" i18nKey="search.form.show.label"></i18n-message>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="flex flex-col flex-grow hc-main-wrapper">
+                            
+
+
+<div class="vp-article vp-container article">
+    <div class="vp-article__aside-left no-print">
+        <div id="vp-js-desktop__navigation" class="vp-article__aside-left__inner"></div>
+    </div>
+
+    <main id="article-content" class="vp-article__content-panel">
+                    
+    <i18n-message i18nkey="breadcrumb.label" attribute="aria-label" class="vp-breadcrumbs__wrapper">
+        <nav class="vp-breadcrumbs" aria-label="Breadcrumb" role="navigation">
+            <div class="breadcrumbs-wrapper">
+                <ol class="breadcrumbs breadcrumbs--fit-content">
+                                            <li>
+                                                            <a href="index.html" rel="prev">iText</a>
+                                                                                        <span aria-hidden="true">/</span>
+                                                    </li>
+                                            <li>
+                                                            <a href="releases.html" rel="prev" class="js-breadcrumbs-truncate">Releases</a>
+                                                                                </li>
+                                    </ol>
+            </div>
+        </nav>
+    </i18n-message>
+                        <div id="content" class="vp-a11y-skip-target" tabindex="-1"></div>
+                    <div class="vp-article__aside-right no-print">
+                <vp-toc data-vp-component="toc" for="main-content">
+                    <vp-a11y-skip-controller slot="afterbegin">
+                        <a class="vp-a11y-skip-trigger"  href="release-pdfocr-5-0-0.html#article-inner-content">
+                            <i18n-message i18nkey="navigation.skip.toc.label">
+                                Skip table of contents
+                            </i18n-message>
+                        </a>
+                    </vp-a11y-skip-controller>
+                </vp-toc>
+            </div>
+                <div id="article-inner-content" class="vp-article__wrapper" tabindex="-1">
+            <header class="article-header">
+                <!-- CSS class article__heading is deprecated and will be removed in the future -->
+                <h1 class="vp-article__heading article__heading"><span>Release pdfOCR 5.0.0</span></h1>
+            </header>
+
+            <section id="main-content" class="vp-article__content wiki-content article__content">
+                    <h4 local-id="5b2b50892dcb" id="ReleasepdfOCR5.0.0-Releasedate:">Release date: <time datetime="2026-04-01" class="date-upcoming">01 Apr 2026</time></h4><p local-id="f82d3b4f7cb4">This release of the <a shape="rect" href="https://itextpdf.com/node/10101" class="external-link" rel="nofollow">pdfOCR</a> add-on for iText Core not only supports PaddleOCR and EasyOCR models, but also offers some huge performance improvements and general OCR improvements across the board. Therefore it’s significant enough to warrant a major release version, bumping the version number to 5.0.0.</p><h2 local-id="496b73d7c81a" id="ReleasepdfOCR5.0.0-PaddleOCR/EasyOCRModelSupport">PaddleOCR/EasyOCR Model Support</h2><p local-id="f5220895ca70">The ML-based OCR engine is extended to include support for pretrained ONNX PaddleOCR and EasyOCR models, adding to the docTR models already supported. In our ongoing OCR tests, these models perform extremely well over a wide range of use cases and have extensive language support.</p><p local-id="1da17a9d6237">We are now maintaining a <a shape="rect" href="https://huggingface.co/itextresearch/models" class="external-link" rel="nofollow">HuggingFace repository</a> where you can download many compatible models to get started quickly. You’re free to experiment with alternative models, though some models will need to be converted to the ONNX format to work with pdfOCR’s ONNX engine. The <a shape="rect" href="https://www.paddleocr.ai/latest/en/version3.x/deployment/obtaining_onnx_models.html" class="external-link" rel="nofollow">PaddleOCR documentation</a> has details on converting PaddleOCR models to ONNX format, however, EasyOCR does not provide official documentation on converting models.</p><h2 local-id="ae10cd5925bb" id="ReleasepdfOCR5.0.0-GPUAcceleration">GPU Acceleration</h2><p local-id="52e1c36834a2">Optional GPU acceleration is also now enabled for pdfOCR’s ONNX engine, which not only lets the CPU handle other tasks but can also result in major performance gains. </p><p local-id="bde8f5b9e21a">ONNX Runtime supports multiple execution providers for hardware acceleration, although not all are ready for production. At present, we have only tested pdfOCR using Nvidia CUDA-enabled GPUs, so you should refer to OnnxRuntime’s <a shape="rect" href="https://onnxruntime.ai/docs/execution-providers/" class="external-link" rel="nofollow">official docs</a> on execution providers for other hardware.</p><h2 local-id="bc44687c9149" id="ReleasepdfOCR5.0.0-GeneralOCRImprovements">General OCR Improvements</h2><p local-id="6d1859e7fe3c">Another nice change is we've significantly improved how pdfOCR positions recognized text boxes for rotated content. This allows pdfOCR to better match the original orientation and placement of text, including small-angle rotations (not only 0°, 90°, 180°, 270° as previously).</p><p local-id="9058365d7565">Additionally, support for retrieving OCR text bounding rectangles in image pixel coordinates rather than PDF coordinate space has been added, removing the need for manual conversion when working at the image level.</p><h2 local-id="0643901bc529" id="ReleasepdfOCR5.0.0-Huge.NETPerformanceGains">Huge .NET Performance Gains</h2><p local-id="320d89a98114">For .NET, the performance of the ONNX engine is massively improved thanks to some clever optimizations. Most significantly, a wrapper for Java’s <code>FloatBuffer</code> class was created to prevent the copying of huge float data arrays for models. Additional improvements to general image handling and processing brought some nice wins, resulting in blazing-fast performance on both Java and .NET.</p><h2 local-id="b02dd00ce331" id="ReleasepdfOCR5.0.0-BreakingChanges">Breaking Changes</h2><p local-id="9c40f9f7c6bd">Since this is a major version release, you can expect some breaking changes. The most important change is to split up and rename the module for pdfOCR’s ONNX engine.</p><p local-id="94d7e91ec807">Since we now support more than simply docTR ONNX models, the <code>pdf-ocr-onnxtr</code> package has been renamed and split into <code>pdf-ocr-onnx-abstract</code> and <code>pdfocr-onnx-cpu</code>. This change also accommodates for GPU acceleration using the <code>onnxruntime_gpu</code> package.</p><p local-id="99aee5bb8014">See the <a href="https://kb.itextpdf.com/itext/breaking-changes-for-pdfocr-5-0-0" data-linked-resource-id="2229305345" data-linked-resource-version="7" data-linked-resource-type="page">breaking changes</a> for details on the differences from previous releases of pdfOCR.</p><h2 local-id="b3526ce54f95" id="ReleasepdfOCR5.0.0-Downloads">Downloads</h2><div class="table-wrap" data-layout="default" style="--table-inline-size: 946px;"><table data-table-width="946" data-layout="center" data-local-id="1a8720af-dbc3-486a-83e3-8701a9521797" class="confluenceTable"><tbody><tr data-local-id="8aaf868531cf"><th colspan="1" rowspan="1" data-local-id="ca649047f0d3" class="confluenceTh"><p local-id="2e306028c4c0"><br clear="none"></p></th><th colspan="1" rowspan="1" data-local-id="ea0ccc309d9b" class="confluenceTh"><p local-id="2cac000dcdda"><a shape="rect" href="https://github.com/itext/" class="external-link" rel="nofollow"><strong>GitHub</strong></a></p></th><th colspan="1" rowspan="1" data-local-id="2f900fc2e393" class="confluenceTh"><p local-id="0f53afbeaa00"><a shape="rect" href="https://mvnrepository.com/artifact/com.itextpdf" class="external-link" rel="nofollow"><strong>Maven</strong></a></p></th><th colspan="1" rowspan="1" data-local-id="f1c61a609bb1" class="confluenceTh"><p local-id="28f6410e1708"><a shape="rect" href="https://www.nuget.org/profiles/iText" class="external-link" rel="nofollow"><strong>NuGet</strong></a></p></th><th colspan="1" rowspan="1" data-local-id="ec9474163d52" class="confluenceTh"><p local-id="baab44d55df0"><a shape="rect" href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/" class="external-link" rel="nofollow"><strong>Artifactory</strong></a></p></th></tr><tr data-local-id="aad0b3ccec65"><td colspan="1" rowspan="1" data-local-id="9c4a5a0ce59e" class="confluenceTd"><p local-id="5b3b887a8fd7"><a shape="rect" href="https://itextpdf.com/node/10101" class="external-link" rel="nofollow">iText pdfOCR</a>&nbsp;– 5.0.0 (<a shape="rect" href="https://api.itextpdf.com/pdfOCR/java/5.0.0" class="external-link" rel="nofollow">Java</a>)</p></td><td colspan="1" rowspan="1" data-local-id="10fbddde17bc" class="confluenceTd"><p local-id="74f0dbc6b611"><a shape="rect" href="https://github.com/itext/itext-pdfocr-java/releases/tag/5.0.0" class="external-link" rel="nofollow">link</a></p></td><td colspan="1" rowspan="1" data-local-id="84b38d77c6e1" class="confluenceTd"><p local-id="05ffe938a9c0"><a shape="rect" href="https://central.sonatype.com/artifact/com.itextpdf/pdfocr-api/5.0.0/jar" class="external-link" rel="nofollow">link</a> (API)</p><p local-id="8662f7d77e0d"><a shape="rect" href="https://search.maven.org/artifact/com.itextpdf/pdfocr-tesseract4/5.0.0/jar" class="external-link" rel="nofollow">link</a> (Tesseract)</p><p local-id="921ab2112188"><a shape="rect" href="https://central.sonatype.com/artifact/com.itextpdf/pdfocr-onnx-abstract/5.0.0" class="external-link" rel="nofollow">link</a> (ONNX-abstract)</p><p local-id="263eb671bea3"><a shape="rect" href="https://central.sonatype.com/artifact/com.itextpdf/pdfocr-onnx-cpu/5.0.0" class="external-link" rel="nofollow">link</a> (ONNX-cpu)</p></td><td colspan="1" rowspan="1" data-local-id="0adb8c5c2a8f" class="confluenceTd"><p local-id="e9b6c270e27c">N/A</p></td><td colspan="1" rowspan="1" data-local-id="886dd6ed-af7d-4e91-a062-090f2902a368" class="confluenceTd"><p local-id="9f33c588501e"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/releases/com/itextpdf/pdfocr-api/5.0.0" class="external-link" rel="nofollow">link</a> (API)</p><p local-id="fc850e3819d3"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/releases/com/itextpdf/pdfocr-tesseract4/5.0.0" class="external-link" rel="nofollow">link</a> (Tesseract)</p><p local-id="ebb1323ca960"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/releases/com/itextpdf/pdfocr-onnx-abstract/5.0.0" class="external-link" rel="nofollow">link</a> (ONNX-abstract)</p><p local-id="c8ba81f01e0f"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/releases/com/itextpdf/pdfocr-onnx-cpu/5.0.0" class="external-link" rel="nofollow">link</a> (ONNX-cpu)</p></td></tr><tr data-local-id="2bb0aefc85af"><td colspan="1" rowspan="1" data-local-id="b7b128fc074a" class="confluenceTd"><p local-id="d52d57645be6"><a shape="rect" href="https://itextpdf.com/node/10101" class="external-link" rel="nofollow">iText pdfOCR</a>&nbsp;– 5.0.0 (<a shape="rect" href="https://api.itextpdf.com/pdfOCR/dotnet/4.1.0" class="external-link" rel="nofollow">.NET</a>)</p></td><td colspan="1" rowspan="1" data-local-id="fcb1e2962689" class="confluenceTd"><p local-id="08906ba29f72"><a shape="rect" href="https://github.com/itext/itext-pdfocr-dotnet/releases/tag/5.0.0" class="external-link" rel="nofollow">link</a></p></td><td colspan="1" rowspan="1" data-local-id="4bd388fe6874" class="confluenceTd"><p local-id="b06f8f65e7ce">N/A</p></td><td colspan="1" rowspan="1" data-local-id="23bd09c30675" class="confluenceTd"><p local-id="e34756d74b86"><a shape="rect" href="https://www.nuget.org/packages/itext.pdfocr.api/5.0.0" class="external-link" rel="nofollow">link </a>(API)</p><p local-id="657784f1f84b"><a shape="rect" href="https://www.nuget.org/packages/itext.pdfocr.tesseract4/5.0.0" class="external-link" rel="nofollow">link</a> (Tesseract)</p><p local-id="ad5fe6af795c"><a shape="rect" href="https://www.nuget.org/packages/itext.pdfocr.onnx.abstract/5.0.0" class="external-link" rel="nofollow">link </a>(ONNX-abstract)</p><p local-id="1aec0ac274bc"><a shape="rect" href="https://www.nuget.org/packages/itext.pdfocr.onnx.cpu/5.0.0" class="external-link" rel="nofollow">link </a>(ONNX-cpu)</p></td><td colspan="1" rowspan="1" data-local-id="523a2557feb3" class="confluenceTd"><p local-id="de9dacc2bdb7"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/nuget/itext.pdfocr.api/itext.pdfocr.api.5.0.0.nupkg" class="external-link" rel="nofollow">link</a> (API)</p><p local-id="2ce54b33a314"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/nuget/itext.pdfocr.tesseract4/itext.pdfocr.tesseract4.5.0.0.nupkg" class="external-link" rel="nofollow">link</a> (Tesseract)</p><p local-id="1ab1e24d06d8"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/nuget/itext.pdfocr.onnx.abstract/itext.pdfocr.onnx.abstract.5.0.0.nupkg" class="external-link" rel="nofollow">link</a> (ONNX-abstract)</p><p local-id="3833b29510e3"><a shape="rect" href="https://repo.itextsupport.com/ui/repos/tree/General/nuget/itext.pdfocr.onnx.cpu/itext.pdfocr.onnx.cpu.5.0.0.nupkg" class="external-link" rel="nofollow">link</a> (ONNX-cpu)</p></td></tr></tbody></table></div><h2 local-id="c0a81fd21675" id="ReleasepdfOCR5.0.0-Changelog">Changelog</h2><div class="table-wrap" data-layout="default" style="--table-inline-size: 760px;"><table data-table-width="760" data-layout="default" data-local-id="92983a51-056d-4680-baa5-c3cdaa101524" class="confluenceTable"><tbody><tr data-local-id="95eac9924b69"><td colspan="1" rowspan="1" data-local-id="e0dec72ed6f6" class="confluenceTd"><h3 local-id="5e1ab892b7db" id="ReleasepdfOCR5.0.0-Newfeatures">New features</h3><ul local-id="9d0c4b13a204"><li local-id="04473857b947"><p local-id="e093773455e0">DEVSIX-9706 – Support EasyOCR and PaddleOCR models for pdfOCR</p></li><li local-id="7cbca4a3c828"><p local-id="07e246905da0">DEVSIX-9740 – Support PdfOCR-Onnx execution on GPU</p></li><li local-id="45f6780a5d62"><p local-id="19f59b2d25e8">DEVSIX-9792 – Allow multiple files for IOcrEngine#doImageOcr input</p></li><li local-id="912a9afbc439"><p local-id="5677a71d091f">DEVSIX-9793 – Add the ability to get rectangles in image pixels for TextInfo</p></li></ul><h3 local-id="92e16ea0c03e" id="ReleasepdfOCR5.0.0-Improvements">Improvements</h3><ul local-id="e0dea6b118e5"><li local-id="e4284205f9d5"><p local-id="020cc30f2d05">DEVSIX-9739 – PdfOCR: Improve text boxes taking into account arbitrary rotation</p></li><li local-id="37305e6cd136"><p local-id="20598164892f">DEVSIX-9458 – Improve BY_LINES TextPositioning mode to handle whitespaces</p></li><li local-id="835bd9091cdd"><p local-id="84d2d574dc34">DEVSIX-9775 – Create .NET wrapper for FloatBuffer to make some classes autoportable</p></li><li local-id="3ff0b891fd44"><p local-id="7f55841cad0c">DEVSIX-9723 – PdfOCR: port BufferedImageUtil and image type related logic to .NET</p></li><li local-id="10f0b6532776"><p local-id="3c1fb6b416fc">DEVSIX-9724 – PdfOCR: port YamlUtil to .NET</p></li></ul><h3 local-id="2e819e6997bf" id="ReleasepdfOCR5.0.0-Bugfixes">Bug fixes</h3><ul local-id="5878a86289d4"><li local-id="bd88897e44c2"><p local-id="592fe39e88b8">DEVSIX-9744 – Fix CVE-2025-53644 on OpenCVSharp4 runtimes in pdfocr-dotnet</p></li></ul></td></tr></tbody></table></div><h3 local-id="82a77170badd" id="ReleasepdfOCR5.0.0-InstallationInstructions">Installation Instructions</h3><div class="vp-content-by-label" data-vp-id="vp-content-by-label-1">
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+<div class="vp-content-by-label-items"><ul><li><a href="https://kb.itextpdf.com/itext/installing-itext-pdfocr-for-net-developers">Installing iText pdfOCR for .NET developers</a></li><li><a href="https://kb.itextpdf.com/itext/installing-itext-pdfocr-for-java-developers">Installing iText pdfOCR for Java developers</a></li></ul></div></div><h3 local-id="76961141634b" id="ReleasepdfOCR5.0.0-Examples(latestones)">Examples (latest ones)</h3><div class="vp-content-by-label" data-vp-id="vp-content-by-label-2">
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+<div class="vp-content-by-label-items"><ul><li><a href="https://kb.itextpdf.com/itext/pdfocr-how-to-ocr-an-image-to-pdf">pdfOCR: How to OCR an Image to PDF?</a></li><li><a href="https://kb.itextpdf.com/itext/pdfocr-how-to-ocr-an-image-to-pdf-a-3u">pdfOCR: How to OCR an Image to PDF/A-3u?</a></li><li><a href="https://kb.itextpdf.com/itext/pdfocr-module-onnxtr">pdfOCR module - onnxTR</a></li><li><a href="pdfocr-paddleocr-model-support.html">pdfOCR: PaddleOCR model support</a></li></ul></div></div><h3 local-id="c66e2fa129d3" id="ReleasepdfOCR5.0.0-FAQ(latestones)">FAQ (latest ones)</h3><div class="vp-content-by-label" data-vp-id="vp-content-by-label-3">
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+<div class="vp-content-by-label-items"><ul><li><a href="https://kb.itextpdf.com/itext/which-languages-are-supported-in-pdfocr">Which languages are supported in pdfOCR?</a></li><li><a href="https://kb.itextpdf.com/itext/what-does-textpositioning-in-pdfocr-do">What does TextPositioning in pdfOCR do?</a></li><li><a href="https://kb.itextpdf.com/itext/could-not-find-a-glyph-corresponding-to-unicode-ch">Could not find a glyph corresponding to Unicode character</a></li><li><a href="https://kb.itextpdf.com/itext/pdfocr-if-your-scanned-document-has-a-mixture-of-s">pdfOCR: If your scanned document has a mixture of sections with paragraphs and tables, what is a recommended strategy here?</a></li><li><a href="https://kb.itextpdf.com/itext/pdfocr-is-handwriting-recognition-supported">pdfOCR: Is handwriting recognition supported</a></li></ul></div></div>
+
+        
+<div class="table-overlay full reveal article__content" data-vp-id="js-table-overlay">
+    <i18n-message i18nkey="modal.cta.close.label" attribute="title">
+        <button class="close-button table-overlay__close"
+                data-close
+                title="Close modal"
+                type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </i18n-message>
+    <div class="table-overlay__content"></div>
+</div>
+
+                                    <vp-article-pagination pageid="1624015112"></vp-article-pagination>
+                            </section>
+
+                    </div>
+    </main>
+</div>
+                    </div>
+
+        
+    
+<footer data-vp-component="footer" class="footer hc-footer-background-color">
+    <div class="grid lg:flex footer--alignment hc-footer-font-color vp-container">
+                    <div class="flex hc-footer-font-color">
+                <img src="../__theme/footer-logo--f92dd2820b24ad5bb8be.svg" class="footer__logo" alt="">
+            </div>
+                <div class="grid">
+            <div class="footer__links">
+                                    <a
+                        href="https://itextpdf.com/en/about-us"
+                        class="hc-footer-font-color"
+                        rel="noopener"
+                    >
+                        About Us
+                    </a>
+                    <span class="footer__links--separator">/</span>                                    <a
+                        href="https://itextpdf.com/en/blog"
+                        class="hc-footer-font-color"
+                        rel="noopener"
+                    >
+                        News
+                    </a>
+                    <span class="footer__links--separator">/</span>                                    <a
+                        href="https://itextpdf.com/en/jobs"
+                        class="hc-footer-font-color"
+                        rel="noopener"
+                    >
+                        Jobs
+                    </a>
+                    <span class="footer__links--separator">/</span>                                    <a
+                        href="https://itextpdf.com/en/how-buy/agpl-license"
+                        class="hc-footer-font-color"
+                        rel="noopener"
+                    >
+                        Open Source AGPL license
+                    </a>
+                    <span class="footer__links--separator">/</span>                                    <a
+                        href="https://itextpdf.com/en/how-buy"
+                        class="hc-footer-font-color"
+                        rel="noopener"
+                    >
+                        Commercial &amp; OEM licenses
+                    </a>
+                                                </div>
+                <ul class="footer__attribution-line--copyright hc-footer-font-color">
+                    <li>
+                    <i18n-message i18nkey="footer.copyright.label" options='{ "date": "2026", "by": "iText" }'>
+                        Copyright &copy; 2026 iText
+                    </i18n-message>
+                    </li>
+                    <li>
+                        <span aria-hidden="true">&bull;</span>
+                        <i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message>
+                        &#32;
+                        <a
+                            href="https://www.k15t.com/go/scroll-viewport-cloud-help-center"
+                            rel="noopener nofollow"
+                        >
+                            Scroll Viewport
+                        </a>
+                        &#32;
+                        &#38;
+                        &#32;
+                        <a
+                            href="https://www.atlassian.com/software/confluence"
+                            rel="noopener nofollow"
+                        >
+                            Atlassian Confluence
+                        </a>
+                    </li>
+                    <li id="vp-js-cookies__reset-link"></li>
+                </ul>
+                    </div>
+    </div>
+</footer>
+
+        
+    
+    
+        
+        
+            
+    
+                
+                
+                
+        
+        <div id="vp-js-mobile__navigation"></div>
+
+                            <div class="vp-error-log">
+                <div class="vp-error-log__backdrop"></div>
+                <div class="vp-error-log__modal">
+                    <div class="vp-error-log__header">
+                        <i18n-message i18nkey="preview.errorLog.header.label" ns="common">
+                            JavaScript errors detected
+                        </i18n-message>
+                    </div>
+                    <div class="vp-error-log__content">
+                        <p>
+                            <i18n-message i18nkey="preview.errorLog.content.0" ns="common">
+                                Please note, these errors can depend on your browser setup.
+                            </i18n-message>
+                        </p>
+                        <ul data-error-log-list>
+                            <template class="vp-error-log__item--template">
+                                <li></li>
+                            </template>
+                        </ul>
+                        <p>
+                            <i18n-message i18nkey="preview.errorLog.content.1" ns="common">
+                                If this problem persists, please contact our support.
+                            </i18n-message>
+                        </p>
+                    </div>
+                    <div class="vp-error-log__footer">
+                        <a class="vp-button vp-button--primary" href="https://k15t.jira.com/servicedesk/customer/portal/3" rel="noopener">
+                            <i18n-message i18nkey="preview.errorLog.cta.support.label" ns="common">
+                                Contact Support
+                            </i18n-message>
+                        </a>
+                        <a class="vp-button vp-button--secondary" id="error-log-close-button" tabindex="0">
+                            <i18n-message i18nkey="preview.errorLog.cta.close.label" ns="common">
+                                Close
+                            </i18n-message>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        
+        <script>
+            (function() {
+                // set the inapphelp attributes as early as possible to avoid flashing content that should be hidden
+                const searchParams = new URL(location.href).searchParams;
+
+                if (searchParams.get('inAppHelp') === 'true') {
+                    const inAppHelpClasses = ['vp-in-app-help'];
+
+                    if (searchParams.get('title') === 'false') {
+                        inAppHelpClasses.push('vp-in-app-help--no-title');
+                    }
+
+                    document.body.classList.add(...inAppHelpClasses);
+                }
+            }());
+        </script>
+
+        <script>
+            if(!false) {
+                window.scrollHelpCenter.initializeCookieRelatedFeatures();
+            }
+        </script>
+
+        <script src="../__theme/js/app--e097f5305d0a99a7c40c.js"></script>
+    </body>
+</html>
