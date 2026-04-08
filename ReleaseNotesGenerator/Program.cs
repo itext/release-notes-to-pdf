@@ -173,8 +173,8 @@ namespace ReleaseNotesGenerator {
         /// <param name="document"></param>
         /// <exception cref="Exception"></exception>
         private static void AddSourceCodeFiles(PdfDocument document) {
-            var sourceCodeZipFile = Path.Combine(OutputDirectory, "source-code.zip");
-            const string fileTitle = "source-code.zip";
+            var sourceCodeZipFile = Path.Combine(OutputDirectory, "source-code.zipx");
+            const string fileTitle = "source-code.zipx";
             const string fileDescription = "This zip file contains the source code to recreate this pdf.";
             const string readmeTitle = "README.md";
             const string readmeDescription = "Build instructions for the project.";

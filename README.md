@@ -6,7 +6,7 @@ It conforms to PDF/UA-2 and PDF/A-4F, and is created with the help of pdfHTML.
 When the output PDF is generated, the tool automatically embeds several attachments into the PDF file: 
 * `README.md` - this README file.
 * `source-code.zipx` - the archive with source code. This is just a usual zip archive, the extension is changed to `.zipx` because
-some PDF  processors forbid saving `.zip` attachments.
+some PDF processors forbid saving `.zip` attachments.
 * `Release notes for iText x.y.z (Mac protected).pdf`- a version of the same PDF file encrypted with MAC-protection. 
 The password is `itext`. 
 

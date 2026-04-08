@@ -34,7 +34,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="source-code.zip" />
+      <None Remove="source-code.zipx" />
       <None Remove="test.html" />
     </ItemGroup>
 </Project>
