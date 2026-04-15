@@ -263,7 +263,9 @@ namespace ReleaseNotesGenerator {
             customContentInjector.Inject("customhtml/custom_content_after_logo.html", "//body", 2);
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
 
+            // We need full html before post-processing.
             new TocAndBookMarkGenerator(htmDocument, pdfDocument).AddTocAndBookmarks();
+            htmlProcessor.PostProcess();
 
             var document = HtmlConverter.ConvertToDocument(htmDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
             document.Flush();

@@ -57,20 +57,16 @@ namespace ReleaseNotesGenerator.Utils {
             RemoveUnwantedNodes();
             InsertIdForContributorsTable(version);
         }
-        
-        private void InsertIdForContributorsTable(string version)
+
+        /// <summary>
+        /// Performs post-processing on an HTML document.
+        /// This method resolves relative links, preparing it for further access,
+        /// also adds alternative description to avoid accessibility issues.
+        /// </summary>
+        public void PostProcess()
         {
-            var h2 = htmlDocument.DocumentNode.SelectSingleNode($"//h2[@id='ReleaseiTextCore{version}-Contributors']");
-            if (h2 == null)
-            {
-                throw new InvalidOperationException("Target h2 not found.");
-            }
-            var table = h2.SelectSingleNode("ancestor::table[1]");
-            if (table == null)
-            {
-                throw new InvalidOperationException("Ancestor table not found.");
-            }
-            table.SetAttributeValue("id", "contributorsTable");
+            AddAlternateDescriptionForImages();
+            ResolveRelativeLinks();
         }
 
         /// <summary>
@@ -187,5 +183,51 @@ namespace ReleaseNotesGenerator.Utils {
                 .Any(c => c.IndexOf(classFragment, StringComparison.Ordinal) >= 0);
         }
 
+        private void InsertIdForContributorsTable(string version) {
+            var h2 = htmlDocument.DocumentNode.SelectSingleNode($"//h2[@id='ReleaseiTextCore{version}-Contributors']");
+            if (h2 == null) {
+                throw new InvalidOperationException("Target h2 not found.");
+            }
+            var table = h2.SelectSingleNode("ancestor::table[1]");
+            if (table == null) {
+                throw new InvalidOperationException("Ancestor table not found.");
+            }
+            table.SetAttributeValue("id", "contributorsTable");
+        }
+
+        private void AddAlternateDescriptionForImages() {
+            // Add alt attribute to images to avoid accessibility issues.
+            var imgNodes = htmlDocument.DocumentNode.SelectNodes("//img");
+            if (imgNodes != null) {
+                foreach (var selectNode in imgNodes) {
+                    if (selectNode.GetAttributeValue("alt", "") == "") {
+                        selectNode.SetAttributeValue("alt", "Image");
+                    }
+                }
+            }
+
+            // Add alt attribute to images to avoid accessibility issues.
+            var svgNodes = htmlDocument.DocumentNode.SelectNodes("//svg");
+            if (svgNodes != null) {
+                foreach (var selectNode in htmlDocument.DocumentNode.SelectNodes("//svg")) {
+                    if (selectNode.GetAttributeValue("alt", "") == "") {
+                        selectNode.SetAttributeValue("alt", "Image");
+                    }
+                }
+            }
+        }
+
+        private void ResolveRelativeLinks() {
+            var aNodes = htmlDocument.DocumentNode.SelectNodes("//a");
+            if (aNodes != null) {
+                foreach (var selectNode in htmlDocument.DocumentNode.SelectNodes("//a")) {
+                    var href = selectNode.GetAttributeValue("href", "");
+                    if (!href.StartsWith("http") && !href.StartsWith("#")) {
+                        selectNode.SetAttributeValue("href", 
+                            "https://kb.itextpdf.com/itext/" + href.Replace(".html", ""));
+                    }
+                }
+            }
+        }
     }
 }
