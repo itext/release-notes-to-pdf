@@ -1,0 +1,2802 @@
+
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-page-template="article"
+	
+ data-page-id="ci_7cc884f6978841b251e331616095e07f6e7236455af8d2ad36b2bb729eaa2d38" data-confluence-content-id="327685670"
+		data-color-scheme="light"
+>
+<head>
+	<meta charset="UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="color-scheme" content="light">
+
+						<link id="pageTreeSource" rel="preload" href="__pagetree.json" as="fetch" type="application/json" crossorigin="anonymous">
+
+		<meta name="site-path" content="/">
+
+					<link rel="x-site-path" href="https://kb.itextpdf.com/">
+	<link rel="x-root-path" href="https://kb.itextpdf.com/">
+
+	<meta name="site-default-language" content="en">
+		<meta name="site-languages" content="en">
+		<meta name="confluence-content-type" content="page">
+		<meta name="confluence-base-url" content="https://apryse.atlassian.net/wiki">
+		<meta name="confluence-space-key" content="IT7KB">
+
+		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+
+
+
+	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
+
+
+
+
+
+
+
+
+
+
+
+		<title>Release iText 7.1.11 | iText Knowledge Base</title>
+		<meta property="og:title" content="Release iText 7.1.11 | iText Knowledge Base">
+		<meta property="twitter:title" content="Release iText 7.1.11 | iText Knowledge Base">
+
+		<link rel="canonical" href="release-itext-7-1-11.html">
+		<meta property="og:url" content="https://kb.itextpdf.com/itext/release-itext-7-1-11">
+
+		<meta name="description" content="iText 7: Release iText 7.1.11 - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+		<meta property="og:description" content="iText 7: Release iText 7.1.11 - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+		<meta property="twitter:description" content="iText 7: Release iText 7.1.11 - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+
+		<meta property="og:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+		<meta property="twitter:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+	<meta property="og:type" content="website">
+	<meta property="twitter:card" content="summary_large_image">
+
+		<meta name="page-last-modified" content="2026-03-06T09:17:28.091Z">
+
+		<script>
+		(function () {
+			const defaultLanguageMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-default-language"]')?.content);
+			const availableLanguagesMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-languages"]')?.content);
+			const fallbackLanguage = defaultLanguageMeta ?? 'en';
+			const supportedLanguagesFromMeta = availableLanguagesMeta?.split(',') ?? [];
+			const supportedLanguages = [...new Set([fallbackLanguage, ...supportedLanguagesFromMeta])].filter(Boolean);
+			const detectedLanguage = new URLSearchParams(self.location.search).get('l') || document.documentElement.lang;
+			const resolvedLanguage = supportedLanguages.includes(detectedLanguage) ? detectedLanguage : fallbackLanguage;
+			document.documentElement.lang = resolvedLanguage;
+			const sheet = new CSSStyleSheet();
+			document.adoptedStyleSheets.push(sheet);
+			// Hide any element with a `data-lang` attribute that does NOT match the detected language
+			sheet.replaceSync('[data-lang]:not([data-lang="' + resolvedLanguage + '"]) { display: none; }');
+		})();
+	</script>
+
+		<script>
+		(function() {
+			/** @typedef {'light'|'dark'} ColorScheme */
+			/** @type {ColorScheme[]} */
+			const availableColorSchemes = document.documentElement.querySelector('meta[name="color-scheme"]').content.split(' ').filter(Boolean);
+			/** @type {ColorScheme|'system'} */
+			const userPreference = localStorage?.getItem('color-scheme-preference') ?? 'system';
+			// Clean-up user preference in case there's nothing to choose from
+			// Fall back to the HTML document's default color theme
+			if (availableColorSchemes.length <= 1 || ![...availableColorSchemes, 'system'].includes(userPreference)) {
+				localStorage?.removeItem('color-scheme-preference');
+				return;
+			}
+			// Override default HTML document with client-side user preference
+			if (userPreference === 'system') {
+				updateThemeAttribute(self.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+			} else {
+				updateThemeAttribute(userPreference)
+			}
+			/** @param {ColorScheme} colorScheme */
+			function updateThemeAttribute(colorScheme) {
+				document.documentElement.setAttribute('data-color-scheme', colorScheme);
+			}
+		})();
+	</script>
+
+		<script>
+		
+		function sortContentSources(a, b) {
+			let result = a.precedence - b.precedence;
+
+			if (result === 0) {
+				result = a.value.localeCompare(b.value);
+			}
+
+			return result;
+		}
+
+		
+		function applyContentSourceOrderToElements({ parent, children }) {
+			const contentSourceElements = [...children];
+
+			contentSourceElements
+				.sort((a, b) => (
+					sortContentSources(
+						{ value: a.dataset.orderValue, precedence: a.dataset.orderPrecedence },
+						{ value: b.dataset.orderValue, precedence: b.dataset.orderPrecedence }
+					)
+				))
+				.forEach((element) => {
+					delete element.dataset.orderValue;
+					delete element.dataset.orderPrecedence;
+				});
+
+			parent.replaceChildren(...contentSourceElements);
+		}
+	</script>
+
+<script>
+	(() => {
+		if (isInAppHelpEnabled()) {
+			document.documentElement.dataset.inAppHelp = 'true';
+
+			if (isTitleHidden()) {
+				document.documentElement.dataset.hideTitle = 'true';
+			}
+		}
+
+		function isInAppHelpEnabled() {
+			return new URLSearchParams(location.search).get('inAppHelp') === 'true';
+		}
+
+		function isTitleHidden() {
+			return new URLSearchParams(location.search).get('title') === 'false';
+		}
+	})();
+</script>
+
+<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.css"/>
+<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.js"></script>
+
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/styles.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/fonts.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-styles-bundle.css">
+
+
+	<style>
+		@layer overrides {
+			:root {
+				--theme-headline-font: "Roboto";
+				--theme-text-font: "Roboto";
+				--theme-headline-scale: calc(100 / 100);
+				--theme-text-scale: calc(100 / 100);
+			}
+		}
+	</style>
+
+	<style>
+		@layer overrides {
+			:root, :host {
+					--theme-header-logo-size: 24px;
+					--theme-footer-logo-size: 28px;
+			}
+
+			:root[data-color-scheme='light'],
+			:host([data-color-scheme='light']) {
+					--theme-header-text-color: #000c34;
+					--theme-header-background-color: #ffffff;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #477bb6;
+			}
+
+			:root[data-color-scheme='dark'],
+			:host([data-color-scheme='dark']) {
+					--theme-header-text-color: #FFFFFF;
+					--theme-header-background-color: #0a0b0c;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #0a0b0c;
+			}
+		}
+	</style>
+
+	 
+
+
+
+
+
+<script data-site-data="content-sources" type="application/json">
+{
+	"collection": {
+		"members": [
+
+
+	{
+	"name": "iText",
+	"id": "b8e6446e-9541-48e7-9f7c-63425ff58e76",
+	"key": "IT7KB",
+	"path": "/itext",
+		"prefix": "/itext",
+		"current": true,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText DITO",
+	"id": "48e0d55c-a9ff-4fb3-9437-698d1fec9562",
+	"key": "DITOKB",
+	"path": "/ditokb",
+		"prefix": "/ditokb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText pdf2Data",
+	"id": "bf49a43e-a311-494a-bc8c-8d0eb84b75bc",
+	"key": "2DATA",
+	"path": "/2data",
+		"prefix": "/2data",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText 5",
+	"id": "2b6a097e-2988-4c1f-a04f-901c41b207e6",
+	"key": "IT5KB",
+	"path": "/it5kb",
+		"prefix": "/it5kb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+
+		]
+	}
+}
+</script>
+
+
+<script data-theme-placeholder="site" type="application/json">
+	{
+		"id": "7fea8421-aa1f-4eeb-9938-6be4ad5b04ef",
+		"path": "/",
+		"url": "/",
+		"domain": "kb.itextpdf.com",
+		"aiSearchEnabled": false,
+		"visibleToSearchEngines": true
+	}
+</script>
+ 
+<script data-config="cookieconsent" type="application/json">
+{
+	"enabled": true,
+	"mode": "opt-in",
+	"heading": "",
+	"description": "",
+	"links": [
+	]
+}
+</script>
+
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/main.js"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/page-tree.js" fetchpriority="high"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-bundle.js"></script>
+
+							<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/article.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.js"></script>
+
+
+
+
+
+
+<template data-custom-overrides data-type="code-asset">
+	<link rel="stylesheet" href="../__site/660125f2-82ac-4965-bb39-0be62e9db4a1/code_custom_css_override_asset.css">
+</template>
+
+<template data-custom-overrides data-type="code-asset">
+		<script src="../__site/28d64cce-9cb5-4091-90c8-9552383d17bc/code_custom_js_override_asset.js"></script>
+</template>
+
+<script>
+	(() => {
+		if (new URLSearchParams(location.search).has('disable-custom-overrides')) {
+			return;
+		}
+
+		document.querySelectorAll('[data-custom-overrides]').forEach(template => {
+			const type = template.getAttribute('data-type');
+
+			if (type === 'code-asset') {
+				const assetElement = template.content.cloneNode(true).firstElementChild;
+				const appendAsset = () => document.head.appendChild(assetElement);
+
+				if (assetElement.tagName === 'SCRIPT') {
+															if (document.readyState === 'complete') {
+						appendAsset();
+					} else {
+												document.addEventListener('DOMContentLoaded', appendAsset, { once: true });
+					}
+				} else {
+					appendAsset();
+				}
+			}
+		});
+	})();
+</script>
+
+
+			
+		<script data-config="integration:ga" type="application/json">
+			{
+				"enabled": true,
+				"tagId": "G-R5ENF9PVSJ"
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="analytics"
+			data-service="ga"
+			data-src="https://www.googletagmanager.com/gtag/js?id=G-R5ENF9PVSJ"
+			async
+		></script>
+
+
+
+
+		<script data-config="integration:gtm" type="application/json">
+			{
+				"enabled": true
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="marketing"
+			data-service="gtm"
+			data-src="https://www.googletagmanager.com/gtm.js?id=GTM-KLFZM24W"
+			async
+		></script>
+
+
+
+
+
+
+
+
+			</head>
+<body>
+	<a href="release-itext-7-1-11.html#content" class="skip-link">
+		<i18n-message i18nkey="navigation.skip.to.main.label">Skip to main content</i18n-message>
+	</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="c8f1b6717d7a6efe-2" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="c8f1b6717d7a6efe-2">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+	<div class="header-content">
+			<div class="header-links">
+				<ul>
+						<li><a href="https://itextpdf.com/">iText Website</a></li>
+						<li><a href="https://itextpdf.com/en/blog">Blog</a></li>
+						<li><a href="https://itextpdf.com/en/support">Support</a></li>
+						<li><a href="https://itextpdf.com/en/welcome-itext-community">Community</a></li>
+				</ul>
+			</div>
+
+		<div class="header-pickers">
+
+		</div>
+
+			<div class="header-search">
+				<search-bar quicksearch></search-bar>
+			</div>
+
+
+				<button type="button" aria-controls="drawer-c8f1b6717d7a6efe-1" aria-haspopup="dialog" aria-expanded="false" class="header-nav-toggle" onclick="self['drawer-c8f1b6717d7a6efe-1'].showModal()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+			<i18n-message class="sr-only" i18nkey="navigation.main.label">Main navigation</i18n-message>
+		</button>
+	</div>
+
+	
+
+<dialog id="drawer-c8f1b6717d7a6efe-1" class="drawer">
+	<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="c8f1b6717d7a6efe-3" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="c8f1b6717d7a6efe-3">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+
+		<div class="header-content">
+			<button type="button" aria-controls="drawer-c8f1b6717d7a6efe-1" aria-haspopup="dialog" aria-expanded="true" autofocus class="drawer-toggle" onclick="self['drawer-c8f1b6717d7a6efe-1'].close()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-close ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#close"></use>
+	</svg>
+				<i18n-message class="sr-only" i18nkey="navigation.close.label">Close navigation</i18n-message>
+			</button>
+		</div>
+	</header>
+
+	<div class="drawer-section drawer-search">
+		<search-bar quicksearch></search-bar>
+	</div>
+
+
+	<nav id="drawer-nav" class="drawer-section drawer-nav tree" aria-labelledby="drawer-nav-label">
+		<i18n-message id="drawer-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+
+						<copy-page-tree target="articleTree"></copy-page-tree>
+	</nav>
+
+			<div class="drawer-section drawer-links tree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-4" href="https://itextpdf.com/" >iText Website</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-5" href="https://itextpdf.com/en/blog" >Blog</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-6" href="https://itextpdf.com/en/support" >Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-7" href="https://itextpdf.com/en/welcome-itext-community" >Community</a>
+			</div>
+
+		</li>
+</ul>
+		</div>
+</dialog>
+
+</header>
+		<section class="article-page body">
+		<theme-navigator class="navigator">
+			<button id="navigator-toggle" class="navigator-toggle" aria-controls="navigator-nav" aria-labelledby="navigator-nav-label" aria-expanded="true">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu navigator-icon-closed">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-chevron_left navigator-icon-opened">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#chevron_left"></use>
+	</svg>
+			</button>
+						<nav id="navigator-nav" class="navigator-body tree" aria-labelledby="navigator-nav-label">
+				<i18n-message id="navigator-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+				<theme-page-tree id="articleTree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-8"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-8" href="cves.html" >CVEs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-10"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-10" href="digital-signatures-hub.html" >Digital Signatures Hub</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="true"
+aria-controls="c8f1b6717d7a6efe-13"						aria-labelledby="c8f1b6717d7a6efe-12"
+					></button>
+				<a id="c8f1b6717d7a6efe-12" href="releases.html" >Releases</a>
+			</div>
+
+<ul  id="c8f1b6717d7a6efe-13" >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-14" href="compatibility-matrix.html" >Compatibility Matrix</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-15" href="release-itext-core-9-6-0.html" >Release iText Core 9.6.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-16" href="release-itext-core-9-5-0.html" >Release iText Core 9.5.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-17" href="release-itext-core-9-4-0.html" >Release iText Core 9.4.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-18" href="release-itext-core-9-3-0.html" >Release iText Core 9.3.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-19" href="release-itext-core-9-2-0.html" >Release iText Core 9.2.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-20" href="release-itext-core-9-1.html" >Release iText Core 9.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-21"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-21" href="release-itext-core-9-0.html" >Release iText Core 9.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-23" href="release-itext-core-8-0-5.html" >Release iText Core 8.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-24" href="release-itext-core-8-0-4.html" >Release iText Core 8.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-25" href="release-itext-core-8-0-3.html" >Release iText Core 8.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-26" href="release-itext-core-8-0-2.html" >Release iText Core 8.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-27" href="release-itext-core-8-0-1.html" >Release iText Core 8.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-28"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-28" href="release-itext-core-8-0-0.html" >Release iText Core 8.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-30" href="release-itext-core-7-2-6.html" >Release iText Core 7.2.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-31" href="release-itext-core-7-2-5.html" >Release iText Core 7.2.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-32" href="release-itext-core-7-2-4.html" >Release iText Core 7.2.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-33" href="release-itext-core-7-2-3.html" >Release iText Core 7.2.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-34" href="release-itext-core-7-2-2.html" >Release iText Core 7.2.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-35" href="release-itext-core-7-2-1.html" >Release iText Core 7.2.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-36" href="release-itext-core-7-2-0.html" >Release iText Core 7.2.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-37" href="release-itext-core-7-1-19.html" >Release iText Core 7.1.19</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-38" href="release-itext-core-7-1-18.html" >Release iText Core 7.1.18</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-39" href="release-itext-core-7-1-17.html" >Release iText Core 7.1.17</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-40" href="release-itext-core-7-1-16.html" >Release iText Core 7.1.16</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-41" href="release-itext-core-7-1-15.html" >Release iText Core 7.1.15</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-42" href="release-itext-core-7-1-14.html" >Release iText Core 7.1.14</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-43" href="release-itext-core-7-1-13.html" >Release iText Core 7.1.13</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-44" href="release-itext-core-7-1-12.html" >Release iText Core 7.1.12</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-45" href="release-itext-7-1-11.html" aria-current="page">Release iText 7.1.11</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-46" href="release-itext-7-1-10.html" >Release iText 7.1.10</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-47" href="release-itext-7-1-9.html" >Release iText 7.1.9</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-48" href="release-itext-7-1-8.html" >Release iText 7.1.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-49" href="release-itext-7-1-7.html" >Release iText 7.1.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-50" href="release-itext-7-1-6.html" >Release iText 7.1.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-51" href="release-itext-7-1-5.html" >Release iText 7.1.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-52" href="release-itext-7-1-4.html" >Release iText 7.1.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-53" href="release-itext-7-1-3.html" >Release iText 7.1.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-54" href="release-itext-7-1-2.html" >Release iText 7.1.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-55" href="release-itext-7-1-1.html" >Release iText 7.1.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-56" href="release-itext-7-1-0.html" >Release iText 7.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-57" href="release-itext-7-0-8.html" >Release iText 7.0.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-58" href="release-itext-7-0-7.html" >Release iText 7.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-59" href="release-itext-7-0-6.html" >Release iText 7.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-60" href="release-itext-7-0-5.html" >Release iText 7.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-61" href="release-itext-7-0-4.html" >Release iText 7.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-62" href="release-itext-7-0-3.html" >Release iText 7.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-63" href="release-itext-7-0-2.html" >Release iText 7.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-64" href="release-itext-7-0-1.html" >Release iText 7.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-65" href="release-itext-7-0-0.html" >Release iText 7.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-66" href="release-licensekey-3-1-4.html" >Release licensekey 3.1.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-67" href="release-pdf2data-3-0-0.html" >Release pdf2Data 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-68" href="release-pdf2data-2-1-12.html" >Release pdf2Data 2.1.12</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-69" href="release-pdf2data-2-1-11.html" >Release pdf2Data 2.1.11</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-70" href="release-pdf2data-2-1-10.html" >Release pdf2Data 2.1.10</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-71" href="release-pdf2data-2-1-9.html" >Release pdf2Data 2.1.9</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-72" href="release-pdf2data-2-1-8.html" >Release pdf2Data 2.1.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-73" href="release-pdfcalligraph-5-1-0.html" >Release pdfCalligraph 5.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-74" href="release-pdfcalligraph-5-0-6.html" >Release pdfCalligraph 5.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-75" href="release-pdfcalligraph-5-0-5.html" >Release pdfCalligraph 5.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-76" href="release-pdfcalligraph-5-0-4.html" >Release pdfCalligraph 5.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-77" href="release-pdfcalligraph-5-0-3.html" >Release pdfCalligraph 5.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-78" href="release-pdfcalligraph-5-0-2.html" >Release pdfCalligraph 5.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-79" href="release-pdfcalligraph-5-0-1.html" >Release pdfCalligraph 5.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-80" href="release-pdfcalligraph-5-0.html" >Release pdfCalligraph 5.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-81" href="release-pdfcalligraph-4-0-2.html" >Release pdfCalligraph 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-82" href="release-pdfcalligraph-4-0-1.html" >Release pdfCalligraph 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-83" href="release-pdfcalligraph-4-0-0.html" >Release pdfCalligraph 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-84" href="release-pdfcalligraph-3-0-2.html" >Release pdfCalligraph 3.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-85" href="release-pdfcalligraph-3-0-1.html" >Release pdfCalligraph 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-86" href="release-pdfcalligraph-3-0-0.html" >Release pdfCalligraph 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-87" href="release-pdfcalligraph-2-0-9.html" >Release pdfCalligraph 2.0.9</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-88" href="release-pdfcalligraph-2-0-8.html" >Release pdfCalligraph 2.0.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-89" href="release-pdfcalligraph-2-0-7.html" >Release pdfCalligraph 2.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-90" href="release-pdfhtml-6-3-3.html" >Release pdfHTML 6.3.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-91" href="release-pdfhtml-6-3-2.html" >Release pdfHTML 6.3.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-92" href="release-pdfhtml-6-3-1.html" >Release pdfHTML 6.3.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-93" href="release-pdfhtml-6-3-0.html" >Release pdfHTML 6.3.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-94" href="release-pdfhtml-6-2-1.html" >Release pdfHTML 6.2.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-95" href="release-pdfhtml-6-2-0.html" >Release pdfHTML 6.2.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-96" href="release-pdfhtml-6-1.html" >Release pdfHTML 6.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-97" href="release-pdfhtml-6-0.html" >Release pdfHTML 6.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-98" href="release-pdfhtml-5-0-5.html" >Release pdfHTML 5.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-99" href="release-pdfhtml-5-0-4.html" >Release pdfHTML 5.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-100" href="release-pdfhtml-5-0-3.html" >Release pdfHTML 5.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-101" href="release-pdfhtml-5-0-2.html" >Release pdfHTML 5.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-102" href="release-pdfhtml-5-0-1.html" >Release pdfHTML 5.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-103" href="release-pdfhtml-5-0-0.html" >Release pdfHTML 5.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-104" href="release-pdfhtml-4-0-5.html" >Release pdfHTML 4.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-105" href="release-pdfhtml-4-0-4.html" >Release pdfHTML 4.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-106" href="release-pdfhtml-4-0-3.html" >Release pdfHTML 4.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-107" href="release-pdfhtml-4-0-2.html" >Release pdfHTML 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-108" href="release-pdfhtml-4-0-1.html" >Release pdfHTML 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-109" href="release-pdfhtml-4-0-0.html" >Release pdfHTML 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-110" href="release-pdfhtml-3-0-5.html" >Release pdfHTML 3.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-111" href="release-pdfhtml-3-0-4.html" >Release pdfHTML 3.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-112" href="release-pdfhtml-3-0-3.html" >Release pdfHTML 3.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-113" href="release-pdfhtml-3-0-2.html" >Release pdfHTML 3.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-114" href="release-pdfhtml-3-0-1.html" >Release pdfHTML 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-115" href="release-pdfocr-5-0-1.html" >Release pdfOCR 5.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-116"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-116" href="release-pdfocr-5-0-0.html" >Release pdfOCR 5.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-118" href="release-pdfocr-4-1-2.html" >Release pdfOCR 4.1.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-119" href="release-pdfocr-4-1-1.html" >Release pdfOCR 4.1.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-120" href="release-pdfocr-4-1-0.html" >Release pdfOCR 4.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-121" href="release-pdfocr-4-0-2.html" >Release pdfOCR 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-122" href="release-pdfocr-4-0-1.html" >Release pdfOCR 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-123" href="release-pdfocr-4-0.html" >Release pdfOCR 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-124" href="release-pdfocr-3-0-2.html" >Release pdfOCR 3.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-125" href="release-pdfocr-3-0-1.html" >Release pdfOCR 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-126" href="release-pdfocr-3-0-0.html" >Release pdfOCR 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-127" href="release-pdfocr-2-0-2.html" >Release pdfOCR 2.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-128" href="release-pdfocr-2-0-1.html" >Release pdfOCR 2.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-129" href="release-pdfocr-2-0-0.html" >Release pdfOCR 2.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-130" href="release-pdfocr-1-0-3.html" >Release pdfOCR 1.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-131" href="release-pdfocr-1-0-2.html" >Release pdfOCR 1.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-132" href="release-pdfocr-1-0-1.html" >Release pdfOCR 1.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-133" href="release-pdfocr-1-0-0.html" >Release pdfOCR 1.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-134" href="release-pdfoffice-2-0-5.html" >Release pdfOffice 2.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-135" href="release-pdfoffice-2-0-4.html" >Release pdfOffice 2.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-136" href="release-pdfoffice-2-0-3.html" >Release pdfOffice 2.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-137" href="release-pdfoffice-2-0-2.html" >Release pdfOffice 2.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-138" href="release-pdfoffice-2-0-1.html" >Release pdfOffice 2.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-139" href="release-pdfoffice-2-0-0.html" >Release pdfOffice 2.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-140" href="release-pdfoffice-1-0-0.html" >Release pdfOffice 1.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-141" href="release-pdfoptimizer-4-1-4.html" >Release pdfOptimizer 4.1.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-142" href="release-pdfoptimizer-4-1-3.html" >Release pdfOptimizer 4.1.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-143" href="release-pdfoptimizer-4-1-2.html" >Release pdfOptimizer 4.1.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-144" href="release-pdfoptimizer-4-1-1.html" >Release pdfOptimizer 4.1.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-145" href="release-pdfoptimizer-4-1-0.html" >Release pdfOptimizer 4.1.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-146" href="release-pdfoptimizer-4-0-2.html" >Release pdfOptimizer 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-147" href="release-pdfoptimizer-4-0-1.html" >Release pdfOptimizer 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-148" href="release-pdfoptimizer-4-0.html" >Release pdfOptimizer 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-149" href="release-pdfoptimizer-3-0-1.html" >Release pdfOptimizer 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-150" href="release-pdfoptimizer-3-0-0.html" >Release pdfOptimizer 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-151" href="release-pdfoptimizer-2-0-2.html" >Release pdfOptimizer 2.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-152" href="release-pdfoptimizer-2-0-1.html" >Release pdfOptimizer 2.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-153" href="release-pdfoptimizer-2-0-0-vlatest.html" >Release pdfOptimizer 2.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-154" href="release-pdfoptimizer-1-0-1.html" >Release pdfOptimizer 1.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-155" href="release-pdfrender-2-0-4.html" >Release pdfRender 2.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-156" href="release-pdfrender-2-0-3.html" >Release pdfRender 2.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-157" href="release-pdfrender-2-0-2.html" >Release pdfRender 2.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-158" href="release-pdfrender-2-0-1.html" >Release pdfRender 2.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-159" href="release-pdfrender-2-0-0.html" >Release pdfRender 2.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-160" href="release-pdfrender-1-0-6.html" >Release pdfRender 1.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-161" href="release-pdfrender-1-0-5.html" >Release pdfRender 1.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-162" href="release-pdfrender-1-0-4.html" >Release pdfRender 1.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-163" href="release-pdfrender-1-0-3.html" >Release pdfRender 1.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-164" href="release-pdfrender-1-0-2.html" >Release pdfRender 1.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-165" href="release-pdfrender-1-0-0.html" >Release pdfRender 1.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-166" href="release-pdfsweep-5-0-7.html" >Release pdfSweep 5.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-167" href="release-pdfsweep-5-0-6.html" >Release pdfSweep 5.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-168" href="release-pdfsweep-5-0-5.html" >Release pdfSweep 5.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-169" href="release-pdfsweep-5-0-4.html" >Release pdfSweep 5.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-170" href="release-pdfsweep-5-0-3.html" >Release pdfSweep 5.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-171" href="release-pdfsweep-5-0-2.html" >Release pdfSweep 5.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-172" href="release-pdfsweep-5-0-1.html" >Release pdfSweep 5.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-173" href="release-pdfsweep-5-0.html" >Release pdfSweep 5.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-174" href="release-pdfsweep-4-0-3.html" >Release pdfSweep 4.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-175" href="release-pdfsweep-4-0-2.html" >Release pdfSweep 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-176" href="release-pdfsweep-4-0-1.html" >Release pdfSweep 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-177" href="release-pdfsweep-4-0-0.html" >Release pdfSweep 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-178" href="release-pdfsweep-3-0-2.html" >Release pdfSweep 3.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-179" href="release-pdfsweep-3-0-1.html" >Release pdfSweep 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-180" href="release-pdfsweep-3-0-0.html" >Release pdfSweep 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-181" href="release-pdfsweep-2-0-8.html" >Release pdfSweep 2.0.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-182" href="release-pdfsweep-2-0-7.html" >Release pdfSweep 2.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-183" href="release-pdfsweep-2-0-6.html" >Release pdfSweep 2.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-184" href="release-pdfxfa-5-0-7.html" >Release pdfXFA 5.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-185" href="release-pdfxfa-5-0-6.html" >Release pdfXFA 5.0.6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-186" href="release-pdfxfa-5-0-5.html" >Release pdfXFA 5.0.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-187" href="release-pdfxfa-5-0-4.html" >Release pdfXFA 5.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-188" href="release-pdfxfa-5-0-3.html" >Release pdfXFA 5.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-189" href="release-pdfxfa-5-0-2.html" >Release pdfXFA 5.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-190" href="release-pdfxfa-5-0-1.html" >Release pdfXFA 5.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-191" href="release-pdfxfa-5-0.html" >Release pdfXFA 5.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-192" href="release-pdfxfa-4-0-4.html" >Release pdfXFA 4.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-193" href="release-pdfxfa-4-0-3.html" >Release pdfXFA 4.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-194" href="release-pdfxfa-4-0-2.html" >Release pdfXFA 4.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-195" href="release-pdfxfa-4-0-1.html" >Release pdfXFA 4.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-196" href="release-pdfxfa-4-0-0.html" >Release pdfXFA 4.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-197" href="release-pdfxfa-3-0-4.html" >Release pdfXFA 3.0.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-198" href="release-pdfxfa-3-0-3.html" >Release pdfXFA 3.0.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-199" href="release-pdfxfa-3-0-2.html" >Release pdfXFA 3.0.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-200" href="release-pdfxfa-3-0-1.html" >Release pdfXFA 3.0.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-201" href="release-pdfxfa-3-0-0.html" >Release pdfXFA 3.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-202" href="release-pdfxfa-2-0-12.html" >Release pdfXFA 2.0.12</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-203" href="release-pdfxfa-2-0-11.html" >Release pdfXFA 2.0.11</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-204" href="release-pdfxfa-2-0-10.html" >Release pdfXFA 2.0.10</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-205" href="release-pdfxfa-2-0-9.html" >Release pdfXFA 2.0.9</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-206" href="release-pdfxfa-2-0-8.html" >Release pdfXFA 2.0.8</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-207" href="release-pdfxfa-2-0-7.html" >Release pdfXFA 2.0.7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-208" href="release-rups-26-01.html" >Release RUPS 26.01</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-209" href="release-rups-25-03.html" >Release RUPS 25.03</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-210" href="release-rups-7-2-5.html" >Release RUPS 7.2.5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-211" href="release-rups-7-2-4.html" >Release RUPS 7.2.4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-212" href="release-rups-7-2-3.html" >Release RUPS 7.2.3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-213" href="release-rups-7-2-2.html" >Release RUPS 7.2.2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-214" href="release-rups-7-2-0.html" >Release RUPS 7.2.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-215" href="release-rups-7-2-1.html" >Release RUPS 7.2.1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-216" href="release-rups-7-1-16.html" >Release RUPS 7.1.16</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-217" href="release-rups-7-1-15.html" >Release RUPS 7.1.15</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-218" href="release-rups-7-1-14.html" >Release RUPS 7.1.14</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-219" href="release-rups-7-1-13.html" >Release RUPS 7.1.13</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="c8f1b6717d7a6efe-220" href="release-rups-7-1-12.html" >Release RUPS 7.1.12</a>
+			</div>
+
+		</li>
+</ul>
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-221"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-221" href="installation-guidelines.html" >Installation guidelines</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-223"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-223" href="examples.html" >Examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-225"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-225" href="breaking-changes.html" >Breaking changes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-227"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-227" href="ebooks.html" >Ebooks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-229"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-229" href="faq.html" >FAQ</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-231"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-231" href="technical-tales.html" >Technical Tales</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="c8f1b6717d7a6efe-233"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="c8f1b6717d7a6efe-233" href="technical-reference.html" >Technical Reference</a>
+			</div>
+
+		</li>
+</ul>
+				</theme-page-tree>
+			</nav>
+		</theme-navigator>
+
+		<main class="main-content">
+			<div class="topbar">
+
+
+
+
+	<theme-breadcrumbs class="breadcrumbs" itemsbeforecollapse="2" maxitems="4">
+		<i18n-message id="c8f1b6717d7a6efe-235" class="sr-only" i18nkey="breadcrumbs.label">Breadcrumbs</i18n-message>
+		<nav aria-labelledby="c8f1b6717d7a6efe-235">
+				<ol>
+							<li>
+								<a href="https://kb.itextpdf.com/">
+										<i18n-message key="breadcrumbs.home.label">Home</i18n-message>
+								</a>
+							</li>
+							<li>
+								<a href="https://kb.itextpdf.com/itext">
+										iText
+								</a>
+							</li>
+							<li>
+								<a href="releases.html">
+										Releases
+								</a>
+							</li>
+				</ol>
+		</nav>
+	</theme-breadcrumbs>
+					<script src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/breadcrumbs.js"></script>
+					<ai-actions class="ai-actions"></ai-actions>
+			</div>
+		<nav class="toc sticky" data-component="toc" aria-labelledby="c8f1b6717d7a6efe-236">
+			<h2 class="toc-heading" id="c8f1b6717d7a6efe-236">
+				<i18n-message i18nkey="page.article.toc.label">On this Page</i18n-message>
+			</h2>
+			<theme-toc for="content"></theme-toc>
+		</nav>
+			<article id="content" tabindex="-1" class="fb-layout-container">
+				<header>
+					<h1>Release iText 7.1.11</h1>
+				</header>
+				<section class="article-body fb-layout-body" data-searchable-content>
+			
+
+	
+
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+		
+		
+	
+	
+	
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+	
+	
+	
+	<p><strong>iText 7.1.11</strong>&nbsp;brings&nbsp;the second quarterly release of 2020 for the iText 7 family, with&nbsp;<strong>SEVEN</strong>&nbsp;(7) out&nbsp;of&nbsp;<strong>EIGHT</strong>&nbsp;product releases. You know what? We could even round that off, as the only product that we're not releasing,&nbsp;<a href="https://itextpdf.com/en/products/itext-7/pdfsweep" data-scope="external" rel="external noreferrer">pdfSweep</a>,&nbsp;also benefits from changes to Core.</p>
+<p>Included is some pretty cool stuff (even a new icon for RUPS!), though we are particularly excited about the brand new version 3.0 of&nbsp;<a href="https://itextpdf.com/en/products/itext-7/pdfhtml" data-scope="external" rel="external noreferrer">iText pdfHTML</a>&nbsp;(check out the Release notes for that).</p>
+<h2 id="Breaking-Changes"><span id="ReleaseiText7.1.11-BreakingChanges"></span>Breaking Changes
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#Breaking-Changes">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="License-Key"><span id="ReleaseiText7.1.11-LicenseKey"></span>License Key
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#License-Key">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>Our licensing mechanism (iText License Key Library &amp; iText License Key Library Volume), will now require&nbsp;for "Volume Subscription" license&nbsp;holders, that the reporting will either have to be&nbsp;<strong>remote</strong>&nbsp;(our most convenient way for usage reporting) or&nbsp;<strong>local</strong>.&nbsp;This should make reporting your usage much easier and&nbsp;more flexible. If nothing is specified,&nbsp;<strong>remote</strong>&nbsp;will be the default. For more information, please check our&nbsp;<a href="https://kb.itextpdf.com/itext/volume-counter-faqs" data-scope="internal">Volume FAQ</a>.</p>
+<h3 id="iText-pdfHTML"><span id="ReleaseiText7.1.11-iTextpdfHTML"></span>iText pdfHTML
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#iText-pdfHTML">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<ul>
+ <li>
+  <p>the Ledger page&nbsp;<a href="https://www.w3.org/TR/css-page-3/#page-size-prop" data-scope="external" rel="external noreferrer">size</a>&nbsp;will now be portrait oriented by default (if you prefer landscape, you just need to specify it);</p>
+ </li>
+ <li>
+  <p>the rendering of HTML as PDF files now has a closer behavior to how a web browser&nbsp;would render the content. If you would like to maintain the previous behavior&nbsp;with pdfHTML&nbsp;3.x, then we've provided you with the following Java and C# code:</p>
+ </li>
+</ul>
+<p>##GITHUB:https://github.com/itext/itext-publications-examples-java/blob/b6ace96e8ad3718e406eb02e5a6af0330f666e4c/src/test/java/com/itextpdf/samples/sandbox/pdfhtml/PdfHtmlRenderingMode.java##</p>
+<p>##GITHUB:https://github.com/itext/itext-publications-samples-dotnet/blob/43b7bfd7a4b057b7d29af82d9c27e60dade85581/itext/itext.samples/itext/samples/sandbox/pdfhtml/PdfHtmlRenderingMode.cs##</p>
+<h2 id="Release-Related-Examples"><span id="ReleaseiText7.1.11-ReleaseRelatedExamples"></span>Release Related Examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#Release-Related-Examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<div data-component="filter-by-label">
+ <ul>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/pdfhtml-creation-and-or-merging-of-outlines-for-do" data-scope="internal">pdfHTML: Creation and/or merging of outlines for documents</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/pdfhtml-line-height-property-support" data-scope="internal">pdfHTML: Line Height property support</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/png-image-handling" data-scope="internal">PNG Image Handling</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/setting-of-choice-form-field-using-setvalue-method" data-scope="internal">Setting of choice form field using setValue Method</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/widow-and-orphan-content-support-added" data-scope="internal">Widow and Orphan content support added</a></li>
+ </ul>
+</div>
+<div class="theme-table" style="--width: 4000px;">
+ <table-expand>
+  <scroll-shadow>
+   <table-sort>
+    <div data-component="table" data-align="align-start" data-number-column="false">
+     <table>
+      <tbody>
+       <tr>
+        <th>
+         <p>
+          <br>
+         </p>
+        </th>
+        <th>
+         <p><a href="https://github.com/itext/" data-scope="external" rel="external noreferrer"><strong>GitHub</strong></a></p>
+        </th>
+        <th>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf" data-scope="external" rel="external noreferrer"><strong>Maven</strong></a></p>
+        </th>
+        <th>
+         <p><a href="https://www.nuget.org/profiles/iText" data-scope="external" rel="external noreferrer"><strong>NuGet</strong></a></p>
+        </th>
+        <th>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/" data-scope="external" rel="external noreferrer"><strong>Artifactory</strong></a></p>
+        </th>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/itext-7-core" data-scope="external" rel="external noreferrer">iText 7 Core</a>&nbsp;– 7.1.11 (<a href="https://api.itextpdf.com/iText7/java/7.1.11/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p><a href="https://github.com/itext/itext7/releases/tag/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/itext7-core/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/root/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/itext-7-core" data-scope="external" rel="external noreferrer">iText 7 Core</a>&nbsp;– 7.1.11 (<a href="https://api.itextpdf.com/iText7/dotnet/7.1.11/" data-scope="external" rel="external noreferrer">.NET</a>)</p>
+        </td>
+        <td>
+         <p><a href="https://github.com/itext/itext7-dotnet/releases/tag/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/nuget/itext7/itext7.7.1.11.nupkg" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="release-itext-7-1-11.html#" data-scope="external" rel="external noreferrer">iText License Key Library</a>&nbsp;– 3.1.0</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/itext-licensekey/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.licensekey/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/itext-licensekey/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="release-itext-7-1-11.html#" data-scope="external" rel="external noreferrer">iText License Key Library Volume</a>&nbsp;– 3.1.0</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/itext-licensekey-volume/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.licensekey.volume/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/itext-licensekey-volume/3.1.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdf2data" data-scope="external" rel="external noreferrer">iText pdf2Data</a>&nbsp;– 2.1.7 (<a href="https://api.itextpdf.com/pdf2Data/java/2.1.7/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/pdf2data/com/duallab/pdf2data/pdf2data/2.1.7" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdf2data" data-scope="external" rel="external noreferrer">iText pdf2Data</a>&nbsp;– 2.1.7 (.NET)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.pdf2data/2.1.7" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/pdf2data-dotnet/itext7.pdf2data.2.1.7.nupkg" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfcalligraph" data-scope="external" rel="external noreferrer">iText pdfCalligraph</a>&nbsp;– 2.0.6 (<a href="https://api.itextpdf.com/pdfCalligraph/java/2.0.6/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/typography/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/typography/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfcalligraph" data-scope="external" rel="external noreferrer">iText pdfCalligraph</a>&nbsp;– 2.0.6 (<a href="https://api.itextpdf.com/pdfCalligraph/dotnet/2.0.6/" data-scope="external" rel="external noreferrer">.NET</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.pdfcalligraph/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/nuget/itext7.pdfcalligraph/itext7.pdfcalligraph.2.0.6.nupkg" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfhtml" data-scope="external" rel="external noreferrer">iText pdfHTML</a>&nbsp;– 3.0.0 (<a href="https://api.itextpdf.com/pdfHTML/java/3.0.0/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p><a href="https://github.com/itext/i7j-pdfhtml/releases/tag/3.0.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/html2pdf/3.0.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/html2pdf/3.0.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfhtml" data-scope="external" rel="external noreferrer">iText pdfHTML</a>&nbsp;– 3.0.0 (<a href="https://api.itextpdf.com/pdfHTML/dotnet/3.0.0/" data-scope="external" rel="external noreferrer">.NET</a>)</p>
+        </td>
+        <td>
+         <p><a href="https://github.com/itext/i7n-pdfhtml/releases/tag/3.0.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.pdfhtml/3.0.0" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/nuget/itext7.pdfhtml/itext7.pdfhtml.3.0.0.nupkg" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfrender" data-scope="external" rel="external noreferrer">iText pdfRender</a>&nbsp;– 1.0.1 (<a href="https://api.itextpdf.com/pdfRender/java/1.0.1/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/pdfrender/1.0.1" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/pdfrender/1.0.1" data-scope="external" rel="external noreferrer">link</a>&nbsp;(<a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/pdfrender-cli/1.0.1" data-scope="external" rel="external noreferrer">CLI</a>)</p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfxfa" data-scope="external" rel="external noreferrer">iText pdfXFA</a>&nbsp;– 2.0.6 (<a href="https://api.itextpdf.com/pdfXFA/java/2.0.6/" data-scope="external" rel="external noreferrer">Java</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/pdfxfa/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/pdfxfa/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/itext-7/pdfxfa" data-scope="external" rel="external noreferrer">iText pdfXFA</a>&nbsp;– 2.0.6 (<a href="https://api.itextpdf.com/pdfXFA/dotnet/2.0.6/" data-scope="external" rel="external noreferrer">.NET</a>)</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://www.nuget.org/packages/itext7.pdfxfa/2.0.6" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/nuget/itext7.pdfxfa/itext7.pdfxfa.2.0.6.nupkg" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+       <tr>
+        <td>
+         <p><a href="https://itextpdf.com/en/products/rups" data-scope="external" rel="external noreferrer">iText RUPS</a>&nbsp;– 7.1.11</p>
+        </td>
+        <td>
+         <p><a href="https://github.com/itext/i7j-rups/releases/tag/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p><a href="https://mvnrepository.com/artifact/com.itextpdf/itext-rups/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+        <td>
+         <p>N/A</p>
+        </td>
+        <td>
+         <p><a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/releases/com/itextpdf/itext-rups/7.1.11" data-scope="external" rel="external noreferrer">link</a></p>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+   </table-sort>
+  </scroll-shadow>
+ </table-expand>
+</div>
+<p>
+ <br>
+ In alphabetical order, here's an overview of the changes that each product has with this quarterly release:
+</p>
+<p><a href="https://itextpdf.com/en/products/itext-7/itext-7-core" data-scope="external" rel="external noreferrer">iText Core 7.1.11</a></p>
+<ul>
+ <li>
+  <p>A bug fix with XFDF as&nbsp;squares and circles could not be made optional;</p>
+ </li>
+ <li>
+  <p>More robust PNG handling;</p>
+ </li>
+ <li>
+  <p>Better handling of form fields (specifically when /TI value is present, and when using SetValue for a choice form field);</p>
+ </li>
+ <li>
+  <p>Improved table splitting;</p>
+ </li>
+ <li>
+  <p>Improve&nbsp;RegexBasedCleanupStrategy (<a href="https://api.itextpdf.com/pdfSweep/java/2.0.5/com/itextpdf/pdfcleanup/autosweep/RegexBasedCleanupStrategy.html" data-scope="external" rel="external noreferrer">Java</a>/<a href="https://api.itextpdf.com/pdfSweep/dotnet/2.0.5/classi_text_1_1_pdf_cleanup_1_1_autosweep_1_1_regex_based_cleanup_strategy.html" data-scope="external" rel="external noreferrer">.NET</a>)&nbsp;(although a Core change, it benefits&nbsp;<a href="https://itextpdf.com/en/products/itext-7/pdfsweep" data-scope="external" rel="external noreferrer">iText pdfSweep</a>) when white spaces are available (thank you&nbsp;<a href="https://github.com/vemoo" data-scope="external" rel="external noreferrer">vemoo</a>&nbsp;for the&nbsp;<a href="release-itext-7-1-11.html#" data-scope="external" rel="external noreferrer">PR</a>&nbsp;(<a href="https://github.com/itext/itext7-dotnet/pull/6" data-scope="external" rel="external noreferrer">#1</a>&nbsp;and&nbsp;<a href="https://github.com/itext/i7n-pdfsweep/pull/1" data-scope="external" rel="external noreferrer">#2</a>)!);</p>
+ </li>
+ <li>
+  <p>Added control over widow/orphan content (we have an example for&nbsp;<a href="https://github.com/itext/i7js-examples/blob/develop/src/main/java/com/itextpdf/samples/sandbox/layout/OrphansWidowsExample.java" data-scope="external" rel="external noreferrer">Java</a>&nbsp;and&nbsp;<a href="https://github.com/itext/i7ns-samples/blob/develop/itext/itext.samples/itext/samples/sandbox/layout/OrphansWidowsExample.cs" data-scope="external" rel="external noreferrer">.NET (C#)</a>&nbsp;on this new functionality).</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/itext-7/pdf2data" data-scope="external" rel="external noreferrer">iText pdf2Data 2.1.7</a></p>
+<ul>
+ <li>
+  <p>More stable data extraction in cases of non-critical errors in PDF syntax.</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/itext-7/pdfcalligraph" data-scope="external" rel="external noreferrer">iText pdfCalligraph 2.0.6</a></p>
+<ul>
+ <li>
+  <p>Better Arabic&nbsp;(fix in&nbsp;Tanween&nbsp;characters rendering, and some characters that were being truncated at the end);</p>
+ </li>
+ <li>
+  <p>Improved&nbsp;<a href="https://en.wikipedia.org/wiki/Khmer_script" data-scope="external" rel="external noreferrer">Khmer script</a>&nbsp;rendering.</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/itext-7/pdfhtml" data-scope="external" rel="external noreferrer">iText pdfHTML&nbsp;3.0.0</a></p>
+<ul>
+ <li>
+  <p>Support for the&nbsp;<a href="https://www.w3schools.com/cssref/pr_dim_line-height.asp" data-scope="external" rel="external noreferrer">line-height property</a>&nbsp;for inline-level elements as well (in addition to improved support for block-level elements);</p>
+ </li>
+ <li>
+  <p>Improve line height calculation differences between browsers and PDF rendering (this is a breaking change,&nbsp;check above for how to revert the behavior);</p>
+ </li>
+ <li>
+  <p>Improve creation and/or&nbsp;merging of outlines;</p>
+ </li>
+ <li>
+  <p>Support for&nbsp;<a href="https://www.w3.org/TR/CSS21/page.html#break-inside" data-scope="external" rel="external noreferrer">widows and orphans properties</a>.</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/itext-7/pdfrender" data-scope="external" rel="external noreferrer">iText pdfRender 1.0.1</a></p>
+<ul>
+ <li>
+  <p>We now have a CLI (Command Line Interface) wrapper around pdfRender, so you can use it outside of a Java only environment.</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/rups" data-scope="external" rel="external noreferrer">iText RUPS 7.1.11</a></p>
+<ul>
+ <li>
+  <p>New icon!</p>
+ </li>
+</ul>
+<p><a href="https://itextpdf.com/en/products/itext-7/pdfxfa" data-scope="external" rel="external noreferrer">iText pdfXFA&nbsp;2.0.6</a></p>
+<ul>
+ <li>
+  <p>Better handling of lists in rich text fields;</p>
+ </li>
+ <li>
+  <p>Better support for &lt;draw&gt;, &lt;float&gt; and &lt;subformSet&gt; tags.</p>
+ </li>
+</ul>
+<p>
+ <br>
+</p>
+<p>Also, a couple of points&nbsp;related to our licensing and volume counting mechanisms:</p>
+<ul>
+ <li>
+  <p>Expiration checks are now locale-independent (this is relevant if you are using a Trial license, or have an expiration date on your commercial license);</p>
+ </li>
+ <li>
+  <p>As referred on the Breaking Changes, if you have a&nbsp;"Volume Subscription License", you will have to specify if you want to do your volume counting locally, or remote. You can check our&nbsp;<a href="https://kb.itextpdf.com/home/it7kb/faq/volume-counter-faqs" data-scope="external" rel="external noreferrer">Volume Counter FAQs</a>&nbsp;for further details.</p>
+ </li>
+</ul>
+<p>
+ <br>
+</p>
+<h2 id="New-Features"><span id="ReleaseiText7.1.11-NewFeatures"></span>New Features
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#New-Features">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<ul>
+ <li>
+  <p>[CORE] Improve creation and(or) merging of outlines for &nbsp;documents created in pdfHTML</p>
+ </li>
+ <li>
+  <p>[CORE &amp; PDFHTML] Basic implementation of orphan/widow control</p>
+ </li>
+ <li>
+  <p>[LICENSE] Implement EventDataHandler for stable local volume counting files writing and rotating</p>
+ </li>
+ <li>
+  <p>[LICENSE] Implement user-side configuration of volume counting library mode (public API, ENV and license file)</p>
+ </li>
+ <li>
+  <p>[LICENSE] Fail license check for volume license in AWS mode if AWS is not available on startup</p>
+ </li>
+ <li>
+  <p>[LICENSE] Enable local volume counting file mode</p>
+ </li>
+ <li>
+  <p>[PDFHTML] Added support for the&nbsp;Line height property</p>
+ </li>
+ <li>
+  <p>[PDFRENDER] Introduce CLI to simplify usage from non-Java environments</p>
+ </li>
+</ul>
+<h2 id="Improvements"><span id="ReleaseiText7.1.11-Improvements"></span>Improvements
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#Improvements">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<ul>
+ <li>
+  <p>[CORE]&nbsp;<a href="https://github.com/itext/itext7-dotnet/pull/6" data-scope="external" rel="external noreferrer">itext7-dotnet PR #6</a>&nbsp;(and&nbsp;<a href="https://github.com/itext/i7n-pdfsweep/pull/1" data-scope="external" rel="external noreferrer">i7n-pdfsweep PR #1</a>): Fix missing index and newlines in cleanup regexes (<a href="https://github.com/vemoo" data-scope="external" rel="external noreferrer"><strong>thank you vemoo!</strong></a>)</p>
+ </li>
+ <li>
+  <p>[CORE]&nbsp;<a href="https://github.com/itext/itext7/pull/44" data-scope="external" rel="external noreferrer">itext7 PR #44</a>: Fix null pointer in PdfAcroForm (<a href="https://github.com/craftmaster2190" data-scope="external" rel="external noreferrer"><strong>thank you craftmaster2190!</strong></a>)</p>
+ </li>
+ <li>
+  <p>[CORE]&nbsp;<a href="https://github.com/itext/itext7-dotnet/pull/4" data-scope="external" rel="external noreferrer">itext7-dotnet PR #4</a>: Path transformation to userspace (<a href="https://github.com/Moneema14" data-scope="external" rel="external noreferrer"><strong>thank you Moneema14</strong></a><strong>&nbsp;for the inspiration!</strong>)</p>
+ </li>
+ <li>
+  <p>[CORE]&nbsp;While checking whether a cell with a fixed height should be split, float are compared without any epsilon value, which may cause issues because of float precision inaccuracy</p>
+ </li>
+ <li>
+  <p>[PDFHTML] Get rid of the difference in line height calculations between HTML and PDF</p>
+ </li>
+ <li>
+  <p>[PDFRENDER] Improve log and exception messages</p>
+ </li>
+ <li>
+  <p>[RUPS] Update logo
+   <br>
+   &nbsp;</p>
+ </li>
+</ul>
+<h2 id="Bugs"><span id="ReleaseiText7.1.11-Bugs"></span>Bugs
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-7-1-11#Bugs">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<ul>
+ <li>
+  <p>[CORE] Make fringe attribute in xfdf squre and circle annotations optional</p>
+ </li>
+ <li>
+  <p>[CORE] Several bugs in processing of /TI for choice fields</p>
+ </li>
+ <li>
+  <p>[CORE] setValue method works incorrectly for a choice form field</p>
+ </li>
+ <li>
+  <p>[CORE] NotoSerifKhmer is rendered poorly</p>
+ </li>
+ <li>
+  <p>[CORE] GposLookupType5: mark to ligature positioning results in duplicating the mark</p>
+ </li>
+ <li>
+  <p>[CORE] Fix issue with Khmer text being incorrectly formatted</p>
+ </li>
+ <li>
+  <p>[CORE] Adding a PNG to pdf creates unopenable pdf document</p>
+ </li>
+ <li>
+  <p>[CORE] The FillOpacity is not set correctly on the GraphicsState of TextRenderInfo</p>
+ </li>
+ <li>
+  <p>[LICENSE]&nbsp;Ensure licensekey expiration checks are locale-independent (Thai Buddhist calendar, Arabic calendar)</p>
+ </li>
+ <li>
+  <p>[PDFCALLIGRAPH] New glyphs which have been added while applying positioning features do not affect the start/end of the appropriate glyphline</p>
+ </li>
+ <li>
+  <p>[PDFCALLIGRAPH]&nbsp;Arabic: glyph is truncated</p>
+ </li>
+ <li>
+  <p>[PDFCALLIGRAPH]&nbsp;iText printing two arabic Tanween characters( Ù‹ &nbsp;) instead of one</p>
+ </li>
+ <li>
+  <p>[PDFRENDER] pdfRender fails to correctly render PDF files encrypted with AES256&nbsp;</p>
+ </li>
+ <li>
+  <p>[PDFRENDER] pdfRender fails to process text in Myriad Pro</p>
+ </li>
+ <li>
+  <p>[PDFRENDER] pdfRender jar contains unnecessary dependencies (layout, forms, licensekey,...)</p>
+ </li>
+ <li>
+  <p>[PDFXFA]&nbsp;&lt;float&gt; tag value from FormState is not applied to a field</p>
+ </li>
+ <li>
+  <p>[PDFXFA] Form state is not applied for &lt;draw&gt; elements</p>
+ </li>
+ <li>
+  <p>[PDFXFA] Subforms are unexpectedly multiplied because default relation of subformSet is not respected</p>
+ </li>
+ <li>
+  <p>[PDFXFA] Fix difference between Java and .NET version of XFAWorker/pdfXFA for particular template flattening</p>
+ </li>
+ <li>
+  <p>[PDFXFA] Flattening TextFields with rich text in them with nested lists is poorly handled</p>
+ </li>
+</ul>
+<p>
+ <br>
+</p>
+
+
+																				<script>
+						// Mark block images on the first level as breakout so they can grow wider than the article content.
+						document.querySelectorAll('.article-body > .theme-block-image [data-component="image"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--width');
+							if (!propertyValue) {
+								return;
+							}
+							if (parseInt(propertyValue) >= 760) {
+								element.closest('.theme-block-image').classList.add('theme-block-image--breakout');
+							}
+						});
+
+						// Remove the inline size on page layouts as this would lead to layouts breaking out of the article content.
+						document.querySelectorAll('.article-body [data-component="layout-section"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--inline-size');
+							if (!propertyValue) {
+								return;
+							}
+							// ONLY for this very specific width (Confluence default)
+							if (parseInt(propertyValue) === 760) {
+								element.style.removeProperty('--inline-size');
+							}
+						})
+
+						// Set the initial state of the navigation toggle to prevent shifting in the UI
+						try {
+							const navigationToggle = document.querySelector('#navigator-toggle');
+							const navigationState = localStorage.getItem('theme-navigation-state');
+
+							if (navigationState === 'collapsed' && navigationToggle) {
+								navigationToggle.setAttribute('aria-expanded', 'false');
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					</script>
+																			</section>
+				<footer>
+
+
+	<i18n-message id="c8f1b6717d7a6efe-237" class="sr-only" i18nkey="pagination.label">Pagination</i18n-message>
+	<nav data-component="page-pagination" class="page-pagination" aria-labelledby="c8f1b6717d7a6efe-237">
+		<ul class="page-pagination-items">
+				<li class="page-pagination-item">
+					<a rel="prev" href="release-itext-core-7-1-12.html">
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_left ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_left"></use>
+	</svg>
+						</div>
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.prev.label">Previous Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Release iText Core 7.1.12</div>
+						</div>
+					</a>
+				</li>
+				<li class="page-pagination-item">
+					<a rel="next" href="release-itext-7-1-10.html">
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.next.label">Next Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Release iText 7.1.10</div>
+						</div>
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_right ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_right"></use>
+	</svg>
+						</div>
+					</a>
+				</li>
+		</ul>
+	</nav>
+
+				</footer>
+			</article>
+		</main>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer data-component="footer" class="footer">
+
+
+
+
+
+		<img class="footer-logo footer-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="footer-logo footer-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+		<ul class="footer-links">
+				<li><a href="https://itextpdf.com/en/about-us" target="_blank" rel="noopener">About Us </a></li>
+				<li><a href="https://itextpdf.com/en/blog" target="_blank" rel="noopener">News</a></li>
+				<li><a href="https://itextpdf.com/en/jobs" target="_blank" rel="noopener">Jobs</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy/agpl-license">Open Source AGPL license</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy">Commercial &amp; OEM licenses</a></li>
+		</ul>
+	<ul class="footer-content">
+		<li><i18n-message i18nkey="footer.copyright.label">Copyright</i18n-message> <current-year></current-year> Apryse</li>		<li><i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message> <a href="https://www.k15t.com/products/scroll-sites-for-confluence?utm_campaign=k15t-sts-attribution-line&utm_source=k15t-apps" rel="external nofollow">Scroll&nbsp;Sites</a> & <a href="https://www.atlassian.com/software/confluence" rel="external nofollow">Atlassian&nbsp;Confluence</a></li>
+			<li>
+				<button type="button" data-cc="show-preferencesModal">
+					<i18n-message i18nkey="cookieConsent.showPreferences">Manage cookie preferences</i18n-message>
+				</button>
+			</li>
+	</ul>
+
+</footer>
+
+
+</body>
+</html>

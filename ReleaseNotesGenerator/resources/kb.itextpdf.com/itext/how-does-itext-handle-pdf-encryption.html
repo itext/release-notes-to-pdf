@@ -1,0 +1,3332 @@
+
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-page-template="article"
+	
+ data-page-id="ci_7c303bed131b8fa5714603a4796ff5b5dd2ff737b677f24a559ff50870601e23" data-confluence-content-id="1348075524"
+		data-color-scheme="light"
+>
+<head>
+	<meta charset="UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="color-scheme" content="light">
+
+						<link id="pageTreeSource" rel="preload" href="__pagetree.json" as="fetch" type="application/json" crossorigin="anonymous">
+
+		<meta name="site-path" content="/">
+
+					<link rel="x-site-path" href="https://kb.itextpdf.com/">
+	<link rel="x-root-path" href="https://kb.itextpdf.com/">
+
+	<meta name="site-default-language" content="en">
+		<meta name="site-languages" content="en">
+		<meta name="confluence-content-type" content="page">
+		<meta name="confluence-base-url" content="https://apryse.atlassian.net/wiki">
+		<meta name="confluence-space-key" content="IT7KB">
+
+		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+
+
+
+	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
+
+
+
+
+
+
+
+
+
+
+
+		<title>How does iText handle PDF encryption? | iText Knowledge Base</title>
+		<meta property="og:title" content="How does iText handle PDF encryption? | iText Knowledge Base">
+		<meta property="twitter:title" content="How does iText handle PDF encryption? | iText Knowledge Base">
+
+		<link rel="canonical" href="how-does-itext-handle-pdf-encryption.html">
+		<meta property="og:url" content="https://kb.itextpdf.com/itext/how-does-itext-handle-pdf-encryption">
+
+		<meta name="description" content="Out-of-the-box, iText provides multiple encryption and decryption methods, so it can be hard to decide which one is better suited for a particular case. This a…">
+		<meta property="og:description" content="Out-of-the-box, iText provides multiple encryption and decryption methods, so it can be hard to decide which one is better suited for a particular case. This a…">
+		<meta property="twitter:description" content="Out-of-the-box, iText provides multiple encryption and decryption methods, so it can be hard to decide which one is better suited for a particular case. This a…">
+
+		<meta property="og:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+		<meta property="twitter:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+	<meta property="og:type" content="website">
+	<meta property="twitter:card" content="summary_large_image">
+
+		<meta name="page-last-modified" content="2025-10-30T10:57:38.868Z">
+
+		<script>
+		(function () {
+			const defaultLanguageMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-default-language"]')?.content);
+			const availableLanguagesMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-languages"]')?.content);
+			const fallbackLanguage = defaultLanguageMeta ?? 'en';
+			const supportedLanguagesFromMeta = availableLanguagesMeta?.split(',') ?? [];
+			const supportedLanguages = [...new Set([fallbackLanguage, ...supportedLanguagesFromMeta])].filter(Boolean);
+			const detectedLanguage = new URLSearchParams(self.location.search).get('l') || document.documentElement.lang;
+			const resolvedLanguage = supportedLanguages.includes(detectedLanguage) ? detectedLanguage : fallbackLanguage;
+			document.documentElement.lang = resolvedLanguage;
+			const sheet = new CSSStyleSheet();
+			document.adoptedStyleSheets.push(sheet);
+			// Hide any element with a `data-lang` attribute that does NOT match the detected language
+			sheet.replaceSync('[data-lang]:not([data-lang="' + resolvedLanguage + '"]) { display: none; }');
+		})();
+	</script>
+
+		<script>
+		(function() {
+			/** @typedef {'light'|'dark'} ColorScheme */
+			/** @type {ColorScheme[]} */
+			const availableColorSchemes = document.documentElement.querySelector('meta[name="color-scheme"]').content.split(' ').filter(Boolean);
+			/** @type {ColorScheme|'system'} */
+			const userPreference = localStorage?.getItem('color-scheme-preference') ?? 'system';
+			// Clean-up user preference in case there's nothing to choose from
+			// Fall back to the HTML document's default color theme
+			if (availableColorSchemes.length <= 1 || ![...availableColorSchemes, 'system'].includes(userPreference)) {
+				localStorage?.removeItem('color-scheme-preference');
+				return;
+			}
+			// Override default HTML document with client-side user preference
+			if (userPreference === 'system') {
+				updateThemeAttribute(self.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+			} else {
+				updateThemeAttribute(userPreference)
+			}
+			/** @param {ColorScheme} colorScheme */
+			function updateThemeAttribute(colorScheme) {
+				document.documentElement.setAttribute('data-color-scheme', colorScheme);
+			}
+		})();
+	</script>
+
+		<script>
+		
+		function sortContentSources(a, b) {
+			let result = a.precedence - b.precedence;
+
+			if (result === 0) {
+				result = a.value.localeCompare(b.value);
+			}
+
+			return result;
+		}
+
+		
+		function applyContentSourceOrderToElements({ parent, children }) {
+			const contentSourceElements = [...children];
+
+			contentSourceElements
+				.sort((a, b) => (
+					sortContentSources(
+						{ value: a.dataset.orderValue, precedence: a.dataset.orderPrecedence },
+						{ value: b.dataset.orderValue, precedence: b.dataset.orderPrecedence }
+					)
+				))
+				.forEach((element) => {
+					delete element.dataset.orderValue;
+					delete element.dataset.orderPrecedence;
+				});
+
+			parent.replaceChildren(...contentSourceElements);
+		}
+	</script>
+
+<script>
+	(() => {
+		if (isInAppHelpEnabled()) {
+			document.documentElement.dataset.inAppHelp = 'true';
+
+			if (isTitleHidden()) {
+				document.documentElement.dataset.hideTitle = 'true';
+			}
+		}
+
+		function isInAppHelpEnabled() {
+			return new URLSearchParams(location.search).get('inAppHelp') === 'true';
+		}
+
+		function isTitleHidden() {
+			return new URLSearchParams(location.search).get('title') === 'false';
+		}
+	})();
+</script>
+
+<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.css"/>
+<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.js"></script>
+
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/styles.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/fonts.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-styles-bundle.css">
+
+
+	<style>
+		@layer overrides {
+			:root {
+				--theme-headline-font: "Roboto";
+				--theme-text-font: "Roboto";
+				--theme-headline-scale: calc(100 / 100);
+				--theme-text-scale: calc(100 / 100);
+			}
+		}
+	</style>
+
+	<style>
+		@layer overrides {
+			:root, :host {
+					--theme-header-logo-size: 24px;
+					--theme-footer-logo-size: 28px;
+			}
+
+			:root[data-color-scheme='light'],
+			:host([data-color-scheme='light']) {
+					--theme-header-text-color: #000c34;
+					--theme-header-background-color: #ffffff;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #477bb6;
+			}
+
+			:root[data-color-scheme='dark'],
+			:host([data-color-scheme='dark']) {
+					--theme-header-text-color: #FFFFFF;
+					--theme-header-background-color: #0a0b0c;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #0a0b0c;
+			}
+		}
+	</style>
+
+	 
+
+
+
+
+
+<script data-site-data="content-sources" type="application/json">
+{
+	"collection": {
+		"members": [
+
+
+	{
+	"name": "iText",
+	"id": "b8e6446e-9541-48e7-9f7c-63425ff58e76",
+	"key": "IT7KB",
+	"path": "/itext",
+		"prefix": "/itext",
+		"current": true,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText DITO",
+	"id": "48e0d55c-a9ff-4fb3-9437-698d1fec9562",
+	"key": "DITOKB",
+	"path": "/ditokb",
+		"prefix": "/ditokb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText pdf2Data",
+	"id": "bf49a43e-a311-494a-bc8c-8d0eb84b75bc",
+	"key": "2DATA",
+	"path": "/2data",
+		"prefix": "/2data",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText 5",
+	"id": "2b6a097e-2988-4c1f-a04f-901c41b207e6",
+	"key": "IT5KB",
+	"path": "/it5kb",
+		"prefix": "/it5kb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+
+		]
+	}
+}
+</script>
+
+
+<script data-theme-placeholder="site" type="application/json">
+	{
+		"id": "7fea8421-aa1f-4eeb-9938-6be4ad5b04ef",
+		"path": "/",
+		"url": "/",
+		"domain": "kb.itextpdf.com",
+		"aiSearchEnabled": false,
+		"visibleToSearchEngines": true
+	}
+</script>
+ 
+<script data-config="cookieconsent" type="application/json">
+{
+	"enabled": true,
+	"mode": "opt-in",
+	"heading": "",
+	"description": "",
+	"links": [
+	]
+}
+</script>
+
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/main.js"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/page-tree.js" fetchpriority="high"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-bundle.js"></script>
+
+							<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/article.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.js"></script>
+
+
+
+
+
+
+<template data-custom-overrides data-type="code-asset">
+	<link rel="stylesheet" href="../__site/660125f2-82ac-4965-bb39-0be62e9db4a1/code_custom_css_override_asset.css">
+</template>
+
+<template data-custom-overrides data-type="code-asset">
+		<script src="../__site/28d64cce-9cb5-4091-90c8-9552383d17bc/code_custom_js_override_asset.js"></script>
+</template>
+
+<script>
+	(() => {
+		if (new URLSearchParams(location.search).has('disable-custom-overrides')) {
+			return;
+		}
+
+		document.querySelectorAll('[data-custom-overrides]').forEach(template => {
+			const type = template.getAttribute('data-type');
+
+			if (type === 'code-asset') {
+				const assetElement = template.content.cloneNode(true).firstElementChild;
+				const appendAsset = () => document.head.appendChild(assetElement);
+
+				if (assetElement.tagName === 'SCRIPT') {
+															if (document.readyState === 'complete') {
+						appendAsset();
+					} else {
+												document.addEventListener('DOMContentLoaded', appendAsset, { once: true });
+					}
+				} else {
+					appendAsset();
+				}
+			}
+		});
+	})();
+</script>
+
+
+			
+		<script data-config="integration:ga" type="application/json">
+			{
+				"enabled": true,
+				"tagId": "G-R5ENF9PVSJ"
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="analytics"
+			data-service="ga"
+			data-src="https://www.googletagmanager.com/gtag/js?id=G-R5ENF9PVSJ"
+			async
+		></script>
+
+
+
+
+		<script data-config="integration:gtm" type="application/json">
+			{
+				"enabled": true
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="marketing"
+			data-service="gtm"
+			data-src="https://www.googletagmanager.com/gtm.js?id=GTM-KLFZM24W"
+			async
+		></script>
+
+
+
+
+
+
+
+
+			</head>
+<body>
+	<a href="how-does-itext-handle-pdf-encryption.html#content" class="skip-link">
+		<i18n-message i18nkey="navigation.skip.to.main.label">Skip to main content</i18n-message>
+	</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="75d373dd3e89419d-2" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="75d373dd3e89419d-2">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+	<div class="header-content">
+			<div class="header-links">
+				<ul>
+						<li><a href="https://itextpdf.com/">iText Website</a></li>
+						<li><a href="https://itextpdf.com/en/blog">Blog</a></li>
+						<li><a href="https://itextpdf.com/en/support">Support</a></li>
+						<li><a href="https://itextpdf.com/en/welcome-itext-community">Community</a></li>
+				</ul>
+			</div>
+
+		<div class="header-pickers">
+
+		</div>
+
+			<div class="header-search">
+				<search-bar quicksearch></search-bar>
+			</div>
+
+
+				<button type="button" aria-controls="drawer-75d373dd3e89419d-1" aria-haspopup="dialog" aria-expanded="false" class="header-nav-toggle" onclick="self['drawer-75d373dd3e89419d-1'].showModal()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+			<i18n-message class="sr-only" i18nkey="navigation.main.label">Main navigation</i18n-message>
+		</button>
+	</div>
+
+	
+
+<dialog id="drawer-75d373dd3e89419d-1" class="drawer">
+	<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="75d373dd3e89419d-3" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="75d373dd3e89419d-3">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+
+		<div class="header-content">
+			<button type="button" aria-controls="drawer-75d373dd3e89419d-1" aria-haspopup="dialog" aria-expanded="true" autofocus class="drawer-toggle" onclick="self['drawer-75d373dd3e89419d-1'].close()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-close ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#close"></use>
+	</svg>
+				<i18n-message class="sr-only" i18nkey="navigation.close.label">Close navigation</i18n-message>
+			</button>
+		</div>
+	</header>
+
+	<div class="drawer-section drawer-search">
+		<search-bar quicksearch></search-bar>
+	</div>
+
+
+	<nav id="drawer-nav" class="drawer-section drawer-nav tree" aria-labelledby="drawer-nav-label">
+		<i18n-message id="drawer-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+
+						<copy-page-tree target="articleTree"></copy-page-tree>
+	</nav>
+
+			<div class="drawer-section drawer-links tree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-4" href="https://itextpdf.com/" >iText Website</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-5" href="https://itextpdf.com/en/blog" >Blog</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-6" href="https://itextpdf.com/en/support" >Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-7" href="https://itextpdf.com/en/welcome-itext-community" >Community</a>
+			</div>
+
+		</li>
+</ul>
+		</div>
+</dialog>
+
+</header>
+		<section class="article-page body">
+		<theme-navigator class="navigator">
+			<button id="navigator-toggle" class="navigator-toggle" aria-controls="navigator-nav" aria-labelledby="navigator-nav-label" aria-expanded="true">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu navigator-icon-closed">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-chevron_left navigator-icon-opened">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#chevron_left"></use>
+	</svg>
+			</button>
+						<nav id="navigator-nav" class="navigator-body tree" aria-labelledby="navigator-nav-label">
+				<i18n-message id="navigator-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+				<theme-page-tree id="articleTree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-8"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-8" href="cves.html" >CVEs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-10"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-10" href="digital-signatures-hub.html" >Digital Signatures Hub</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-12"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-12" href="releases.html" >Releases</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-14"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-14" href="installation-guidelines.html" >Installation guidelines</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-16"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-16" href="examples.html" >Examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-18"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-18" href="breaking-changes.html" >Breaking changes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-20"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-20" href="ebooks.html" >Ebooks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="true"
+aria-controls="75d373dd3e89419d-23"						aria-labelledby="75d373dd3e89419d-22"
+					></button>
+				<a id="75d373dd3e89419d-22" href="faq.html" >FAQ</a>
+			</div>
+
+<ul  id="75d373dd3e89419d-23" >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-24" href="https://kb.itextpdf.com/itext/resolving-missingmethodexception-and-aws-sdk-compa" >Resolving MissingMethodException and AWS SDK Compatibility in .NET Applications</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-25" href="https://kb.itextpdf.com/itext/how-to-use-itext-with-flutter" >How to use iText with Flutter?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-26" href="how-can-i-find-code-examples-for-specific-itext-ve.html" >How can I find code examples for specific iText versions or releases?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-27" href="what-features-are-supported-or-unsupported-in-pdfh.html" >What features are supported or unsupported in pdfHTML?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-28" href="how-does-itext-handle-pdf-encryption.html" aria-current="page">How does iText handle PDF encryption?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-29" href="how-to-deploy-an-itext-license-for-azure-powershel.html" >How to deploy an iText License for Azure PowerShell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-30" href="resolving-microsoft-dotnet-platformabstractions-dl.html" >Resolving Microsoft.DotNet.PlatformAbstractions.dll Exception in Azure Functions</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-31" href="https://kb.itextpdf.com/itext/where-are-your-net-examples" >Where are your .NET examples?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-32" href="https://kb.itextpdf.com/itext/is-itext-free" >Is iText free?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-33" href="https://kb.itextpdf.com/itext/how-to-merge-pdfs-and-add-bookmarks" >How to merge PDFs and add bookmarks?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-34" href="https://kb.itextpdf.com/itext/how-to-solve-an-unsupportedcharsetexception-when-u" >How to solve an UnsupportedCharsetException when using itext-asian.jar</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-35" href="https://kb.itextpdf.com/itext/how-to-fill-xfa-form-using-itext-without-breaking-" >How to fill XFA form using iText without breaking usage rights?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-36" href="https://kb.itextpdf.com/itext/how-to-move-the-content-inside-a-rectangle-inside-" >How to move the content inside a rectangle inside an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-37" href="https://kb.itextpdf.com/itext/where-can-i-download-the-license-key-library" >Where can I download the license key library?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-38" href="https://kb.itextpdf.com/itext/can-i-create-a-reader-enabled-pdf-using-itext" >Can I create a Reader-enabled PDF using iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-39" href="https://kb.itextpdf.com/itext/how-to-change-the-order-of-optional-content-groups" >How to change the order of Optional Content Groups?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-40" href="https://kb.itextpdf.com/itext/how-to-change-a-background-image-into-a-watermark-" >How to change a background Image into a watermark by altering the opacity?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-41" href="https://kb.itextpdf.com/itext/how-to-encrypt-pdf-using-a-certificate" >How to encrypt PDF using a certificate?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-42" href="https://kb.itextpdf.com/itext/why-can-t-i-extract-text-added-using-a-type3-font-" >Why can&#39;t I extract text added using a Type3 font correctly from a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-43" href="https://kb.itextpdf.com/itext/how-to-add-an-x-offset-to-a-text-pattern-with-ever" >How to add an x-offset to a text pattern with every x-step?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-44" href="https://kb.itextpdf.com/itext/how-do-i-create-a-separate-ocr-layer" >How do I create a separate OCR layer?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-45" href="https://kb.itextpdf.com/itext/how-can-i-create-a-reader-enabled-pdf-with-a-signa" >How can I create a Reader enabled PDF with a signature field that can be signed in Adobe Reader</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-46" href="https://kb.itextpdf.com/itext/does-a-pdf-file-have-styles-headers-and-footers" >Does a PDF file have styles, headers and footers?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-47" href="https://kb.itextpdf.com/itext/how-do-i-add-xmp-metadata-to-each-page-of-an-exist" >How do I add XMP metadata to each page of an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-48" href="https://kb.itextpdf.com/itext/how-to-set-the-ocg-state-of-an-existing-pdf" >How to set the OCG state of an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-49" href="https://kb.itextpdf.com/itext/can-i-change-the-page-count-by-changing-internal-m" >Can I change the page count by changing internal metadata?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-50" href="https://kb.itextpdf.com/itext/i-upgraded-to-itext-7-how-do-i-use-my-license" >I upgraded to iText version 7 or 8, how do I use my license?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-51" href="https://kb.itextpdf.com/itext/do-i-need-a-license-for-windows-fonts-when-using-i" >Do I need a license for Windows fonts when using iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-52" href="https://kb.itextpdf.com/itext/how-do-i-install-itext-7-core" >How do I install iText Core?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-53" href="https://kb.itextpdf.com/itext/are-itext-5-and-itext-7-backwards-compatible" >Are iText 5 and iText 7 backwards compatible?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-54" href="https://kb.itextpdf.com/itext/argument-not-specified-in-itextsharp" >Argument not specified in iTextSharp</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-55" href="https://kb.itextpdf.com/itext/could-not-find-a-glyph-corresponding-to-unicode-ch" >Could not find a glyph corresponding to Unicode character</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-56" href="https://kb.itextpdf.com/itext/do-we-license-per-functionality-feature" >Do we license per functionality /feature?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-57" href="https://kb.itextpdf.com/itext/do-you-have-authorized-resellers" >Do you have authorized resellers?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-58" href="https://kb.itextpdf.com/itext/do-you-have-customer-testimonials" >Do you have customer testimonials?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-59" href="https://kb.itextpdf.com/itext/does-anyone-have-any-idea-how-tabstop-works" >Does anyone have any idea how TabStop works?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-60" href="https://kb.itextpdf.com/itext/how-can-i-add-a-new-acroform-field-to-a-pdf" >How can I add a new AcroForm field to a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-61" href="https://kb.itextpdf.com/itext/how-can-i-add-an-image-to-all-pages-of-my-pdf" >How can I add an image to all pages of my PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-62" href="https://kb.itextpdf.com/itext/how-can-i-add-titles-of-chapters-in-columntext" >How can I add titles of chapters in ColumnText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-63" href="https://kb.itextpdf.com/itext/how-can-i-convert-a-csv-file-to-a-table-with-a-rep" >How can I convert a CSV file to a table with a repeating header row?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-64" href="https://kb.itextpdf.com/itext/how-can-i-crop-the-pages-of-an-existing-pdf-docume" >How can I crop the pages of an existing PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-65" href="https://kb.itextpdf.com/itext/how-can-i-find-the-border-color-of-a-field" >How can I find the border color of a field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-66" href="https://kb.itextpdf.com/itext/how-can-i-find-the-maximum-character-limit-for-a-t" >How can I find the maximum character limit for a text field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-67" href="https://kb.itextpdf.com/itext/how-can-i-generate-a-pdf-ua-compatible-pdf-with-it" >How can I generate a PDF/UA compatible PDF with iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-68" href="https://kb.itextpdf.com/itext/how-can-i-load-a-font-from-web-inf-resources-fonts" >How can I load a font from /WEB-INF/resources/fonts/foobar.ttf?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-69" href="https://kb.itextpdf.com/itext/how-can-i-log-the-number-of-documents-bytes-i-ve-p" >How can I log the number of documents / bytes I&#39;ve processed?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-70" href="https://kb.itextpdf.com/itext/how-can-i-read-roman-page-numbers" >How can I read Roman page numbers?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-71" href="https://kb.itextpdf.com/itext/how-can-i-serve-a-pdf-to-a-browser-without-storing" >How can I serve a PDF to a browser without storing a file on the server side?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-72" href="https://kb.itextpdf.com/itext/how-can-i-set-the-zoom-level-of-a-pdf-using-itext-" >How can I set the zoom level of a PDF using iText 7?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-73" href="https://kb.itextpdf.com/itext/how-can-i-use-regular-and-bold-in-a-single-string" >How can I use regular and bold in a single String?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-74" href="https://kb.itextpdf.com/itext/how-do-i-change-the-border-color-of-a-pdfpcell" >How do I change the border color of a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-75" href="https://kb.itextpdf.com/itext/how-do-i-extend-my-30-day-free-trial" >How do I extend my 30-day free trial?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-76" href="https://kb.itextpdf.com/itext/how-do-i-get-a-free-trial" >How do I get a free trial?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-77" href="https://kb.itextpdf.com/itext/how-do-i-get-an-object-if-i-have-its-indirect-refe" >How do I get an object if I have its indirect reference?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-78" href="https://kb.itextpdf.com/itext/how-do-i-insert-a-hyperlink-to-another-page-in-an-" >How do I insert a hyperlink to another page in an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-79" href="https://kb.itextpdf.com/itext/how-do-i-renew-my-license" >How do I renew my license?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-80" href="https://kb.itextpdf.com/itext/how-do-i-rotate-a-pdf-page-to-an-arbitrary-angle" >How do I rotate a PDF page to an arbitrary angle?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-81" href="https://kb.itextpdf.com/itext/how-do-i-set-parameters-back-to-the-default-value" >How do I set parameters back to the default value?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-82" href="https://kb.itextpdf.com/itext/how-do-i-use-pdfrender-in-a-net-environment" >How do I use pdfRender in a .NET environment?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-83" href="https://kb.itextpdf.com/itext/how-do-setminimumsize-and-setfixedsize-interact" >How do setMinimumSize() and setFixedSize() interact?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-84" href="https://kb.itextpdf.com/itext/how-do-we-define-an-application" >How do we define an application?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-85" href="https://kb.itextpdf.com/itext/how-does-a-pdfpcell-s-height-relate-to-the-font-si" >How does a PdfPCell&#39;s height relate to the font size?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-86" href="https://kb.itextpdf.com/itext/how-does-itext-group-count-processes-files" >How does iText Group count processes/files?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-87" href="https://kb.itextpdf.com/itext/how-much-does-it-cost-to-upgrade-itext-5-to-itext-" >How much does it cost to upgrade iText 5 to iText 7?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-88" href="https://kb.itextpdf.com/itext/how-should-i-interpret-the-coordinates-of-a-rectan" >How should I interpret the coordinates of a rectangle in PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-89" href="https://kb.itextpdf.com/itext/how-to-adapt-the-position-of-the-first-line-in-col" >How to adapt the position of the first line in ColumnText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-90" href="https://kb.itextpdf.com/itext/how-to-add-continue-on-next-page-continued-from--1" >How to add &quot;continue on next page&quot; / &quot;continued from next page&quot; to a table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-91" href="https://kb.itextpdf.com/itext/how-to-add-a-background-image-to-a-cell" >How to add a background image to a cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-92" href="https://kb.itextpdf.com/itext/how-to-add-a-border-to-a-paragraph" >How to add a border to a paragraph?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-93" href="https://kb.itextpdf.com/itext/how-to-add-a-border-to-a-pdf-page" >How to add a border to a PDF page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-94" href="https://kb.itextpdf.com/itext/how-to-add-a-cover-page-to-an-existing-pdf-documen" >How to add a cover page to an existing PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-95" href="https://kb.itextpdf.com/itext/how-to-add-a-full-line-break" >How to add a full line break?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-96" href="https://kb.itextpdf.com/itext/how-to-add-a-hidden-text-field" >How to add a hidden text field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-97" href="https://kb.itextpdf.com/itext/how-to-add-a-map-with-a-pointer-to-a-pdf" >How to add a map with a pointer to a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-98" href="https://kb.itextpdf.com/itext/how-to-add-a-new-form-from-an-existing-pdf-templat" >How to add a new form from an existing PDF template?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-99" href="https://kb.itextpdf.com/itext/how-to-add-a-page-number-in-the-header-of-a-pdf-a-" >How to add a page number in the header of a PDF/A Level A file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-100" href="https://kb.itextpdf.com/itext/how-to-add-a-printable-or-non-printable-bitmap-sta" >How to add a printable or non-printable bitmap stamp to a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-101" href="https://kb.itextpdf.com/itext/how-to-add-a-rectangle-to-every-page-of-a-document" >How to add a rectangle to every page of a document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-102" href="https://kb.itextpdf.com/itext/how-to-add-a-shading-pattern-to-a-custom-shape" >How to add a shading pattern to a custom shape?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-103" href="https://kb.itextpdf.com/itext/how-to-add-a-table-as-a-header" >How to add a table as a header?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-104" href="https://kb.itextpdf.com/itext/how-to-add-a-table-in-the-top-right-corner-of-the-" >How to add a table in the top-right corner of the page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-105" href="https://kb.itextpdf.com/itext/how-to-add-a-table-on-a-form-and-maybe-insert-a-ne" >How to add a table on a form (and maybe insert a new page)?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-106" href="https://kb.itextpdf.com/itext/how-to-add-a-table-to-the-bottom-of-the-last-page" >How to add a table to the bottom of the last page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-107" href="https://kb.itextpdf.com/itext/how-to-add-a-text-to-the-left-and-to-the-right-in-" >How to add a text to the left and to the right in a header?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-108" href="https://kb.itextpdf.com/itext/how-to-add-a-watermark-to-a-page-with-an-opaque-im" >How to add a watermark to a page with an opaque image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-109" href="https://kb.itextpdf.com/itext/how-to-add-alternative-text-for-an-image-in-tagged" >How to add alternative text for an image in Tagged PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-110" href="https://kb.itextpdf.com/itext/how-to-add-an-image-and-text-to-the-same-cell" >How to add an image and text to the same cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-111" href="https://kb.itextpdf.com/itext/how-to-add-an-image-to-an-acroform-field" >How to add an image to an AcroForm field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-112" href="https://kb.itextpdf.com/itext/how-to-add-an-image-to-an-existing-pdf-using-affin" >How to add an image to an existing PDF using AffineTransform?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-113" href="https://kb.itextpdf.com/itext/how-to-add-an-image-watermark-to-a-pdf-file" >How to add an image watermark to a PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-114" href="https://kb.itextpdf.com/itext/how-to-add-an-in-reply-to-annotation" >How to add an In Reply To annotation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-115" href="https://kb.itextpdf.com/itext/how-to-add-an-inner-table-surrounded-by-text" >How to add an inner table surrounded by text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-116" href="https://kb.itextpdf.com/itext/how-to-add-an-onmouseover-javascript-action-to-a-t" >How to add an onMouseOver javaScript action to a TextField?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-117" href="https://kb.itextpdf.com/itext/how-to-add-blank-pages-to-an-existing-pdf-in-java" >How to add blank pages to an existing PDF in java?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-118" href="https://kb.itextpdf.com/itext/how-to-add-blank-pages-while-concatenating-several" >How to add blank pages while concatenating several PDFs using PdfSmartCopy</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-119" href="https://kb.itextpdf.com/itext/how-to-add-inline-spacing-in-a-pdfpcell" >How to add inline spacing in a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-120" href="https://kb.itextpdf.com/itext/how-to-add-jpeg-images-that-are-multi-stage-filter" >How to add JPEG images that are multi-stage filtered (DCTDecode and FlateDecode)?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-121" href="https://kb.itextpdf.com/itext/how-to-add-multiple-images-into-a-single-pdf" >How to add multiple images into a single PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-122" href="https://kb.itextpdf.com/itext/how-to-add-text-as-a-header-or-footer" >How to add text as a header or footer?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-123" href="https://kb.itextpdf.com/itext/how-to-add-text-at-an-absolute-position-on-the-top" >How to add text at an absolute position on the top of the first page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-124" href="https://kb.itextpdf.com/itext/how-to-add-text-inside-a-rectangle" >How to add text inside a rectangle?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-125" href="https://kb.itextpdf.com/itext/how-to-add-text-to-an-image" >How to add text to an image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-126" href="https://kb.itextpdf.com/itext/how-to-add-two-images-in-one-cell" >How to add two images in one cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-127" href="https://kb.itextpdf.com/itext/how-to-align-a-label-versus-its-content" >How to align a label versus its content?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-128" href="https://kb.itextpdf.com/itext/how-to-align-acrofields" >How to align AcroFields?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-129" href="https://kb.itextpdf.com/itext/how-to-align-two-paragraphs-to-the-left-and-right-" >How to align two paragraphs to the left and right on the same line?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-130" href="https://kb.itextpdf.com/itext/how-to-allow-a-unicode-subscript-symbol-in-a-pdf-w" >How to allow a Unicode subscript symbol in a PDF without using setTextRise()?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-131" href="https://kb.itextpdf.com/itext/how-to-allow-page-extraction-when-setting-password" >How to allow page extraction when setting password security?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-132" href="https://kb.itextpdf.com/itext/how-to-apply-color-to-strings-in-a-paragraph" >How to apply color to Strings in a Paragraph?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-133" href="https://kb.itextpdf.com/itext/how-to-attach-files-to-a-pdf" >How to attach files to a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-134" href="https://kb.itextpdf.com/itext/how-to-avoid-an-exception-when-importing-a-tiff-fi" >How to avoid an exception when importing a TIFF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-135" href="https://kb.itextpdf.com/itext/how-to-calculate-the-height-of-an-element" >How to calculate the height of an element?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-136" href="https://kb.itextpdf.com/itext/how-to-calculate-set-font-line-distance" >How to calculate/set font line distance?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-137" href="https://kb.itextpdf.com/itext/how-to-change-the-author-name-for-comments" >How to change the author name for comments?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-138" href="https://kb.itextpdf.com/itext/how-to-change-the-color-of-a-circle-annotation" >How to change the color of a circle annotation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-139" href="https://kb.itextpdf.com/itext/how-to-change-the-color-of-pages" >How to change the color of pages?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-140" href="https://kb.itextpdf.com/itext/how-to-change-the-icon-of-a-push-button-field" >How to change the icon of a push button field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-141" href="https://kb.itextpdf.com/itext/how-to-change-the-line-spacing-of-text" >How to change the line spacing of text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-142" href="https://kb.itextpdf.com/itext/how-to-change-the-properties-of-an-annotation" >How to change the properties of an annotation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-143" href="https://kb.itextpdf.com/itext/how-to-change-the-spacing-between-words-and-charac" >How to change the spacing between words and characters?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-144" href="https://kb.itextpdf.com/itext/how-to-change-the-text-color-of-an-acroform-field" >How to change the text color of an AcroForm field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-145" href="https://kb.itextpdf.com/itext/how-to-change-the-zoom-factor-in-link-annotations" >How to change the zoom factor in link annotations?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-146" href="https://kb.itextpdf.com/itext/how-to-change-width-of-single-column-of-table" >How to change width of single column of table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-147" href="https://kb.itextpdf.com/itext/how-to-check-a-check-box" >How to check a check box?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-148" href="https://kb.itextpdf.com/itext/how-to-check-for-an-event-and-remove-it" >How to check for an event and remove it?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-149" href="https://kb.itextpdf.com/itext/how-to-check-if-a-font-is-bold" >How to check if a font is bold?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-150" href="https://kb.itextpdf.com/itext/how-to-choose-the-optimal-size-for-a-font" >How to choose the optimal size for a font?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-151" href="https://kb.itextpdf.com/itext/how-to-close-a-pdf-file-to-recreate-it-file-in-use" >How to close a PDF file to recreate it? (File in use problem)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-152" href="https://kb.itextpdf.com/itext/how-to-continue-an-ordered-list-on-a-second-page" >How to continue an ordered list on a second page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-153" href="https://kb.itextpdf.com/itext/how-to-continue-field-output-on-a-second-page" >How to continue field output on a second page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-154" href="https://kb.itextpdf.com/itext/how-to-convert-an-a4-size-pdf-to-a-pdf-booklet" >How to convert an A4 size PDF to a PDF booklet?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-155" href="https://kb.itextpdf.com/itext/how-to-convert-an-existing-a4-pdf-document-to-an-a" >How to convert an existing A4 PDF document to an A3 booklet?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-156" href="https://kb.itextpdf.com/itext/how-to-convert-colored-images-to-black-and-white" >How to convert colored images to black and white?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-157" href="https://kb.itextpdf.com/itext/how-to-convert-pdfstamper-to-a-byte-array" >How to convert PdfStamper to a byte array?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-158" href="https://kb.itextpdf.com/itext/how-to-create-a-clickable-polygon-or-path" >How to create a clickable polygon or path?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-159" href="https://kb.itextpdf.com/itext/how-to-create-a-complex-pdf-document" >How to create a complex PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-160" href="https://kb.itextpdf.com/itext/how-to-create-a-custom-dashed-line-separator" >How to create a custom dashed line separator?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-161" href="https://kb.itextpdf.com/itext/how-to-create-a-document-with-unequal-page-sizes" >How to create a document with unequal page sizes?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-162" href="https://kb.itextpdf.com/itext/how-to-create-a-javascript-action-to-open-the-atta" >How to create a JavaScript action to open the attachments panel?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-163" href="https://kb.itextpdf.com/itext/how-to-create-a-link-to-a-specific-page-number" >How to create a link to a specific page number?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-164" href="https://kb.itextpdf.com/itext/how-to-create-a-link-to-launch-an-external-program" >How to create a link to launch an external program?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-165" href="https://kb.itextpdf.com/itext/how-to-create-a-list-without-indentation" >How to create a list without indentation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-166" href="https://kb.itextpdf.com/itext/how-to-create-a-nested-column" >How to create a nested column?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-167" href="https://kb.itextpdf.com/itext/how-to-create-a-new-pdf-file-if-a-file-name-alread" >How to create a new PDF file if a file name already exists?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-168" href="https://kb.itextpdf.com/itext/how-to-create-a-pdf-with-a-cartesian-grid" >How to create a PDF with a Cartesian grid?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-169" href="https://kb.itextpdf.com/itext/how-to-create-a-pdf-with-font-information-and-embe" >How to create a PDF with font information and embed the actual font while merging the files into a single PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-170" href="https://kb.itextpdf.com/itext/how-to-create-a-pop-up-window-to-display-images-an" >How to create a pop-up window to display images and text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-171" href="https://kb.itextpdf.com/itext/how-to-create-a-pushbuttonfield-with-double-byte-c" >How to create a pushbuttonfield with double byte character text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-172" href="https://kb.itextpdf.com/itext/how-to-create-a-table-based-on-a-two-dimensional-1" >How to create a table based on a two-dimensional array?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-173" href="https://kb.itextpdf.com/itext/how-to-create-a-table-in-which-the-cells-have-diff" >How to create a table in which the cells have different widths?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-174" href="https://kb.itextpdf.com/itext/how-to-create-a-table-with-2-rows-that-can-be-used" >How to create a table with 2 rows that can be used as a footer?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-175" href="https://kb.itextpdf.com/itext/how-to-create-a-table-with-complex-borders" >How to create a table with complex borders?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-176" href="https://kb.itextpdf.com/itext/how-to-create-a-table-with-only-vertical-borders" >How to create a table with only vertical borders?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-177" href="https://kb.itextpdf.com/itext/how-to-create-a-table-with-rounded-corners" >How to create a table with rounded corners?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-178" href="https://kb.itextpdf.com/itext/how-to-create-a-toc-when-merging-documents" >How to create a TOC when merging documents?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-179" href="https://kb.itextpdf.com/itext/how-to-create-an-uncompressed-pdf-file" >How to create an uncompressed PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-180" href="https://kb.itextpdf.com/itext/how-to-create-and-apply-redactions" >How to create and apply redactions?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-181" href="https://kb.itextpdf.com/itext/how-to-create-hierarchical-bookmarks" >How to create hierarchical bookmarks?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-182" href="https://kb.itextpdf.com/itext/how-to-create-persian-content-in-pdf" >How to create Persian content in PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-183" href="https://kb.itextpdf.com/itext/how-to-create-radio-buttons-inside-a-table" >How to create radio buttons inside a table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-184" href="https://kb.itextpdf.com/itext/how-to-create-unique-images-with-image-getinstance" >How to create unique images with Image.getInstance()?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-185" href="https://kb.itextpdf.com/itext/how-to-crop-out-a-part-of-pdf-file" >How to crop out a part of PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-186" href="https://kb.itextpdf.com/itext/how-to-decrypt-a-pdf-document-with-the-owner-passw" >How to decrypt a PDF document with the owner password?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-187" href="https://kb.itextpdf.com/itext/how-to-define-different-border-types-for-a-single-" >How to define different border types for a single cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-188" href="https://kb.itextpdf.com/itext/how-to-define-multiple-actions-for-a-pushbuttonfie" >How to define multiple actions for a PushbuttonField?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-189" href="https://kb.itextpdf.com/itext/how-to-define-spacing-and-leading-in-pdfpcell-obje" >How to define spacing and leading in PdfPCell objects?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-190" href="https://kb.itextpdf.com/itext/how-to-define-the-data-encoding-when-submitting-a-" >How to define the data encoding when submitting a PDF form using AcroForm technology?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-191" href="https://kb.itextpdf.com/itext/how-to-define-the-page-size-based-on-the-content" >How to define the page size based on the content?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-192" href="https://kb.itextpdf.com/itext/how-to-define-the-width-of-a-cell" >How to define the width of a cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-193" href="https://kb.itextpdf.com/itext/how-to-delete-attachments-in-pdf-using-itext" >How to delete attachments in PDF using iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-194" href="https://kb.itextpdf.com/itext/how-to-disable-the-save-button-and-hide-the-menu-b" >How to disable the save button and hide the menu bar in Adobe Reader?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-195" href="https://kb.itextpdf.com/itext/how-to-display-barcodes-in-a-matrix-like-structure" >How to display barcodes in a matrix-like structure?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-196" href="https://kb.itextpdf.com/itext/how-to-display-indian-rupee-symbol" >How to display indian rupee symbol?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-197" href="https://kb.itextpdf.com/itext/how-to-distribute-the-radio-buttons-of-a-radio-fie" >How to distribute the radio buttons of a radio field across multiple PdfPCells?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-198" href="https://kb.itextpdf.com/itext/how-to-divide-a-page-in-n-parts-so-we-can-fill-eac" >How to divide a page in N parts so we can fill each with a different source?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-199" href="https://kb.itextpdf.com/itext/how-to-draw-a-borderless-rounded-rectangle" >How to draw a borderless rounded rectangle?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-200" href="https://kb.itextpdf.com/itext/how-to-draw-a-borderless-table-in-itextsharp" >How to draw a borderless table in iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-201" href="https://kb.itextpdf.com/itext/how-to-draw-a-line-every-25-words" >How to draw a line every 25 words?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-202" href="https://kb.itextpdf.com/itext/how-to-draw-a-rectangle-around-multiline-text" >How to draw a rectangle around multiline text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-203" href="https://kb.itextpdf.com/itext/how-to-draw-lines-on-an-image" >How to draw lines on an image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-204" href="https://kb.itextpdf.com/itext/how-to-draw-vertical-gradient-in-itextsharp" >How to draw vertical gradient in iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-205" href="https://kb.itextpdf.com/itext/how-to-embed-a-font-only-partially" >How to embed a font only partially?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-206" href="https://kb.itextpdf.com/itext/how-to-enable-ltv-for-a-timestamp-signature" >How to enable LTV for a timestamp signature?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-207" href="https://kb.itextpdf.com/itext/how-to-extend-the-page-size-of-a-pdf-to-add-a-wate" >How to extend the page size of a PDF to add a watermark?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-208" href="https://kb.itextpdf.com/itext/how-to-extract-a-page-number-from-a-pdf-file" >How to extract a page number from a PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-209" href="https://kb.itextpdf.com/itext/how-to-extract-embedded-streams" >How to extract embedded streams?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-210" href="https://kb.itextpdf.com/itext/how-to-extract-text-and-anchor-information-from-a-" >How to extract text and anchor information from a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-211" href="https://kb.itextpdf.com/itext/how-to-fill-a-rectangle-with-color" >How to fill a rectangle with color?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-212" href="https://kb.itextpdf.com/itext/how-to-fill-out-a-pdf-file-programmatically-dynami" >How to fill out a PDF file programmatically? (Dynamic XFA)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-213" href="https://kb.itextpdf.com/itext/how-to-find-internal-links-in-a-pdf-file" >How To find internal links in a PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-214" href="https://kb.itextpdf.com/itext/how-to-find-out-the-current-cursor-position-on-a-p" >How to find out the current cursor position on a page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-215" href="https://kb.itextpdf.com/itext/how-to-find-out-which-fields-are-required" >How to find out which fields are required?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-216" href="https://kb.itextpdf.com/itext/how-to-find-the-absolute-position-and-dimension-of" >How to find the absolute position and dimension of a field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-217" href="https://kb.itextpdf.com/itext/how-to-fit-a-string-inside-a-rectangle" >How to fit a String inside a rectangle?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-218" href="https://kb.itextpdf.com/itext/how-to-fix-the-orientation-of-a-pdf-page-in-order-" >How to fix the orientation of a PDF page in order to scale it?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-219" href="https://kb.itextpdf.com/itext/how-to-flatten-a-xfa-pdf-form-using-itextsharp" >How to flatten a XFA PDF Form using iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-220" href="https://kb.itextpdf.com/itext/how-to-flatten-a-xfa-pdf-form-using-pdfxfa" >How to flatten a XFA PDF Form using pdfXFA</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-221" href="https://kb.itextpdf.com/itext/how-to-format-a-field-as-a-currency" >How to format a field as a currency?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-222" href="https://kb.itextpdf.com/itext/how-to-format-a-field-as-a-percentage" >How to format a field as a percentage?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-223" href="https://kb.itextpdf.com/itext/how-to-format-a-string-resulting-in-a-two-column-d" >How to format a String resulting in a two-column display?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-224" href="https://kb.itextpdf.com/itext/how-to-generate-2d-barcode-as-vector-image" >How to generate 2D barcode as vector image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-225" href="https://kb.itextpdf.com/itext/how-to-generate-a-report-with-dynamic-header-in-pd" >How to generate a report with dynamic header in PDF using iText 7?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-226" href="https://kb.itextpdf.com/itext/how-to-generate-and-design-pdfs-with-itext-or-itex" >How to generate and design PDFs with iText or iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-227" href="https://kb.itextpdf.com/itext/how-to-get-a-font-from-an-array" >How to get a font from an array?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-228" href="https://kb.itextpdf.com/itext/how-to-get-rid-of-the-top-padding-in-a-pdfpcell" >How to get rid of the top padding in a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-229" href="https://kb.itextpdf.com/itext/how-to-get-specific-types-from-acrofields-like-pus" >How to get specific types from AcroFields? Like PushButtonField, RadioCheckField, etc</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-230" href="https://kb.itextpdf.com/itext/how-to-get-text-and-image-in-the-same-cell" >How to get text and image in the same cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-231" href="https://kb.itextpdf.com/itext/how-to-get-the-author-of-a-free-text-annotation" >How to get the author of a &quot;free text&quot; annotation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-232" href="https://kb.itextpdf.com/itext/how-to-get-the-co-ordinates-of-an-image" >How to get the co-ordinates of an image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-233" href="https://kb.itextpdf.com/itext/how-to-get-the-color-properties-of-an-acroform-fie" >How to get the color properties of an AcroForm field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-234" href="https://kb.itextpdf.com/itext/how-to-get-the-current-page-count" >How to get the current page count?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-235" href="https://kb.itextpdf.com/itext/how-to-get-the-image-dpi-in-pdf" >How to get the image DPI in PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-236" href="https://kb.itextpdf.com/itext/how-to-get-the-number-of-characters-in-a-field" >How to get the number of characters in a field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-237" href="https://kb.itextpdf.com/itext/how-to-get-the-page-number-of-an-arbitrary-pdf-obj" >How to get the page number of an arbitrary PDF object?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-238" href="https://kb.itextpdf.com/itext/how-to-get-the-page-width-and-height-of-a-pdf-docu" >How to get the page width and height of a PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-239" href="https://kb.itextpdf.com/itext/how-to-get-the-rendered-dimensions-of-text" >How to get the rendered dimensions of text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-240" href="https://kb.itextpdf.com/itext/how-to-get-the-userunit-from-a-pdf-file" >How to get the UserUnit from a PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-241" href="https://kb.itextpdf.com/itext/how-to-give-an-image-rounded-corners" >How to give an image rounded corners?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-242" href="https://kb.itextpdf.com/itext/how-to-hide-the-adobe-floating-toolbar-when-showin" >How to hide the Adobe floating toolbar when showing a PDF in browser?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-243" href="https://kb.itextpdf.com/itext/how-to-hyphenate-text" >How to hyphenate text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-244" href="https://kb.itextpdf.com/itext/how-to-increase-the-accuracy-of-measurements-in-it" >How to increase the accuracy of measurements in iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-245" href="https://kb.itextpdf.com/itext/how-to-insert-a-linked-rectangle-with-itext" >How to insert a &quot;linked rectangle&quot; with iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-246" href="https://kb.itextpdf.com/itext/how-to-introduce-a-custom-font-weight-in-itext-7" >How to introduce a custom font weight in iText 7?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-247" href="https://kb.itextpdf.com/itext/how-to-introduce-a-rowspan" >How to introduce a rowspan?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-248" href="https://kb.itextpdf.com/itext/how-to-introduce-multiple-pdfpageeventhelper-insta" >How to introduce multiple PdfPageEventHelper instances?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-249" href="https://kb.itextpdf.com/itext/how-to-introduce-rounded-cells-with-a-background-c" >How to introduce rounded cells with a background color?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-250" href="https://kb.itextpdf.com/itext/how-to-introduce-superscript" >How to introduce superscript?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-251" href="https://kb.itextpdf.com/itext/how-to-invoke-a-page-break-for-nested-tables" >How to invoke a page break for nested tables?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-252" href="https://kb.itextpdf.com/itext/how-to-keep-specific-words-together-on-one-line" >How to keep specific words together on one line?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-253" href="https://kb.itextpdf.com/itext/how-to-load-a-pdf-from-a-stream-and-add-a-file-att" >How to load a PDF from a stream and add a file attachment?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-254" href="https://kb.itextpdf.com/itext/how-to-maintain-a-paragraph-s-indentation-inside-a" >How to maintain a paragraph&#39;s indentation inside a table cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-255" href="https://kb.itextpdf.com/itext/how-to-make-a-field-not-required" >How to make a field not required?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-256" href="https://kb.itextpdf.com/itext/how-to-make-a-single-letter-bold-within-a-word" >How to make a single letter bold within a word?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-257" href="https://kb.itextpdf.com/itext/how-to-make-an-image-a-qualified-mask-candidate-in" >How to make an image a qualified mask candidate in itext?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-258" href="https://kb.itextpdf.com/itext/how-to-make-sure-a-check-box-is-printed" >How to make sure a check box is printed?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-259" href="https://kb.itextpdf.com/itext/how-to-merge-documents-correctly" >How to merge documents correctly?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-260" href="https://kb.itextpdf.com/itext/how-to-merge-pdfs-from-bytearrayoutputstreams" >How to merge PDFs from ByteArrayOutputStreams?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-261" href="https://kb.itextpdf.com/itext/how-to-modify-the-size-of-annotations-and-make-the" >How to modify the size of annotations and make them read-only?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-262" href="https://kb.itextpdf.com/itext/how-to-move-an-acroform-field" >How to move an AcroForm field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-263" href="https://kb.itextpdf.com/itext/how-to-nest-tables-without-extending-the-inner-tab" >How to nest tables without extending the inner table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-264" href="https://kb.itextpdf.com/itext/how-to-only-read-text-from-a-constant-location-on-" >How to only read text from a constant location on PDF pages?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-265" href="https://kb.itextpdf.com/itext/how-to-open-an-ms-word-attachment-by-clicking-an-i" >How to open an MS Word attachment by clicking an image?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-266" href="https://kb.itextpdf.com/itext/how-to-position-text-relative-to-page" >How to position text relative to page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-267" href="https://kb.itextpdf.com/itext/how-to-precisely-position-an-image-on-top-of-a-tab" >How to precisely position an image on top of a Table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-268" href="https://kb.itextpdf.com/itext/how-to-preserve-high-resolution-images-in-pdf" >How to preserve high resolution images in PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-269" href="https://kb.itextpdf.com/itext/how-to-prevent-images-from-resizing-in-a-table-cel" >How to prevent images from resizing in a table cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-270" href="https://kb.itextpdf.com/itext/how-to-prevent-splitting-a-table" >How to prevent splitting a table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-271" href="https://kb.itextpdf.com/itext/how-to-prevent-the-resizing-of-pages-in-pdf" >How to prevent the resizing of pages in PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-272" href="https://kb.itextpdf.com/itext/how-to-print-mathematical-characters-like" >How to print mathematical characters like ∈, ∩, ∑, ∫, ? √, ∠?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-273" href="https://kb.itextpdf.com/itext/how-to-protect-a-pdf-with-a-username-and-password" >How to protect a PDF with a username and password?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-274" href="https://kb.itextpdf.com/itext/how-to-protect-an-already-existing-pdf-with-a-pass" >How to protect an already existing PDF with a password?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-275" href="https://kb.itextpdf.com/itext/how-to-put-text-above-a-barcode-instead-of-under-t" >How to put text above a barcode instead of under the bars?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-276" href="https://kb.itextpdf.com/itext/how-to-read-bookmark-titles" >How to read bookmark titles?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-277" href="https://kb.itextpdf.com/itext/how-to-read-pdfs-created-with-an-unknown-random-ow" >How to read PDFs created with an unknown random owner password?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-278" href="https://kb.itextpdf.com/itext/how-to-read-text-from-a-specific-position" >How to read text from a specific position?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-279" href="https://kb.itextpdf.com/itext/how-to-reduce-redundant-code-when-adding-content-a" >How to reduce redundant code when adding content at absolute positions?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-280" href="https://kb.itextpdf.com/itext/how-to-remove-text-from-a-pdf" >How to remove text from a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-281" href="https://kb.itextpdf.com/itext/how-to-rename-named-destinations-in-existing-pdf-f" >How to rename named destinations in existing PDF files?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-282" href="https://kb.itextpdf.com/itext/how-to-reorder-pages-in-an-existing-pdf-file" >How to reorder pages in an existing PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-283" href="https://kb.itextpdf.com/itext/how-to-reorder-the-pages-of-a-pdf-file" >How to reorder the pages of a PDF file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-284" href="https://kb.itextpdf.com/itext/how-to-resize-a-pdfptable-to-fit-the-page" >How to resize a PdfPTable to fit the page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-285" href="https://kb.itextpdf.com/itext/how-to-resize-an-image-to-fit-it-into-a-pdfpcell" >How to resize an Image to fit it into a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-286" href="https://kb.itextpdf.com/itext/how-to-restrict-the-number-of-characters-on-a-sing" >How to restrict the number of characters on a single line?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-287" href="https://kb.itextpdf.com/itext/how-to-reuse-a-page-from-one-pdf-document-into-ano" >How to reuse a page from one PDF document into another PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-288" href="https://kb.itextpdf.com/itext/how-to-right-align-text-in-a-pdfpcell" >How to right-align text in a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-289" href="https://kb.itextpdf.com/itext/how-to-rotate-a-page-90-degrees" >How to rotate a page 90 degrees?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-290" href="https://kb.itextpdf.com/itext/how-to-rotate-a-page-while-creating-a-pdf-document" >How to rotate a page while creating a PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-291" href="https://kb.itextpdf.com/itext/how-to-rotate-a-paragraph" >How to rotate a paragraph?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-292" href="https://kb.itextpdf.com/itext/how-to-rotate-a-single-line-of-text" >How to rotate a single line of text?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-293" href="https://kb.itextpdf.com/itext/how-to-rotate-and-scale-pages-in-an-existing-pdf" >How to rotate and scale pages in an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-294" href="https://kb.itextpdf.com/itext/how-to-send-a-success-response-back-to-acrobat-rea" >How to send a &#39;success&#39; response back to Acrobat Reader from a java servlet?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-295" href="https://kb.itextpdf.com/itext/how-to-send-a-file-to-the-server-through-a-pdf" >How to send a file to the server through a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-296" href="https://kb.itextpdf.com/itext/how-to-set-a-fixed-background-image-for-all-my-pag" >How to set a fixed background image for all my pages?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-297" href="https://kb.itextpdf.com/itext/how-to-set-background-image-in-pdfpcell-in-itext" >How to set background image in PdfPCell in iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-298" href="https://kb.itextpdf.com/itext/how-to-set-initial-view-properties" >How to set initial view properties?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-299" href="https://kb.itextpdf.com/itext/how-to-set-the-export-value-of-a-check-box" >How to set the export value of a check box?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-300" href="https://kb.itextpdf.com/itext/how-to-set-the-line-width-of-a-clipping-path" >How to set the line width of a clipping path?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-301" href="https://kb.itextpdf.com/itext/how-to-set-the-page-size-to-envelope-size-with-lan" >How to set the page size to Envelope size with Landscape orientation?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-302" href="https://kb.itextpdf.com/itext/how-to-set-the-zoom-level-of-a-pdf-using-itextshar" >How to set the zoom level of a PDF using iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-303" href="https://kb.itextpdf.com/itext/how-to-set-up-a-table-display" >How to set up a table display?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-304" href="https://kb.itextpdf.com/itext/how-to-show-an-image-at-a-text-field-position" >How to show an image at a text field position?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-305" href="https://kb.itextpdf.com/itext/how-to-show-an-image-with-large-dimensions-across-" >How to show an image with large dimensions across multiple pages?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-306" href="https://kb.itextpdf.com/itext/how-to-shrink-pages-in-an-existing-pdf" >How to shrink pages in an existing PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-307" href="https://kb.itextpdf.com/itext/how-to-split-a-row-over-multiple-pages" >How to split a row over multiple pages?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-308" href="https://kb.itextpdf.com/itext/how-to-stamp-image-on-existing-pdf-and-create-an-a" >How to stamp image on existing PDF and create an anchor?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-309" href="https://kb.itextpdf.com/itext/how-to-strike-through-text-using-itext" >How to strike through text using iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-310" href="https://kb.itextpdf.com/itext/how-to-superimpose-pages-from-existing-documents-i" >How to superimpose pages from existing documents into another document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-311" href="https://kb.itextpdf.com/itext/how-to-tell-itext-how-to-clip-text-to-fit-in-a-cel" >How to tell iText how to clip text to fit in a cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-312" href="https://kb.itextpdf.com/itext/how-to-tell-itext-which-fields-to-flatten-first" >How to tell iText which fields to flatten first?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-313" href="https://kb.itextpdf.com/itext/how-to-tile-a-document-and-add-margins-to-the-tile" >How to tile a document and add margins to the tiles?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-314" href="https://kb.itextpdf.com/itext/how-to-truncate-text-within-a-bounding-box" >How to truncate text within a bounding box?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-315" href="https://kb.itextpdf.com/itext/how-to-underline-a-portion-of-text-in-a-text-field" >How to underline a portion of text in a text field?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-316" href="https://kb.itextpdf.com/itext/how-to-underline-text-with-a-dotted-line" >How to underline text with a dotted line?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-317" href="https://kb.itextpdf.com/itext/how-to-update-a-pdf-without-creating-a-new-pdf" >How to update a PDF without creating a new PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-318" href="https://kb.itextpdf.com/itext/how-to-use-a-dotted-line-as-a-cell-border" >How to use a dotted line as a cell border?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-319" href="https://kb.itextpdf.com/itext/how-to-use-a-text-extraction-strategy-after-applyi" >How to use a text extraction strategy after applying a location extraction strategy?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-320" href="https://kb.itextpdf.com/itext/how-to-use-an-image-as-list-symbol" >How to use an image as list symbol?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-321" href="https://kb.itextpdf.com/itext/how-to-use-cyrillic-characters-in-a-pdf" >How to use Cyrillic characters in a PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-322" href="https://kb.itextpdf.com/itext/how-to-use-multiple-fonts-in-a-single-cell" >How to use multiple fonts in a single cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-323" href="https://kb.itextpdf.com/itext/how-to-use-system-font-in-itextsharp-with-vb-net" >How to use System Font in iTextSharp with VB.net?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-324" href="https://kb.itextpdf.com/itext/how-to-use-the-font-verdana-in-pdfstamper" >How to use the font Verdana in PdfStamper?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-325" href="https://kb.itextpdf.com/itext/how-to-use-the-full-size-of-a-page" >How to use the full size of a page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-326" href="https://kb.itextpdf.com/itext/how-to-use-two-different-colors-in-a-single-string" >How to use two different colors in a single String?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-327" href="https://kb.itextpdf.com/itext/how-to-watermark-pdfs-using-text-or-images" >How to watermark PDFs using text or images?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-328" href="https://kb.itextpdf.com/itext/how-to-write-a-table-header-if-part-of-a-table-is-" >How to write a table header if part of a table is forwarded to the next page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-329" href="https://kb.itextpdf.com/itext/how-to-write-a-zapfdingbats-character-at-a-specifi" >How to write a Zapfdingbats character at a specific location on a page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-330" href="https://kb.itextpdf.com/itext/i-have-been-using-itext-5-or-7-without-a-commercia" >I have been using iText 5 or 7 without a commercial license but never open sourced my application. What should I do?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-331" href="https://kb.itextpdf.com/itext/if-itext-is-free-why-do-i-have-to-pay-for-it" >If iText is free why do I have to pay for it?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-332" href="https://kb.itextpdf.com/itext/is-it-possible-to-attach-multiple-layout-events-to" >Is it possible to attach multiple layout events to a PdfPCell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-333" href="https://kb.itextpdf.com/itext/is-it-possible-to-set-a-different-alignment-for-te" >Is it possible to set a different alignment for text on the same line in the same cell?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-334" href="https://kb.itextpdf.com/itext/is-it-safe-to-remove-xfa" >Is it safe to remove XFA?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-335" href="https://kb.itextpdf.com/itext/is-itext-pdf-a-pdf-viewer" >Is iText PDF a PDF viewer?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-336" href="https://kb.itextpdf.com/itext/license-file-was-corrupted" >License file was corrupted</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-337" href="https://kb.itextpdf.com/itext/pdfocr-if-your-scanned-document-has-a-mixture-of-s" >pdfOCR: If your scanned document has a mixture of sections with paragraphs and tables, what is a recommended strategy here?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-338" href="https://kb.itextpdf.com/itext/pdfocr-is-handwriting-recognition-supported" >pdfOCR: Is handwriting recognition supported</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-339" href="https://kb.itextpdf.com/itext/pdfocr-who-provided-tess_data_directory" >pdfOCR: Who provided TESS_DATA_DIRECTORY?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-340" href="https://kb.itextpdf.com/itext/volume-counter-faqs" >Volume Counter FAQs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-341" href="https://kb.itextpdf.com/itext/what-are-the-extra-characters-in-the-font-name-of-" >What are the extra characters in the font name of my PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-342" href="https://kb.itextpdf.com/itext/what-does-not-ltv-enabled-mean" >What does &quot;Not LTV-enabled&quot; mean?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-343" href="https://kb.itextpdf.com/itext/what-does-pdf-2-0-stand-for" >What does PDF 2.0 stand for?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-344" href="https://kb.itextpdf.com/itext/what-does-textpositioning-in-pdfocr-do" >What does TextPositioning in pdfOCR do?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-345" href="https://kb.itextpdf.com/itext/what-functionalities-does-itext-7-support" >What functionalities does iText 7 support?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-346" href="https://kb.itextpdf.com/itext/what-is-causing-syntax-errors-in-a-page-created-wi" >What is causing syntax errors in a page created with iText 7?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-347" href="https://kb.itextpdf.com/itext/what-is-the-connection-between-ltv-and-document-ti" >What is the connection between LTV and document timestamps?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-348" href="https://kb.itextpdf.com/itext/what-is-the-difference-between-agpl-and-commercial" >What is the difference between AGPL and commercial license?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-349" href="https://kb.itextpdf.com/itext/what-is-the-difference-between-getpagelabels-and-g" >What is the difference between getPageLabels and getPageLabelFormats?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-350" href="https://kb.itextpdf.com/itext/what-is-the-difference-between-itext-jasperreports" >What is the difference between iText, JasperReports and Adobe LC?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-351" href="https://kb.itextpdf.com/itext/what-is-the-pdfptable-defaultcell-property-used-fo" >What is the PdfPTable.DefaultCell property used for?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-352" href="https://kb.itextpdf.com/itext/what-is-the-size-limit-of-pdf-file" >What is the size limit of pdf file?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-353" href="https://kb.itextpdf.com/itext/what-s-an-easy-to-print-first-right-then-down" >What&#39;s an easy to print &quot;first right, then down&quot;?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-354" href="https://kb.itextpdf.com/itext/when-is-the-content-flushed-to-a-pdf-file-by-itext" >When is the content flushed to a PDF File by iTextSharp?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-355" href="https://kb.itextpdf.com/itext/where-do-i-find-demos-and-tutorials" >Where do I find demos and tutorials?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-356" href="https://kb.itextpdf.com/itext/where-do-i-get-agpl-tech-support" >Where do I get AGPL tech support?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-357" href="https://kb.itextpdf.com/itext/where-do-i-get-pre-sales-tech-support" >Where do I get pre-sales tech support?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-358" href="https://kb.itextpdf.com/itext/where-do-i-get-tech-support" >Where do I get tech support?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-359" href="https://kb.itextpdf.com/itext/where-do-i-get-the-pdf-library" >Where do I get the PDF library?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-360" href="https://kb.itextpdf.com/itext/where-is-the-origin-x-y-of-a-pdf-page" >Where is the origin (x,y) of a PDF page?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-361" href="https://kb.itextpdf.com/itext/which-image-types-are-supported-by-itext" >Which image types are supported by iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-362" href="https://kb.itextpdf.com/itext/which-languages-are-supported-in-pdfocr" >Which languages are supported in pdfOCR?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-363" href="https://kb.itextpdf.com/itext/which-pdf-filters-are-used-to-encode-data" >Which PDF filters are used to encode data?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-364" href="https://kb.itextpdf.com/itext/which-version-of-the-license-key-library-should-i-" >Which version of the license key library should I use?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-365" href="https://kb.itextpdf.com/itext/why-are-pdf-files-different-even-if-the-content-is" >Why are PDF files different even if the content is the same?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-366" href="https://kb.itextpdf.com/itext/why-are-the-acrofields-in-my-document-empty" >Why are the AcroFields in my document empty?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-367" href="https://kb.itextpdf.com/itext/why-aren-t-images-added-sequentially" >Why aren&#39;t images added sequentially?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-368" href="https://kb.itextpdf.com/itext/why-aren-t-my-fonts-getting-registered" >Why aren&#39;t my fonts getting registered?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-369" href="https://kb.itextpdf.com/itext/why-can-t-i-compile-the-itext-source-code" >Why can&#39;t I compile the iText source code?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-370" href="https://kb.itextpdf.com/itext/why-can-t-i-set-the-font-of-a-phrase" >Why can&#39;t I set the font of a Phrase?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-371" href="https://kb.itextpdf.com/itext/why-do-i-get-a-getoutputstream-has-already-been-ca" >Why do I get a &quot;getOutputStream() has already been called for this response&quot; error in JSP?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-372" href="https://kb.itextpdf.com/itext/why-do-i-get-a-bouncycastle-noclassdeffounderror" >Why do I get a BouncyCastle NoClassDefFoundError?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-373" href="https://kb.itextpdf.com/itext/why-do-i-get-a-font-embedding-error-when-creating-" >Why do I get a font embedding error when creating PDFA/1a?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-374" href="https://kb.itextpdf.com/itext/why-do-i-get-a-message-saying-1-not-found-as-a-res" >Why do I get a message saying 1.not.found.as.a.resource?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-375" href="https://kb.itextpdf.com/itext/why-do-i-get-a-stackoverflowexception-in-the-onend" >Why do I get a StackOverflowException in the OnEndPage() event handler?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-376" href="https://kb.itextpdf.com/itext/why-do-i-get-an-invalidpdfexception-pdf-header-sig" >Why do I get an &quot;InvalidPdfException: PDF header signature not found&quot;?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-377" href="https://kb.itextpdf.com/itext/why-do-i-get-an-system-io-fileloadexception-could-" >Why do I get an &quot;System.IO.FileLoadException: Could not load file or assembly&quot; error?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-378" href="https://kb.itextpdf.com/itext/why-do-i-get-an-error-saying-that-use-of-extended-" >Why do I get an error saying that &quot;use of extended features is no longer available&quot;?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-379" href="https://kb.itextpdf.com/itext/why-do-i-have-to-buy-core-to-use-the-add-ons" >Why do I have to buy core to use the add-ons?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-380" href="https://kb.itextpdf.com/itext/why-do-i-have-to-pay-for-pdfhtml-during-my-upgrade" >Why do I have to pay for pdfhtml during my upgrade, when I already have XML  Worker in iText?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-381" href="https://kb.itextpdf.com/itext/why-do-pdfs-change-when-processing-them" >Why do PDFs change when processing them?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-382" href="https://kb.itextpdf.com/itext/why-does-columntext-ignore-the-horizontal-alignmen" >Why does ColumnText ignore the horizontal alignment?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-383" href="https://kb.itextpdf.com/itext/why-does-itext-enter-a-cross-symbol-when-checktype" >Why does iText enter a cross symbol when CheckType style is check mark?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-384" href="https://kb.itextpdf.com/itext/why-does-my-header-overlap-with-my-content" >Why does my header overlap with my content?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-385" href="https://kb.itextpdf.com/itext/why-does-pdfstamper-create-a-file-with-0-bytes" >Why does PdfStamper create a file with 0 bytes?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-386" href="https://kb.itextpdf.com/itext/why-does-the-cell-background-color-affect-the-co-1" >Why does the cell background color affect the color of other lines?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-387" href="https://kb.itextpdf.com/itext/why-does-the-function-to-concatenate-merge-pdfs-ca" >Why does the function to concatenate / merge PDFs cause issues in some cases?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-388" href="https://kb.itextpdf.com/itext/why-does-using-columntext-result-in-the-document-h" >Why does using ColumnText result in &quot;The document has no pages&quot; exception?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-389" href="https://kb.itextpdf.com/itext/why-doesn-t-fontfactory-getfont-work-for-all-fonts" >Why doesn&#39;t FontFactory.GetFont() work for all fonts?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-390" href="https://kb.itextpdf.com/itext/why-doesn-t-getdefaultcell-setborder-pdfpcell-no_b" >Why doesn&#39;t getDefaultCell().setBorder(PdfPCell.NO_BORDER) have any effect?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-391" href="https://kb.itextpdf.com/itext/why-is-content-missing-in-my-table" >Why is content missing in my table?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-392" href="https://kb.itextpdf.com/itext/why-is-itext-embedding-a-font-even-when-i-specify-" >Why is iText embedding a font even when I specify not to embed?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-393" href="https://kb.itextpdf.com/itext/why-is-my-cell-event-not-triggered" >Why is my cell event not triggered?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-394" href="https://kb.itextpdf.com/itext/why-is-my-content-overlapping-with-my-footer" >Why is my content overlapping with my footer?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-395" href="https://kb.itextpdf.com/itext/why-is-my-font-not-applied-when-i-create-a-pdf-doc" >Why is my font not applied when I create a PDF document?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-396" href="https://kb.itextpdf.com/itext/why-is-the-page-size-of-a-pdf-always-the-same-no-m" >Why is the page size of a PDF always the same, no matter if it&#39;s landscape or portrait?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-397" href="https://kb.itextpdf.com/itext/why-is-the-text-i-extract-from-an-english-pdf-page" >Why is the text I extract from an English PDF page garbled?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-398" href="https://kb.itextpdf.com/itext/why-isn-t-the-rupee-symbol-showing" >Why isn&#39;t the Rupee symbol showing?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-399" href="https://kb.itextpdf.com/itext/how-to-add-delete-retrieve-information-from-a-pdf-" >How to add / delete / retrieve information from a PDF using a custom property?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="75d373dd3e89419d-400" href="https://kb.itextpdf.com/itext/how-to-merge-forms-from-different-files-into-one-p" >How to merge forms from different files into one PDF?</a>
+			</div>
+
+		</li>
+</ul>
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-401"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-401" href="technical-tales.html" >Technical Tales</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="75d373dd3e89419d-403"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="75d373dd3e89419d-403" href="technical-reference.html" >Technical Reference</a>
+			</div>
+
+		</li>
+</ul>
+				</theme-page-tree>
+			</nav>
+		</theme-navigator>
+
+		<main class="main-content">
+			<div class="topbar">
+
+
+
+
+	<theme-breadcrumbs class="breadcrumbs" itemsbeforecollapse="2" maxitems="4">
+		<i18n-message id="75d373dd3e89419d-405" class="sr-only" i18nkey="breadcrumbs.label">Breadcrumbs</i18n-message>
+		<nav aria-labelledby="75d373dd3e89419d-405">
+				<ol>
+							<li>
+								<a href="https://kb.itextpdf.com/">
+										<i18n-message key="breadcrumbs.home.label">Home</i18n-message>
+								</a>
+							</li>
+							<li>
+								<a href="https://kb.itextpdf.com/itext">
+										iText
+								</a>
+							</li>
+							<li>
+								<a href="faq.html">
+										FAQ
+								</a>
+							</li>
+				</ol>
+		</nav>
+	</theme-breadcrumbs>
+					<script src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/breadcrumbs.js"></script>
+					<ai-actions class="ai-actions"></ai-actions>
+			</div>
+		<nav class="toc sticky" data-component="toc" aria-labelledby="75d373dd3e89419d-406">
+			<h2 class="toc-heading" id="75d373dd3e89419d-406">
+				<i18n-message i18nkey="page.article.toc.label">On this Page</i18n-message>
+			</h2>
+			<theme-toc for="content"></theme-toc>
+		</nav>
+			<article id="content" tabindex="-1" class="fb-layout-container">
+				<header>
+					<h1>How does iText handle PDF encryption?</h1>
+				</header>
+				<section class="article-body fb-layout-body" data-searchable-content>
+		
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+		
+		
+	
+	
+	
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+	
+	
+	
+	<p>Out-of-the-box, iText provides multiple encryption and decryption methods, so it can be hard to decide which one is better suited for a particular case. This article is designed to tell you about these security measures in a simple and easily digestible format.</p>
+<h3 id="PDF-Embedded-Encryption-vs-Binary-Data-Encryption"><span id="HowdoesiTexthandlePDFencryption?-PDFEmbeddedEncryptionvsBinaryDataEncryption"></span>PDF Embedded Encryption vs Binary Data Encryption
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/how-does-itext-handle-pdf-encryption#PDF-Embedded-Encryption-vs-Binary-Data-Encryption">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>PDF embedded encryption refers to the process of <strong>encrypting the content within</strong> a PDF file, rather than <strong>encrypting the file itself</strong> as binary data. iText focuses on providing encryption as a high-level PDF feature since we consider it easier and more convenient for our customers. There are a few advantages to this approach:</p>
+<ul>
+ <li>
+  <p><strong>Access Control:</strong> PDF encryption can enforce&nbsp;specific permissions, such as restricting printing, copying, or editing.</p>
+ </li>
+ <li>
+  <p><strong>Document Integrity:</strong> Embedded encryption ensures that the document's integrity is maintained, so tampering can be detected.</p>
+ </li>
+ <li>
+  <p><strong>Interoperability:</strong> Most PDF viewers support the embedded encryption features, ensuring that users can access encrypted content without needing specialized software.</p>
+ </li>
+ <li>
+  <p><strong>Metadata Handling:</strong> Encrypted PDFs can still contain metadata (if not encrypted), which can provide information about the document without revealing its content.</p>
+ </li>
+</ul>
+<p>iText doesn’t have any option to directly encrypt a PDF as binary data, so for this purpose other tools may be used.</p>
+<h3 id="Encryption-Methods"><span id="HowdoesiTexthandlePDFencryption?-EncryptionMethods"></span>Encryption Methods
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/how-does-itext-handle-pdf-encryption#Encryption-Methods">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>We’ll start with the oldest supported encryption algorithm – RC4 or Rivest Cipher 4 (it is also referenced as the standard encryption algorithm in iText). RC4 is a fast stream cipher which is mostly used with key lengths of 40-bits or 128-bits (hereinafter called RC4-40 and RC4-128). RC4 was added in PDF 1.1 and as of version 1.7 of the specification it became fully deprecated due to being outdated and having significant vulnerabilities.</p>
+<p>Despite the fact that iText still supports RC4-40 and RC4-128 for backwards compatibility purposes, we <strong>strongly </strong>advise against using this encryption methods as there are more modern algorithms that can provide much better security.</p>
+<p>Moving on to AES or the Advanced Encryption Standard, this is a symmetric block cipher. AES-CBC (Cipher Block Chaining) was added in PDF 1.5 and became the primary way to encrypt documents. iText supports the use of AES with 128 and 256 bit keys and these are suitable for most cases. However, since AES with 128-bit keys is inherently less secure, we recommend using AES-256 instead.</p>
+<div data-component="panel" role="note" data-appearance="note">
+ <div class="panel-content">
+  <p>Note that AES-CBC 128-bit encryption was deprecated in the initial PDF 2.0 specification in 2017, with 256-bit becoming the recommended minimum for PDF 2.0-conforming documents. Therefore, reading 256-bit AES encrypted documents requires iText Core 7.1 or newer. See <a href="https://itextpdf.com/blog/technical-notes/how-solve-unknown-encryption-type-r-6-errors" data-scope="external" rel="external noreferrer">How to solve “Unknown encryption type R = 6” error</a> for more information.</p>
+ </div>
+</div>
+<p>The ISO/TS 32003 extension to the PDF 2.0 specification introduced a new mode – AES-GCM (Galois/Counter Mode) for enhanced security. AES-GCM is considered to be more secure than AES-CBC due to its integrated authentication and resistance to padding attacks.</p>
+<p>A public key system can also be used in iText with any of the algorithms mentioned above. This system uses a pair of keys: a public key for encryption and a private key for decryption. Public-key cryptography is a common and preferred way to encrypt a document, providing even better security measures.</p>
+<h3 id="MAC-Protection"><span id="HowdoesiTexthandlePDFencryption?-MACProtection"></span>MAC Protection
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/how-does-itext-handle-pdf-encryption#MAC-Protection">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>The ISO/TS 32004 extension to the PDF 2.0 specification brought another way to protect PDFs – Message Authentication Code (MAC) protection. A MAC is a type of keyed information, computed over the ciphertext to ensure document level integrity protection. In some cases it can be used as a lightweight alternative to signatures. The PDF Association has two excellent articles <a href="https://pdfa.org/iso-32004-an-overview/" data-scope="external" rel="external noreferrer">ISO 32004: an overview</a> and <a href="https://pdfa.org/macs-vs-signatures-in-pdf/" data-scope="external" rel="external noreferrer">MACs vs. signatures in PDF</a> which go into more detail on this.</p>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p>Support for the ISO/TS 32003 and 32004 extensions was added with the <a href="https://itextpdf.com/blog/technical-notes/itext-suite-90-new-security-standards-signature-validation" data-scope="external" rel="external noreferrer">iText Core 9.0.0</a> release. See the following release examples for more information:</p>
+  <ul>
+   <li>
+    <p><a href="https://kb.itextpdf.com/itext/aes-gcm-encryption-support" data-scope="internal">AES-GCM Encryption Support</a></p>
+   </li>
+   <li>
+    <p><a href="https://kb.itextpdf.com/itext/support-for-message-authentication-code-mac-integr" data-scope="internal">Support for Message Authentication Code (MAC) integrity protection</a></p>
+   </li>
+  </ul>
+ </div>
+</div>
+<h3 id="TL;DR:-Applying-this-with-iText"><span id="HowdoesiTexthandlePDFencryption?-TL;DR:ApplyingthiswithiText"></span>TL;DR: Applying this with iText
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/how-does-itext-handle-pdf-encryption#TL;DR:-Applying-this-with-iText">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>If you are targeting compatibility with the majority of PDF viewers, use PDF 1.7 with AES 256-bit encryption:</p>
+<ul>
+ <li>
+  <p>Password-based: <a href="https://github.com/itext/itext-publications-examples-java/blob/develop/src/main/java/com/itextpdf/samples/sandbox/security/EncryptPdf.java" data-scope="external" rel="external noreferrer">EncryptPdf.java</a></p>
+ </li>
+ <li>
+  <p>Certificate-based: <a href="https://github.com/itext/itext-publications-examples-java/blob/develop/src/main/java/com/itextpdf/samples/sandbox/security/EncryptWithCertificate.java" data-scope="external" rel="external noreferrer">EncryptWithCertificate.java</a></p>
+ </li>
+</ul>
+<p>For the best security, use modern PDF 2.0 with AES-GCM and MAC protection:</p>
+<ul>
+ <li>
+  <p><a href="https://github.com/itext/itext-publications-examples-java/blob/develop/src/main/java/com/itextpdf/samples/sandbox/security/EncryptPdfWithGCM.java" data-scope="external" rel="external noreferrer">EncryptPdfWithGCM.java</a>
+   <br>
+   MAC protection will be enabled by default.</p>
+ </li>
+</ul>
+
+
+																				<script>
+						// Mark block images on the first level as breakout so they can grow wider than the article content.
+						document.querySelectorAll('.article-body > .theme-block-image [data-component="image"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--width');
+							if (!propertyValue) {
+								return;
+							}
+							if (parseInt(propertyValue) >= 760) {
+								element.closest('.theme-block-image').classList.add('theme-block-image--breakout');
+							}
+						});
+
+						// Remove the inline size on page layouts as this would lead to layouts breaking out of the article content.
+						document.querySelectorAll('.article-body [data-component="layout-section"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--inline-size');
+							if (!propertyValue) {
+								return;
+							}
+							// ONLY for this very specific width (Confluence default)
+							if (parseInt(propertyValue) === 760) {
+								element.style.removeProperty('--inline-size');
+							}
+						})
+
+						// Set the initial state of the navigation toggle to prevent shifting in the UI
+						try {
+							const navigationToggle = document.querySelector('#navigator-toggle');
+							const navigationState = localStorage.getItem('theme-navigation-state');
+
+							if (navigationState === 'collapsed' && navigationToggle) {
+								navigationToggle.setAttribute('aria-expanded', 'false');
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					</script>
+																			</section>
+				<footer>
+
+
+	<i18n-message id="75d373dd3e89419d-407" class="sr-only" i18nkey="pagination.label">Pagination</i18n-message>
+	<nav data-component="page-pagination" class="page-pagination" aria-labelledby="75d373dd3e89419d-407">
+		<ul class="page-pagination-items">
+				<li class="page-pagination-item">
+					<a rel="prev" href="what-features-are-supported-or-unsupported-in-pdfh.html">
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_left ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_left"></use>
+	</svg>
+						</div>
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.prev.label">Previous Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">What features are supported or unsupported in pdfHTML?</div>
+						</div>
+					</a>
+				</li>
+				<li class="page-pagination-item">
+					<a rel="next" href="how-to-deploy-an-itext-license-for-azure-powershel.html">
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.next.label">Next Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">How to deploy an iText License for Azure PowerShell?</div>
+						</div>
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_right ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_right"></use>
+	</svg>
+						</div>
+					</a>
+				</li>
+		</ul>
+	</nav>
+
+				</footer>
+			</article>
+		</main>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer data-component="footer" class="footer">
+
+
+
+
+
+		<img class="footer-logo footer-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="footer-logo footer-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+		<ul class="footer-links">
+				<li><a href="https://itextpdf.com/en/about-us" target="_blank" rel="noopener">About Us </a></li>
+				<li><a href="https://itextpdf.com/en/blog" target="_blank" rel="noopener">News</a></li>
+				<li><a href="https://itextpdf.com/en/jobs" target="_blank" rel="noopener">Jobs</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy/agpl-license">Open Source AGPL license</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy">Commercial &amp; OEM licenses</a></li>
+		</ul>
+	<ul class="footer-content">
+		<li><i18n-message i18nkey="footer.copyright.label">Copyright</i18n-message> <current-year></current-year> Apryse</li>		<li><i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message> <a href="https://www.k15t.com/products/scroll-sites-for-confluence?utm_campaign=k15t-sts-attribution-line&utm_source=k15t-apps" rel="external nofollow">Scroll&nbsp;Sites</a> & <a href="https://www.atlassian.com/software/confluence" rel="external nofollow">Atlassian&nbsp;Confluence</a></li>
+			<li>
+				<button type="button" data-cc="show-preferencesModal">
+					<i18n-message i18nkey="cookieConsent.showPreferences">Manage cookie preferences</i18n-message>
+				</button>
+			</li>
+	</ul>
+
+</footer>
+
+
+</body>
+</html>

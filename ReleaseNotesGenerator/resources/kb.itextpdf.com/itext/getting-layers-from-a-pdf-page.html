@@ -1,0 +1,2611 @@
+
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-page-template="article"
+	
+ data-page-id="ci_91aad1550cf782d28955e3fd00f5afd6dd7e1827a10684acd5df6888afdc09fb" data-confluence-content-id="910131233"
+		data-color-scheme="light"
+>
+<head>
+	<meta charset="UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="color-scheme" content="light">
+
+						<link id="pageTreeSource" rel="preload" href="__pagetree.json" as="fetch" type="application/json" crossorigin="anonymous">
+
+		<meta name="site-path" content="/">
+
+					<link rel="x-site-path" href="https://kb.itextpdf.com/">
+	<link rel="x-root-path" href="https://kb.itextpdf.com/">
+
+	<meta name="site-default-language" content="en">
+		<meta name="site-languages" content="en">
+		<meta name="confluence-content-type" content="page">
+		<meta name="confluence-base-url" content="https://apryse.atlassian.net/wiki">
+		<meta name="confluence-space-key" content="IT7KB">
+
+		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+
+
+
+	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
+
+
+
+
+
+
+
+
+
+
+
+		<title>Getting Layers from a PDF Page | iText Knowledge Base</title>
+		<meta property="og:title" content="Getting Layers from a PDF Page | iText Knowledge Base">
+		<meta property="twitter:title" content="Getting Layers from a PDF Page | iText Knowledge Base">
+
+		<link rel="canonical" href="getting-layers-from-a-pdf-page.html">
+		<meta property="og:url" content="https://kb.itextpdf.com/itext/getting-layers-from-a-pdf-page">
+
+		<meta name="description" content="iText 7: Getting Layers from a PDF Page - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best pract...">
+		<meta property="og:description" content="iText 7: Getting Layers from a PDF Page - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best pract...">
+		<meta property="twitter:description" content="iText 7: Getting Layers from a PDF Page - Complete guide for iText 7 developers. Latest PDF library for Java and .NET. Documentation, examples and best pract...">
+
+		<meta property="og:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+		<meta property="twitter:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+	<meta property="og:type" content="website">
+	<meta property="twitter:card" content="summary_large_image">
+
+		<meta name="page-last-modified" content="2025-09-26T17:26:54.646Z">
+
+		<script>
+		(function () {
+			const defaultLanguageMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-default-language"]')?.content);
+			const availableLanguagesMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-languages"]')?.content);
+			const fallbackLanguage = defaultLanguageMeta ?? 'en';
+			const supportedLanguagesFromMeta = availableLanguagesMeta?.split(',') ?? [];
+			const supportedLanguages = [...new Set([fallbackLanguage, ...supportedLanguagesFromMeta])].filter(Boolean);
+			const detectedLanguage = new URLSearchParams(self.location.search).get('l') || document.documentElement.lang;
+			const resolvedLanguage = supportedLanguages.includes(detectedLanguage) ? detectedLanguage : fallbackLanguage;
+			document.documentElement.lang = resolvedLanguage;
+			const sheet = new CSSStyleSheet();
+			document.adoptedStyleSheets.push(sheet);
+			// Hide any element with a `data-lang` attribute that does NOT match the detected language
+			sheet.replaceSync('[data-lang]:not([data-lang="' + resolvedLanguage + '"]) { display: none; }');
+		})();
+	</script>
+
+		<script>
+		(function() {
+			/** @typedef {'light'|'dark'} ColorScheme */
+			/** @type {ColorScheme[]} */
+			const availableColorSchemes = document.documentElement.querySelector('meta[name="color-scheme"]').content.split(' ').filter(Boolean);
+			/** @type {ColorScheme|'system'} */
+			const userPreference = localStorage?.getItem('color-scheme-preference') ?? 'system';
+			// Clean-up user preference in case there's nothing to choose from
+			// Fall back to the HTML document's default color theme
+			if (availableColorSchemes.length <= 1 || ![...availableColorSchemes, 'system'].includes(userPreference)) {
+				localStorage?.removeItem('color-scheme-preference');
+				return;
+			}
+			// Override default HTML document with client-side user preference
+			if (userPreference === 'system') {
+				updateThemeAttribute(self.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+			} else {
+				updateThemeAttribute(userPreference)
+			}
+			/** @param {ColorScheme} colorScheme */
+			function updateThemeAttribute(colorScheme) {
+				document.documentElement.setAttribute('data-color-scheme', colorScheme);
+			}
+		})();
+	</script>
+
+		<script>
+		
+		function sortContentSources(a, b) {
+			let result = a.precedence - b.precedence;
+
+			if (result === 0) {
+				result = a.value.localeCompare(b.value);
+			}
+
+			return result;
+		}
+
+		
+		function applyContentSourceOrderToElements({ parent, children }) {
+			const contentSourceElements = [...children];
+
+			contentSourceElements
+				.sort((a, b) => (
+					sortContentSources(
+						{ value: a.dataset.orderValue, precedence: a.dataset.orderPrecedence },
+						{ value: b.dataset.orderValue, precedence: b.dataset.orderPrecedence }
+					)
+				))
+				.forEach((element) => {
+					delete element.dataset.orderValue;
+					delete element.dataset.orderPrecedence;
+				});
+
+			parent.replaceChildren(...contentSourceElements);
+		}
+	</script>
+
+<script>
+	(() => {
+		if (isInAppHelpEnabled()) {
+			document.documentElement.dataset.inAppHelp = 'true';
+
+			if (isTitleHidden()) {
+				document.documentElement.dataset.hideTitle = 'true';
+			}
+		}
+
+		function isInAppHelpEnabled() {
+			return new URLSearchParams(location.search).get('inAppHelp') === 'true';
+		}
+
+		function isTitleHidden() {
+			return new URLSearchParams(location.search).get('title') === 'false';
+		}
+	})();
+</script>
+
+<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.css"/>
+<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.js"></script>
+
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/styles.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/fonts.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-styles-bundle.css">
+
+
+	<style>
+		@layer overrides {
+			:root {
+				--theme-headline-font: "Roboto";
+				--theme-text-font: "Roboto";
+				--theme-headline-scale: calc(100 / 100);
+				--theme-text-scale: calc(100 / 100);
+			}
+		}
+	</style>
+
+	<style>
+		@layer overrides {
+			:root, :host {
+					--theme-header-logo-size: 24px;
+					--theme-footer-logo-size: 28px;
+			}
+
+			:root[data-color-scheme='light'],
+			:host([data-color-scheme='light']) {
+					--theme-header-text-color: #000c34;
+					--theme-header-background-color: #ffffff;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #477bb6;
+			}
+
+			:root[data-color-scheme='dark'],
+			:host([data-color-scheme='dark']) {
+					--theme-header-text-color: #FFFFFF;
+					--theme-header-background-color: #0a0b0c;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #0a0b0c;
+			}
+		}
+	</style>
+
+	 
+
+
+
+
+
+<script data-site-data="content-sources" type="application/json">
+{
+	"collection": {
+		"members": [
+
+
+	{
+	"name": "iText",
+	"id": "b8e6446e-9541-48e7-9f7c-63425ff58e76",
+	"key": "IT7KB",
+	"path": "/itext",
+		"prefix": "/itext",
+		"current": true,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText DITO",
+	"id": "48e0d55c-a9ff-4fb3-9437-698d1fec9562",
+	"key": "DITOKB",
+	"path": "/ditokb",
+		"prefix": "/ditokb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText pdf2Data",
+	"id": "bf49a43e-a311-494a-bc8c-8d0eb84b75bc",
+	"key": "2DATA",
+	"path": "/2data",
+		"prefix": "/2data",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText 5",
+	"id": "2b6a097e-2988-4c1f-a04f-901c41b207e6",
+	"key": "IT5KB",
+	"path": "/it5kb",
+		"prefix": "/it5kb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+
+		]
+	}
+}
+</script>
+
+
+<script data-theme-placeholder="site" type="application/json">
+	{
+		"id": "7fea8421-aa1f-4eeb-9938-6be4ad5b04ef",
+		"path": "/",
+		"url": "/",
+		"domain": "kb.itextpdf.com",
+		"aiSearchEnabled": false,
+		"visibleToSearchEngines": true
+	}
+</script>
+ 
+<script data-config="cookieconsent" type="application/json">
+{
+	"enabled": true,
+	"mode": "opt-in",
+	"heading": "",
+	"description": "",
+	"links": [
+	]
+}
+</script>
+
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/main.js"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/page-tree.js" fetchpriority="high"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-bundle.js"></script>
+
+							<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/article.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/code-snippet.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/code-snippet.js"></script>
+
+
+
+
+
+<template data-custom-overrides data-type="code-asset">
+	<link rel="stylesheet" href="../__site/660125f2-82ac-4965-bb39-0be62e9db4a1/code_custom_css_override_asset.css">
+</template>
+
+<template data-custom-overrides data-type="code-asset">
+		<script src="../__site/28d64cce-9cb5-4091-90c8-9552383d17bc/code_custom_js_override_asset.js"></script>
+</template>
+
+<script>
+	(() => {
+		if (new URLSearchParams(location.search).has('disable-custom-overrides')) {
+			return;
+		}
+
+		document.querySelectorAll('[data-custom-overrides]').forEach(template => {
+			const type = template.getAttribute('data-type');
+
+			if (type === 'code-asset') {
+				const assetElement = template.content.cloneNode(true).firstElementChild;
+				const appendAsset = () => document.head.appendChild(assetElement);
+
+				if (assetElement.tagName === 'SCRIPT') {
+															if (document.readyState === 'complete') {
+						appendAsset();
+					} else {
+												document.addEventListener('DOMContentLoaded', appendAsset, { once: true });
+					}
+				} else {
+					appendAsset();
+				}
+			}
+		});
+	})();
+</script>
+
+
+			
+		<script data-config="integration:ga" type="application/json">
+			{
+				"enabled": true,
+				"tagId": "G-R5ENF9PVSJ"
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="analytics"
+			data-service="ga"
+			data-src="https://www.googletagmanager.com/gtag/js?id=G-R5ENF9PVSJ"
+			async
+		></script>
+
+
+
+
+		<script data-config="integration:gtm" type="application/json">
+			{
+				"enabled": true
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="marketing"
+			data-service="gtm"
+			data-src="https://www.googletagmanager.com/gtm.js?id=GTM-KLFZM24W"
+			async
+		></script>
+
+
+
+
+
+
+
+
+			</head>
+<body>
+	<a href="getting-layers-from-a-pdf-page.html#content" class="skip-link">
+		<i18n-message i18nkey="navigation.skip.to.main.label">Skip to main content</i18n-message>
+	</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="ea3f908ebab5c74b-2" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="ea3f908ebab5c74b-2">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+	<div class="header-content">
+			<div class="header-links">
+				<ul>
+						<li><a href="https://itextpdf.com/">iText Website</a></li>
+						<li><a href="https://itextpdf.com/en/blog">Blog</a></li>
+						<li><a href="https://itextpdf.com/en/support">Support</a></li>
+						<li><a href="https://itextpdf.com/en/welcome-itext-community">Community</a></li>
+				</ul>
+			</div>
+
+		<div class="header-pickers">
+
+		</div>
+
+			<div class="header-search">
+				<search-bar quicksearch></search-bar>
+			</div>
+
+
+				<button type="button" aria-controls="drawer-ea3f908ebab5c74b-1" aria-haspopup="dialog" aria-expanded="false" class="header-nav-toggle" onclick="self['drawer-ea3f908ebab5c74b-1'].showModal()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+			<i18n-message class="sr-only" i18nkey="navigation.main.label">Main navigation</i18n-message>
+		</button>
+	</div>
+
+	
+
+<dialog id="drawer-ea3f908ebab5c74b-1" class="drawer">
+	<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="ea3f908ebab5c74b-3" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="ea3f908ebab5c74b-3">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+
+		<div class="header-content">
+			<button type="button" aria-controls="drawer-ea3f908ebab5c74b-1" aria-haspopup="dialog" aria-expanded="true" autofocus class="drawer-toggle" onclick="self['drawer-ea3f908ebab5c74b-1'].close()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-close ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#close"></use>
+	</svg>
+				<i18n-message class="sr-only" i18nkey="navigation.close.label">Close navigation</i18n-message>
+			</button>
+		</div>
+	</header>
+
+	<div class="drawer-section drawer-search">
+		<search-bar quicksearch></search-bar>
+	</div>
+
+
+	<nav id="drawer-nav" class="drawer-section drawer-nav tree" aria-labelledby="drawer-nav-label">
+		<i18n-message id="drawer-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+
+						<copy-page-tree target="articleTree"></copy-page-tree>
+	</nav>
+
+			<div class="drawer-section drawer-links tree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-4" href="https://itextpdf.com/" >iText Website</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-5" href="https://itextpdf.com/en/blog" >Blog</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-6" href="https://itextpdf.com/en/support" >Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-7" href="https://itextpdf.com/en/welcome-itext-community" >Community</a>
+			</div>
+
+		</li>
+</ul>
+		</div>
+</dialog>
+
+</header>
+		<section class="article-page body">
+		<theme-navigator class="navigator">
+			<button id="navigator-toggle" class="navigator-toggle" aria-controls="navigator-nav" aria-labelledby="navigator-nav-label" aria-expanded="true">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu navigator-icon-closed">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-chevron_left navigator-icon-opened">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#chevron_left"></use>
+	</svg>
+			</button>
+						<nav id="navigator-nav" class="navigator-body tree" aria-labelledby="navigator-nav-label">
+				<i18n-message id="navigator-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+				<theme-page-tree id="articleTree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-8"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-8" href="cves.html" >CVEs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-10"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-10" href="digital-signatures-hub.html" >Digital Signatures Hub</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-12"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-12" href="releases.html" >Releases</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-14"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-14" href="installation-guidelines.html" >Installation guidelines</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="true"
+aria-controls="ea3f908ebab5c74b-17"						aria-labelledby="ea3f908ebab5c74b-16"
+					></button>
+				<a id="ea3f908ebab5c74b-16" href="examples.html" >Examples</a>
+			</div>
+
+<ul  id="ea3f908ebab5c74b-17" >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-18"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-18" href="https://kb.itextpdf.com/itext/pdfocr-module-onnx" >pdfOCR module - Onnx</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-20" href="https://kb.itextpdf.com/itext/pdfocr-custom-session-options-for-an-onnx-model" >pdfOCR: Custom session options for an ONNX model</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-21" href="https://kb.itextpdf.com/itext/pdfocr-paddleocr-model-support" >pdfOCR: PaddleOCR model support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-22" href="resizing-pages-using-the-pageresizer-class.html" >Resizing Pages using the PageResizer Class</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-23" href="https://kb.itextpdf.com/itext/creating-a-hello-world-application-with-itext-on-a" >Creating a Hello World Application With iText on Android</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-24" href="https://kb.itextpdf.com/itext/smarter-font-handling-in-itext-pdfoptimizer-consol" >Smarter Font Handling in iText pdfOptimizer: Consolidating Font Subsets</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-25" href="https://kb.itextpdf.com/itext/pdf-signature-validation-lotl-cache-initialization" >PDF Signature Validation: LOTL Cache Initialization and Usage</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-26" href="refactored-pdf-conformance-architecture.html" >Refactored PDF Conformance Architecture</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-27" href="https://kb.itextpdf.com/itext/new-high-level-html-to-pdf-ua-api" >New High-Level HTML to  PDF/UA API</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-28" href="https://kb.itextpdf.com/itext/adding-bookmarks-table-of-contents-to-a-pdfhtml-co" >Adding Bookmarks / Table of Contents to a pdfHTML conversion document</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-29" href="https://kb.itextpdf.com/itext/adding-a-digital-signature-placeholder-in-html-tem" >Adding a digital signature placeholder in HTML templates</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-30" href="overview-using-css-in-svg-with-itext-sdk.html" >Overview: Using CSS in SVG with iText SDK</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-31" href="itext-9-signing-improvements.html" >iText 9 Signing Improvements</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-32" href="getting-layers-from-a-pdf-page.html" aria-current="page">Getting Layers from a PDF Page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-33" href="https://kb.itextpdf.com/itext/aes-gcm-encryption-support" >AES-GCM Encryption Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-34" href="https://kb.itextpdf.com/itext/support-for-message-authentication-code-mac-integr" >Support for Message Authentication Code (MAC) integrity protection</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-35" href="https://kb.itextpdf.com/itext/creating-well-tagged-pdf-documents-with-pdfhtml" >Creating Well-Tagged PDF Documents with pdfHTML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-36" href="https://kb.itextpdf.com/itext/list-object-in-cell" >List object in cell</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-37" href="https://kb.itextpdf.com/itext/flattening-a-form" >Flattening a form</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-38" href="https://kb.itextpdf.com/itext/vertical-text" >Vertical text</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-39" href="https://kb.itextpdf.com/itext/replacing-pdf-objects" >Replacing PDF objects</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-40" href="https://kb.itextpdf.com/itext/spot-colors" >Spot colors</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-41" href="https://kb.itextpdf.com/itext/colored-text" >Colored text</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-42" href="https://kb.itextpdf.com/itext/reusing-images" >Reusing images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-43" href="https://kb.itextpdf.com/itext/changing-properties-of-an-annotation" >Changing properties of an annotation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-44" href="https://kb.itextpdf.com/itext/splitting-a-pdf-file" >Splitting a PDF file</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-45" href="https://kb.itextpdf.com/itext/adding-page-numbers-to-an-existing-pdf" >Adding page numbers to an existing PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-46" href="https://kb.itextpdf.com/itext/adding-watermarks-to-images" >Adding watermarks to images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-47" href="https://kb.itextpdf.com/itext/tagged-pdf-adding-alt-to-the-structure-tree" >Tagged PDF: Adding Alt to the Structure Tree</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-48" href="https://kb.itextpdf.com/itext/splitting-tables" >Splitting tables</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-49" href="https://kb.itextpdf.com/itext/czech-example" >Czech example</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-50" href="https://kb.itextpdf.com/itext/safeguards-against-loops-in-cross-reference-struct" >Safeguards against loops in cross-reference structure of PDF files</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-51" href="https://kb.itextpdf.com/itext/large-image-examples" >Large Image examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-52" href="https://kb.itextpdf.com/itext/rowspan-and-splitting" >Rowspan and splitting</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-53" href="https://kb.itextpdf.com/itext/change-the-position-of-a-field" >Change the position of a field</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-54" href="https://kb.itextpdf.com/itext/filling-out-a-form-in-multiple-passes-vlatest" >Filling out a form in multiple passes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-55" href="https://kb.itextpdf.com/itext/support-for-a-symbol-element-in-svg" >Support for a symbol element in SVG</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-56" href="https://kb.itextpdf.com/itext/reuse-a-font-from-an-existing-pdf" >Reuse a font from an existing PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-57" href="https://kb.itextpdf.com/itext/links-in-tables" >Links in tables</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-58" href="https://kb.itextpdf.com/itext/scaling-and-rotating-pages" >Scaling and rotating pages</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-59" href="https://kb.itextpdf.com/itext/adding-metadata" >Adding metadata</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-60" href="https://kb.itextpdf.com/itext/support-for-lineargradient-color-scheme-in-layout-" >Support for linearGradient Color Scheme in Layout, CSS and SVG</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-61" href="https://kb.itextpdf.com/itext/viewer-preferences" >Viewer preferences</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-62" href="https://kb.itextpdf.com/itext/underline-and-strike-through-in-a-cell" >Underline and strike-through in a cell</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-63" href="https://kb.itextpdf.com/itext/change-the-content-of-a-button" >Change the content of a button</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-64" href="https://kb.itextpdf.com/itext/color-of-a-circle-annotation" >Color of a circle annotation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-65" href="https://kb.itextpdf.com/itext/adding-a-cover-page-to-an-existing-pdf" >Adding a cover page to an existing PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-66" href="https://kb.itextpdf.com/itext/embedded-files" >Embedded files</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-67" href="https://kb.itextpdf.com/itext/cell-and-table-widths" >Cell and table widths</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-68" href="https://kb.itextpdf.com/itext/pdfcalligraph-new-types-of-gsop-lookup" >pdfCalligraph: New types of GPOS lookup</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-69" href="https://kb.itextpdf.com/itext/background-images" >Background images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-70" href="https://kb.itextpdf.com/itext/large-tables" >Large tables</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-71" href="https://kb.itextpdf.com/itext/multiple-images" >Multiple images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-72" href="https://kb.itextpdf.com/itext/alignment-indentation-leading-and-spacing-in-cells" >Alignment, indentation, leading and spacing in cells</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-73" href="https://kb.itextpdf.com/itext/changing-page-sizes-of-existing-pdfs" >Changing page sizes of existing PDFs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-74" href="https://kb.itextpdf.com/itext/tiling-and-n-upping" >Tiling and N-upping</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-75" href="https://kb.itextpdf.com/itext/tiling-images" >Tiling images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-76" href="https://kb.itextpdf.com/itext/adding-fields-to-an-existing-form" >Adding fields to an existing form</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-77" href="https://kb.itextpdf.com/itext/certificate-encryption" >Certificate encryption</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-78" href="https://kb.itextpdf.com/itext/clipping-pages-in-an-existing-pdf" >Clipping pages in an existing PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-79" href="https://kb.itextpdf.com/itext/rotate-a-barcode" >Rotate a barcode</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-80" href="https://kb.itextpdf.com/itext/support-of-proper-word-wrapping-in-languages-with-" >Support of proper word wrapping in languages with special scripts</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-81" href="https://kb.itextpdf.com/itext/support-for-beveled-underline-and-inset-form-field" >Support for Beveled, Underline and Inset form field border styles</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-82" href="https://kb.itextpdf.com/itext/table-and-cell-events-to-draw-borders" >Table and cell events to draw borders</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-83" href="https://kb.itextpdf.com/itext/scaling-large-html-content-to-render-onto-smaller-" >Scaling large HTML content to render onto smaller PDF page sizes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-84" href="https://kb.itextpdf.com/itext/changing-the-alignment-of-a-field" >Changing the alignment of a field</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-85" href="https://kb.itextpdf.com/itext/adding-images-to-a-table" >Adding images to a table</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-86" href="https://kb.itextpdf.com/itext/tables-to-show-keys-and-values" >Tables to show keys and values</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-87" href="https://kb.itextpdf.com/itext/columntext-and-the-font-ascender" >ColumnText and the font ascender</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-88" href="https://kb.itextpdf.com/itext/changing-the-zoom-factor-in-a-link-destination" >Changing the zoom factor in a link destination</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-89" href="https://kb.itextpdf.com/itext/underline-a-form-field-value" >Underline a form field value</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-90" href="https://kb.itextpdf.com/itext/tables-and-fonts" >Tables and fonts</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-91" href="https://kb.itextpdf.com/itext/setting-of-choice-form-field-using-setvalue-method" >Setting of choice form field using setValue Method</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-92" href="https://kb.itextpdf.com/itext/unembed-a-font" >Unembed a font</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-93" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-lineargradient-in-css-and-svg" >pdfHTML: Support for linearGradient in CSS and SVG</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-94" href="https://kb.itextpdf.com/itext/adding-links-in-a-table-cell" >Adding links in a table cell</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-95" href="https://kb.itextpdf.com/itext/toc-as-first-page" >TOC as first page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-96" href="https://kb.itextpdf.com/itext/fit-text-in-cell" >Fit text in cell</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-97" href="https://kb.itextpdf.com/itext/alternatives-to-using-a-pdfptable" >Alternatives to using a PdfPTable</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-98" href="https://kb.itextpdf.com/itext/cell-borders-without-cell-or-table-events" >Cell borders (without cell or table events)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-99" href="https://kb.itextpdf.com/itext/remove-digital-signatures" >Remove digital signatures</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-100" href="https://kb.itextpdf.com/itext/header-and-footer-examples" >Header and footer examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-101" href="https://kb.itextpdf.com/itext/pdfhtml-custom-tagworker-examples" >pdfHTML: Custom Tagworker examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-102" href="https://kb.itextpdf.com/itext/superimposing-content-from-one-pdf-into-another-pd" >Superimposing content from one PDF into another PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-103" href="https://kb.itextpdf.com/itext/replacing-images" >Replacing images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-104" href="https://kb.itextpdf.com/itext/core-layout-text-in-pdf-does-not-wrap-appropriatel" >Core Layout: Text in PDF does not wrap appropriately (Text elements inside Paragraph)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-105" href="https://kb.itextpdf.com/itext/showing-special-characters" >Showing special characters</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-106" href="https://kb.itextpdf.com/itext/creating-form-fields" >Creating form fields</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-107" href="https://kb.itextpdf.com/itext/adding-backgrounds-using-page-events" >Adding backgrounds using page events</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-108" href="https://kb.itextpdf.com/itext/pdfocr-how-to-ocr-an-image-to-pdf-a-3u" >pdfOCR: How to OCR an Image to PDF/A-3u?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-109" href="https://kb.itextpdf.com/itext/bookmark-examples" >Bookmark examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-110" href="https://kb.itextpdf.com/itext/centering-text" >Centering text</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-111" href="https://kb.itextpdf.com/itext/logging-mechanism" >Logging mechanism</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-112" href="https://kb.itextpdf.com/itext/colspan-and-rowspan" >Colspan and rowspan</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-113" href="https://kb.itextpdf.com/itext/write-on-previous-page" >Write on previous page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-114" href="https://kb.itextpdf.com/itext/cell-heights" >Cell heights</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-115" href="https://kb.itextpdf.com/itext/option-to-disable-agpl-usage-warning-messages" >Option to disable AGPL-usage warning messages</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-116" href="https://kb.itextpdf.com/itext/signature-module-refactoring-built-in-signature-va" >Signature Module Refactoring &amp; Built-in Signature Validation API</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-117" href="https://kb.itextpdf.com/itext/pdfhtml-implementing-advanced-css-grid-layouts-for" >pdfHTML: Implementing Advanced CSS Grid Layouts for HTML Templating</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-118" href="https://kb.itextpdf.com/itext/watermark-examples" >Watermark examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-119" href="https://kb.itextpdf.com/itext/flexbox-suport-in-pdfhtml" >Flexbox suport in pdfHTML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-120" href="https://kb.itextpdf.com/itext/xfdf-examples" >XFDF examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-121" href="https://kb.itextpdf.com/itext/increased-pdf-ua-support" >Increased PDF/UA Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-122" href="https://kb.itextpdf.com/itext/more-flexible-outlinehandler-customization-in-pdfh" >More Flexible OutlineHandler Customization in pdfHTML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-123" href="https://kb.itextpdf.com/itext/improved-html-to-pdf-a" >Improved HTML to PDF/A</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-124" href="https://kb.itextpdf.com/itext/advanced-examples-for-signaturefieldappearance" >Advanced examples for SignatureFieldAppearance</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-125" href="https://kb.itextpdf.com/itext/improving-svg-to-pdf-conversion" >Improving SVG to PDF conversion</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-126" href="https://kb.itextpdf.com/itext/itext-8-0-2-delivers-pdf-a-4-support" >iText 8.0.2 Delivers PDF/A-4 Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-127" href="https://kb.itextpdf.com/itext/itext-core-signature-appearance-improvements" >iText Core: Signature Appearance Improvements</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-128" href="https://kb.itextpdf.com/itext/pades-signing-high-level-api" >PAdES Signing High Level API</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-129" href="https://kb.itextpdf.com/itext/high-level-annotation-flattening" >High-level Annotation Flattening</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-130" href="https://kb.itextpdf.com/itext/forms-in-itext-core-8-0-0" >Forms in iText Core 8.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-131" href="https://kb.itextpdf.com/itext/fips-sha3-examples-for-itext-core-8-0-0" >FIPS &amp; SHA3 Examples for iText Core 8.0.0</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-132" href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pdf-" >Using iText and AWS KMS to digitally sign a PDF document: Part 1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-133" href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-1" >Using iText and AWS KMS to digitally sign a PDF document: Part 2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-134" href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-2" >Using iText and AWS KMS to digitally sign a PDF document: Part 3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-135" href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-3" >Using iText and AWS KMS to digitally sign a PDF document: Part 4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-136" href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-4" >Using iText and AWS KMS to digitally sign a PDF document: Part 5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-137" href="https://kb.itextpdf.com/itext/101-a-very-simple-table" >101 - a very simple table</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-138" href="https://kb.itextpdf.com/itext/adding-a-background-to-a-table" >Adding a background to a table</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-139" href="https://kb.itextpdf.com/itext/an-iexternalsignature-implementation-for-signing-v" >An IExternalSignature implementation for signing via PKCS#11 with the Entrust Signing Automation Service</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-140" href="https://kb.itextpdf.com/itext/changing-ocgs" >Changing OCGs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-141" href="https://kb.itextpdf.com/itext/changing-the-author-of-an-annotation" >Changing the author of an annotation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-142" href="https://kb.itextpdf.com/itext/clearer-exception-messages-when-outline-dictionari" >Clearer exception messages when Outline Dictionaries break PDF specification rules</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-143" href="https://kb.itextpdf.com/itext/core-svg-added-support-of-font-relative-units-for-" >Core SVG: Added support of font-relative units for the font-size property of a text element</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-144" href="https://kb.itextpdf.com/itext/core-svg-support-pattern-element" >Core SVG: Support &lt;pattern&gt; element</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-145" href="https://kb.itextpdf.com/itext/create-booklet-from-a4-document" >Create booklet from A4 document</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-146" href="https://kb.itextpdf.com/itext/create-fields-in-a-table" >Create fields in a table</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-147" href="https://kb.itextpdf.com/itext/creating-a-custom-type-3-font" >Creating a custom Type 3 font</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-148" href="https://kb.itextpdf.com/itext/creating-a-simple-pdf-ua-document" >Creating a simple PDF/UA document</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-149" href="https://kb.itextpdf.com/itext/creating-and-adding-annotations" >Creating and adding annotations</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-150" href="https://kb.itextpdf.com/itext/creating-and-editing-pdf-2-0-documents" >Creating and editing PDF 2.0 Documents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-151" href="https://kb.itextpdf.com/itext/creating-table-of-contents-using-events" >Creating Table of Contents using events</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-152" href="https://kb.itextpdf.com/itext/custom-metadata-entry" >Custom Metadata entry</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-153" href="https://kb.itextpdf.com/itext/cut-and-paste-content-in-a-page" >Cut and paste content in a page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-154" href="https://kb.itextpdf.com/itext/digital-signatures-chapter-1" >Digital signatures - chapter 1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-155" href="https://kb.itextpdf.com/itext/digital-signatures-chapter-2" >Digital signatures - chapter 2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-156" href="https://kb.itextpdf.com/itext/digital-signatures-chapter-3" >Digital signatures - chapter 3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-157" href="https://kb.itextpdf.com/itext/digital-signatures-chapter-4" >Digital signatures - chapter 4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-158" href="https://kb.itextpdf.com/itext/digital-signatures-chapter-5" >Digital signatures - chapter 5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-159"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-159" href="https://kb.itextpdf.com/itext/digital-signing-with-itext" >Digital Signing with iText</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-161" href="https://kb.itextpdf.com/itext/drawing-a-grid" >Drawing a Grid</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-162" href="https://kb.itextpdf.com/itext/drawing-extra-content-on-an-image" >Drawing extra content on an image</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-163" href="https://kb.itextpdf.com/itext/encrypting-decrypting-pdfs" >Encrypting / Decrypting PDFs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-164" href="https://kb.itextpdf.com/itext/evaluating-js-with-pdfhtml" >Evaluating JS with pdfHTML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-165" href="https://kb.itextpdf.com/itext/extracting-objects-from-a-pdf" >Extracting objects from a PDF</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-166" href="https://kb.itextpdf.com/itext/fail-safe-processing-of-outlines-without-parent-li" >Fail-safe processing of Outlines without Parent link</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-167" href="https://kb.itextpdf.com/itext/filling-out-forms" >Filling out forms</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-168" href="https://kb.itextpdf.com/itext/fix-for-when-a-link-occupies-more-than-two-areas-a" >Fix for when a link occupies more than two areas, a NullPointerException is thrown</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-169" href="https://kb.itextpdf.com/itext/flatten-xfa-using-pdfxfa" >Flatten XFA using pdfXFA</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-170" href="https://kb.itextpdf.com/itext/fonts-and-merging-documents" >Fonts and merging documents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-171" href="https://kb.itextpdf.com/itext/generating-and-displaying-bar-codes" >Generating and displaying bar codes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-172" href="https://kb.itextpdf.com/itext/get-information-from-a-form" >Get information from a form</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-173" href="https://kb.itextpdf.com/itext/highlighting-text" >Highlighting text</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-174" href="https://kb.itextpdf.com/itext/how-to-use-a-digital-signing-service-dss-such-as-g" >How to use a Digital Signing Service (DSS) such as GlobalSign, with iText</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-175" href="https://kb.itextpdf.com/itext/image-masks" >Image masks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-176" href="https://kb.itextpdf.com/itext/image-on-rotated-page" >Image on rotated page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-177" href="https://kb.itextpdf.com/itext/images-and-affine-transformations" >Images and Affine Transformations</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-178" href="https://kb.itextpdf.com/itext/images-that-use-different-filters" >Images that use different filters</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-179" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-1-pdffont-examples" >iText Building Blocks - Chapter 1: PdfFont examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-180" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-2-rootelement-exam" >iText Building Blocks - Chapter 2: RootElement examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-181" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-3-ileafelement-exa" >iText Building Blocks - Chapter 3: ILeafElement examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-182" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-4-abstractelement-" >iText Building Blocks - Chapter 4: AbstractElement examples (part 1)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-183" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-5-abstractelement-" >iText Building Blocks - Chapter 5: AbstractElement examples (part 2)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-184" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-6-actions-destinat" >iText Building Blocks - Chapter 6: actions, destinations, bookmarks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-185" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-chapter-7-events-viewer-pr" >iText Building Blocks - Chapter 7: events, viewer preferences, writer properties</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-186" href="https://kb.itextpdf.com/itext/itext-7-building-blocks-util-utilities-for-the-bui" >iText Building Blocks - Util: Utilities for the building blocks examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-187" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-1" >iText Jump-Start Tutorial : Chapter 1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-188" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-2" >iText Jump-Start Tutorial : Chapter 2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-189" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-3" >iText Jump-Start Tutorial : Chapter 3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-190" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-4" >iText Jump-Start Tutorial : Chapter 4</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-191" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-5" >iText Jump-Start Tutorial : Chapter 5</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-192" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-6" >iText Jump-Start Tutorial : Chapter 6</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-193" href="https://kb.itextpdf.com/itext/itext-7-jump-start-tutorial-chapter-7" >iText Jump-Start Tutorial : Chapter 7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-194" href="https://kb.itextpdf.com/itext/itext-7-core-fixing-incorrect-height-calculation" >iText Core: Fixing incorrect height calculation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-195" href="https://kb.itextpdf.com/itext/itext-core-support-type3-fonts-reading-for-stampin" >iText Core: Support Type3 fonts reading for stamping mode</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-196" href="https://kb.itextpdf.com/itext/language-specific-examples" >Language-specific examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-197" href="https://kb.itextpdf.com/itext/merging-documents-and-create-a-table-of-contents" >Merging documents and create a Table of Contents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-198" href="https://kb.itextpdf.com/itext/merging-documents-with-bookmarks" >Merging documents with bookmarks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-199" href="https://kb.itextpdf.com/itext/multiline-fields" >Multiline fields</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-200" href="https://kb.itextpdf.com/itext/named-destinations" >Named destinations</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-201" href="https://kb.itextpdf.com/itext/nested-tables" >Nested tables</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-202" href="https://kb.itextpdf.com/itext/objects-in-columns" >Objects in columns</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-203" href="https://kb.itextpdf.com/itext/open-action" >Open action</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-204" href="https://kb.itextpdf.com/itext/page-events-for-chunks" >Page events for Chunks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-205" href="https://kb.itextpdf.com/itext/page-events-for-headers-and-footers" >Page events for headers and footers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-206" href="https://kb.itextpdf.com/itext/page-events-for-paragraphs" >Page events for Paragraphs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-207" href="https://kb.itextpdf.com/itext/page-events-for-watermarking" >Page events for Watermarking</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-208" href="https://kb.itextpdf.com/itext/page-labels" >Page Labels</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-209" href="https://kb.itextpdf.com/itext/page-numbers-and-pdf-a" >Page numbers and PDF/A</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-210" href="https://kb.itextpdf.com/itext/page-orientation-and-rotation" >Page orientation and rotation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-211" href="https://kb.itextpdf.com/itext/parsing-pdfs" >Parsing PDFs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-212" href="https://kb.itextpdf.com/itext/pattern-colors" >Pattern colors</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-213" href="https://kb.itextpdf.com/itext/pdf2data-add-support-for-tables-using-ascii-line-s" >pdf2Data: Add support for tables using ASCII line symbol separators</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-214" href="https://kb.itextpdf.com/itext/pdf2data-grouping-of-extracted-values-in-xml" >pdf2Data: Grouping of extracted values in XML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-215" href="https://kb.itextpdf.com/itext/pdf-a-1" >PDF/A-1</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-216" href="https://kb.itextpdf.com/itext/pdf-a-2" >PDF/A-2</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-217" href="https://kb.itextpdf.com/itext/pdf-a-3" >PDF/A-3</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-218" href="https://kb.itextpdf.com/itext/pdfcalligraph-support-for-myanmar-script" >pdfCalligraph: Support for Myanmar script</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-219" href="https://kb.itextpdf.com/itext/pdfcalligraph-support-wrapping-at-word-boundaries-" >pdfCalligraph: Support wrapping at word boundaries for languages which don&#39;t use spaces for word separation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-220" href="https://kb.itextpdf.com/itext/pdfhtml-accessible-pdf-creation" >pdfHTML: Accessible PDF Creation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-221" href="https://kb.itextpdf.com/itext/pdfhtml-added-full-background-support" >pdfHTML: Added full background support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-222" href="https://kb.itextpdf.com/itext/pdfhtml-bezier-curve-improvements" >pdfHTML: Bézier Curve Improvements</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-223" href="https://kb.itextpdf.com/itext/pdfhtml-color-blindness-examples" >pdfHTML: Color blindness examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-224" href="https://kb.itextpdf.com/itext/pdfhtml-creation-and-or-merging-of-outlines-for-do" >pdfHTML: Creation and/or merging of outlines for documents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-225" href="https://kb.itextpdf.com/itext/pdfhtml-custom-resourceretriever" >pdfHTML: Custom ResourceRetriever</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-226" href="https://kb.itextpdf.com/itext/pdfhtml-header-and-footer-examples" >pdfHTML: Header and Footer examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-227" href="https://kb.itextpdf.com/itext/pdfhtml-fixed-behavior-for-input-tags-with-negativ" >pdfHTML: Fixed Behavior for &lt;input&gt; Tags with Negative Numbers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-228" href="https://kb.itextpdf.com/itext/pdfhtml-line-height-property-support" >pdfHTML: Line Height property support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-229" href="https://kb.itextpdf.com/itext/pdfhtml-more-accurate-rendering-of-checkboxes" >pdfHTML: more accurate rendering of checkboxes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-230" href="https://kb.itextpdf.com/itext/pdfhtml-qrcode-examples" >pdfHTML: QRCode Examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-231" href="https://kb.itextpdf.com/itext/pdfhtml-responsive-design" >pdfHTML: Responsive Design</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-232" href="https://kb.itextpdf.com/itext/pdfhtml-support-attr-function-for-content-property" >pdfHTML: Support attr() function for content property</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-233" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-vertical-align-css-property-fo" >pdfHTML: Support for &#39;vertical-align&#39; CSS property for inline blocks within HTML</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-234" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-css4-device-cmyk-example" >pdfHTML: support for CSS4 device-cmyk example</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-235" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-generating-cross-references-fo" >pdfHTML: Support for generating cross references for TOC creation with target-counter, target-counters CSS properties</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-236" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-inline-block-with-a-width-perc" >pdfHTML: support for inline-block with a width percent value</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-237" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-overflow-wrap-word-break-css-p" >pdfHTML: Support for overflow-wrap, word-break CSS Properties</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-238" href="https://kb.itextpdf.com/itext/pdfhtml-support-for-the-css-object-fit-property" >pdfHTML: Support for the CSS object-fit Property</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-239" href="https://kb.itextpdf.com/itext/pdfhtml-using-emojis-in-itext" >pdfHTML: Using emojis in iText</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-240" href="https://kb.itextpdf.com/itext/pdfocr-how-to-ocr-an-image-to-pdf" >pdfOCR: How to OCR an Image to PDF?</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-241" href="https://kb.itextpdf.com/itext/pdfoffice-itext-core-annotations-example" >pdfOffice + iText Core Annotations Example</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-242" href="https://kb.itextpdf.com/itext/pdfoffice-pdfsweep-redaction-example" >pdfOffice + pdfSweep Redaction Example</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-243" href="https://kb.itextpdf.com/itext/pdfoffice-example" >pdfOffice - Example</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-244" href="https://kb.itextpdf.com/itext/pdfoffice-digital-signing" >pdfOffice: Digital Signing</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-245" href="https://kb.itextpdf.com/itext/pdfoffice-enabled-parallel-conversion" >pdfOffice: enabled parallel conversion</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-246" href="https://kb.itextpdf.com/itext/pdfoffice-improved-conversion-of-docx-files-contai" >pdfOffice: improved conversion of docx files containing embedded videos</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-247" href="https://kb.itextpdf.com/itext/pdfoffice-improved-conversion-of-docx-files-with-r" >pdfOffice: improved conversion of docx files with repeating table header on new page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-248" href="https://kb.itextpdf.com/itext/pdfoffice-improved-line-space-calculation" >pdfOffice: Improved line space calculation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-249" href="https://kb.itextpdf.com/itext/pdfoffice-spreadsheet-to-pdf-support" >pdfOffice: Spreadsheet To PDF Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-250" href="https://kb.itextpdf.com/itext/pdfoptimizer-support-added-for-font-image-color-sp" >pdfOptimizer: Support added for Font, Image, Color Space optimization</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-251" href="https://kb.itextpdf.com/itext/pdfrender-bufferedimage-as-output-format" >pdfRender: BufferedImage as output format</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-252" href="https://kb.itextpdf.com/itext/pdfrender-heic-image-encoding-support" >pdfRender: HEIC image encoding support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-253" href="https://kb.itextpdf.com/itext/pdfrender-webp-format-support-added" >pdfRender: WEBP format support added</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-254" href="https://kb.itextpdf.com/itext/pdfsigner-now-correctly-detects-and-creates-pdf-a-" >PdfSigner now correctly detects and creates PDF/A documents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-255" href="https://kb.itextpdf.com/itext/pdfxfa-add-support-for-rich-text-values-in-form-st" >pdfXFA: Add support for rich text values in form state</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-256" href="https://kb.itextpdf.com/itext/pdf-portfolios" >PDF Portfolios</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-257" href="https://kb.itextpdf.com/itext/png-image-handling" >PNG Image Handling</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-258" href="https://kb.itextpdf.com/itext/positioning-different-text-snippets-on-a-page" >Positioning different text snippets on a page</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-259" href="https://kb.itextpdf.com/itext/raw-images" >Raw images</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-260" href="https://kb.itextpdf.com/itext/reduce-image" >Reduce image</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-261" href="https://kb.itextpdf.com/itext/removing-content-with-pdfsweep" >Removing content with pdfSweep</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-262" href="https://kb.itextpdf.com/itext/removing-items-from-a-pdf-s-outline-tree" >Removing Items from a PDF&#39;s Outline Tree</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-263" href="https://kb.itextpdf.com/itext/renaming-a-field" >Renaming a field</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-264" href="https://kb.itextpdf.com/itext/render-data-as-table" >Render data as table</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-265" href="https://kb.itextpdf.com/itext/reordering-pages" >Reordering pages</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-266" href="https://kb.itextpdf.com/itext/repeating-parts-of-a-form" >Repeating parts of a form</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-267" href="https://kb.itextpdf.com/itext/repeating-rows" >Repeating rows</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-268" href="https://kb.itextpdf.com/itext/svg-support-exponent-notation-for-numbers-with-cap" >SVG: support exponent notation for numbers with capital E</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-269" href="https://kb.itextpdf.com/itext/using-forms-for-reporting" >Using forms for reporting</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-270" href="https://kb.itextpdf.com/itext/widow-and-orphan-content-support-added" >Widow and Orphan content support added</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-271" href="https://kb.itextpdf.com/itext/xfa-examples" >XFA examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="ea3f908ebab5c74b-272" href="https://kb.itextpdf.com/itext/drawing-lines" >Drawing lines</a>
+			</div>
+
+		</li>
+</ul>
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-273"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-273" href="breaking-changes.html" >Breaking changes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-275"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-275" href="ebooks.html" >Ebooks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-277"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-277" href="faq.html" >FAQ</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-279"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-279" href="technical-tales.html" >Technical Tales</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="ea3f908ebab5c74b-281"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="ea3f908ebab5c74b-281" href="technical-reference.html" >Technical Reference</a>
+			</div>
+
+		</li>
+</ul>
+				</theme-page-tree>
+			</nav>
+		</theme-navigator>
+
+		<main class="main-content">
+			<div class="topbar">
+
+
+
+
+	<theme-breadcrumbs class="breadcrumbs" itemsbeforecollapse="2" maxitems="4">
+		<i18n-message id="ea3f908ebab5c74b-283" class="sr-only" i18nkey="breadcrumbs.label">Breadcrumbs</i18n-message>
+		<nav aria-labelledby="ea3f908ebab5c74b-283">
+				<ol>
+							<li>
+								<a href="https://kb.itextpdf.com/">
+										<i18n-message key="breadcrumbs.home.label">Home</i18n-message>
+								</a>
+							</li>
+							<li>
+								<a href="https://kb.itextpdf.com/itext">
+										iText
+								</a>
+							</li>
+							<li>
+								<a href="examples.html">
+										Examples
+								</a>
+							</li>
+				</ol>
+		</nav>
+	</theme-breadcrumbs>
+					<script src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/breadcrumbs.js"></script>
+					<ai-actions class="ai-actions"></ai-actions>
+			</div>
+		<nav class="toc sticky" data-component="toc" aria-labelledby="ea3f908ebab5c74b-284">
+			<h2 class="toc-heading" id="ea3f908ebab5c74b-284">
+				<i18n-message i18nkey="page.article.toc.label">On this Page</i18n-message>
+			</h2>
+			<theme-toc for="content"></theme-toc>
+		</nav>
+			<article id="content" tabindex="-1" class="fb-layout-container">
+				<header>
+					<h1>Getting Layers from a PDF Page</h1>
+				</header>
+				<section class="article-body fb-layout-body" data-searchable-content>
+		
+	
+
+
+	
+
+
+
+	
+
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+		
+		
+	
+	
+	
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+	
+	
+	
+	<h2 id="Introduction"><span id="GettingLayersfromaPDFPage-Introduction"></span>Introduction
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/getting-layers-from-a-pdf-page#Introduction">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<p>In PDF documents, layers, known technically as Optional Content Groups (OCGs), enable the separation of content within a page, allowing certain elements to be toggled visible or hidden. This feature is similar to working with layers in graphic design applications, where content can be controlled to enhance user interaction and streamline complex information display. For example, an engineering drawing might have separate layers for electrical, plumbing, and structural details, allowing viewers to isolate or combine these aspects as needed.</p>
+<h2 id="New-Feature-in-iText"><span id="GettingLayersfromaPDFPage-NewFeatureiniText"></span>New Feature in iText
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/getting-layers-from-a-pdf-page#New-Feature-in-iText">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<p>An enhancement for version 9 of the iText SDK introduces a straightforward method to extract and analyze these layers on a per-page basis using the <code>getPdfLayers()</code> (<a href="https://api.itextpdf.com/iText/java/9.0.0/com/itextpdf/kernel/pdf/PdfPage.html#getPdfLayers()" data-scope="external" rel="external noreferrer">Java</a>/<a href="https://api.itextpdf.com/iText/dotnet/latest/classi_text_1_1_kernel_1_1_pdf_1_1_pdf_page.html#a41b0f23285e7302d01568c09d287b8e0" data-scope="external" rel="external noreferrer">.NET</a>) function. This function delves into the PDF's annotation and resource structure to compile all associated OCGs, even those listed under the /OCProperties dictionary in the catalog.</p>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p>The /OCProperties entry itself is an integral part of a PDF's catalog, providing a comprehensive list of defined content groups and their visibility settings.</p>
+ </div>
+</div>
+<p>By accessing both catalog-registered and unique page-specific layers, developers can efficiently manage and manipulate optional content, offering them greater flexibility in creating tailored views or extracting detailed document insights.</p>
+<h2 id="Code-Example"><span id="GettingLayersfromaPDFPage-CodeExample"></span>Code Example
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/getting-layers-from-a-pdf-page#Code-Example">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<details class="expand" data-component="expand">
+ <summary class="expand-control"> Java </summary>
+ <div class="expand-body">
+  <code-snippet class="theme-code-snippet">
+   <div class="theme-code-snippet-header">Java</div>
+   <scroll-shadow>
+    <div data-component="code" data-language="java">
+     <pre><code>    public void layersExample(String inFilePath){
+        // Use PdfDocument to read the input PDF. 
+        PdfDocument pdf = new PdfDocument(new PdfReader(inFilePath));
+        
+        //Get all layers from OCProperties
+        List&lt;PdfLayer&gt; layersFromCatalog = pdf.getCatalog().getOCProperties(true).getLayers();
+        
+        //get layers specifically for page 1
+        PdfPage page = pdf.getPage(1);
+        Set&lt;PdfLayer&gt; layersFromPage = page.getPdfLayers();
+        
+        
+        pdf.close();
+    }
+</code></pre>
+    </div>
+   </scroll-shadow>
+   <copy-clipboard class="theme-code-snippet-copy">
+    <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-copy_content copy-icon">
+     <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#copy_content"></use>
+    </svg>
+   </copy-clipboard>
+  </code-snippet>
+ </div>
+</details>
+<details class="expand" data-component="expand">
+ <summary class="expand-control"> C# </summary>
+ <div class="expand-body">
+  <code-snippet class="theme-code-snippet">
+   <div class="theme-code-snippet-header">C#</div>
+   <scroll-shadow>
+    <div data-component="code" data-language="csharp">
+     <pre><code>        public void LayersExample(string inFilePath){
+            // Use PdfDocument to read the input PDF.
+            PdfDocument pdf = new PdfDocument(new PdfReader(inFilePath));
+
+            //Get all layers from OCProperties
+           IList&lt;PdfLayer&gt; layersFromCatalog = pdf.GetCatalog().GetOCProperties(true).GetLayers();
+
+            //get set of layers specifically for page 1
+            PdfPage page = pdf.GetPage(1);
+            var layersFromPage = page.GetPdfLayers();
+
+            pdf.Close();
+        }
+</code></pre>
+    </div>
+   </scroll-shadow>
+   <copy-clipboard class="theme-code-snippet-copy">
+    <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-copy_content copy-icon">
+     <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#copy_content"></use>
+    </svg>
+   </copy-clipboard>
+  </code-snippet>
+ </div>
+</details>
+<p>
+ <br>
+</p>
+
+
+																				<script>
+						// Mark block images on the first level as breakout so they can grow wider than the article content.
+						document.querySelectorAll('.article-body > .theme-block-image [data-component="image"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--width');
+							if (!propertyValue) {
+								return;
+							}
+							if (parseInt(propertyValue) >= 760) {
+								element.closest('.theme-block-image').classList.add('theme-block-image--breakout');
+							}
+						});
+
+						// Remove the inline size on page layouts as this would lead to layouts breaking out of the article content.
+						document.querySelectorAll('.article-body [data-component="layout-section"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--inline-size');
+							if (!propertyValue) {
+								return;
+							}
+							// ONLY for this very specific width (Confluence default)
+							if (parseInt(propertyValue) === 760) {
+								element.style.removeProperty('--inline-size');
+							}
+						})
+
+						// Set the initial state of the navigation toggle to prevent shifting in the UI
+						try {
+							const navigationToggle = document.querySelector('#navigator-toggle');
+							const navigationState = localStorage.getItem('theme-navigation-state');
+
+							if (navigationState === 'collapsed' && navigationToggle) {
+								navigationToggle.setAttribute('aria-expanded', 'false');
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					</script>
+																			</section>
+				<footer>
+
+
+	<i18n-message id="ea3f908ebab5c74b-285" class="sr-only" i18nkey="pagination.label">Pagination</i18n-message>
+	<nav data-component="page-pagination" class="page-pagination" aria-labelledby="ea3f908ebab5c74b-285">
+		<ul class="page-pagination-items">
+				<li class="page-pagination-item">
+					<a rel="prev" href="itext-9-signing-improvements.html">
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_left ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_left"></use>
+	</svg>
+						</div>
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.prev.label">Previous Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">iText 9 Signing Improvements</div>
+						</div>
+					</a>
+				</li>
+				<li class="page-pagination-item">
+					<a rel="next" href="https://kb.itextpdf.com/itext/aes-gcm-encryption-support">
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.next.label">Next Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">AES-GCM Encryption Support</div>
+						</div>
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_right ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_right"></use>
+	</svg>
+						</div>
+					</a>
+				</li>
+		</ul>
+	</nav>
+
+				</footer>
+			</article>
+		</main>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer data-component="footer" class="footer">
+
+
+
+
+
+		<img class="footer-logo footer-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="footer-logo footer-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+		<ul class="footer-links">
+				<li><a href="https://itextpdf.com/en/about-us" target="_blank" rel="noopener">About Us </a></li>
+				<li><a href="https://itextpdf.com/en/blog" target="_blank" rel="noopener">News</a></li>
+				<li><a href="https://itextpdf.com/en/jobs" target="_blank" rel="noopener">Jobs</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy/agpl-license">Open Source AGPL license</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy">Commercial &amp; OEM licenses</a></li>
+		</ul>
+	<ul class="footer-content">
+		<li><i18n-message i18nkey="footer.copyright.label">Copyright</i18n-message> <current-year></current-year> Apryse</li>		<li><i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message> <a href="https://www.k15t.com/products/scroll-sites-for-confluence?utm_campaign=k15t-sts-attribution-line&utm_source=k15t-apps" rel="external nofollow">Scroll&nbsp;Sites</a> & <a href="https://www.atlassian.com/software/confluence" rel="external nofollow">Atlassian&nbsp;Confluence</a></li>
+			<li>
+				<button type="button" data-cc="show-preferencesModal">
+					<i18n-message i18nkey="cookieConsent.showPreferences">Manage cookie preferences</i18n-message>
+				</button>
+			</li>
+	</ul>
+
+</footer>
+
+
+</body>
+</html>

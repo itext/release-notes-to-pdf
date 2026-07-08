@@ -1,0 +1,1474 @@
+
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-page-template="article"
+	
+ data-page-id="ci_610666b11229c5ee3fe64b3d7885d4ec97e1f7523f1f7d6b01f062313fb5e56a" data-confluence-content-id="327687946"
+		data-color-scheme="light"
+>
+<head>
+	<meta charset="UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="color-scheme" content="light">
+
+						<link id="pageTreeSource" rel="preload" href="__pagetree.json" as="fetch" type="application/json" crossorigin="anonymous">
+
+		<meta name="site-path" content="/">
+
+					<link rel="x-site-path" href="https://kb.itextpdf.com/">
+	<link rel="x-root-path" href="https://kb.itextpdf.com/">
+
+	<meta name="site-default-language" content="en">
+		<meta name="site-languages" content="en">
+		<meta name="confluence-content-type" content="page">
+		<meta name="confluence-base-url" content="https://apryse.atlassian.net/wiki">
+		<meta name="confluence-space-key" content="IT7KB">
+
+		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+
+
+
+	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
+
+
+
+
+
+
+
+
+
+
+
+		<title>Digital Signatures Hub | iText Knowledge Base</title>
+		<meta property="og:title" content="Digital Signatures Hub | iText Knowledge Base">
+		<meta property="twitter:title" content="Digital Signatures Hub | iText Knowledge Base">
+
+		<link rel="canonical" href="digital-signatures-hub.html">
+		<meta property="og:url" content="https://kb.itextpdf.com/itext/digital-signatures-hub">
+
+		<meta name="description" content="iText: Digital Signatures Hub - Complete guides for the iText PDF SDK for Java and .NET. Documentation, examples and best practices. This area is a central hub to collect our examples, FAQs, articles and other resources related to the topic of digitally signing PDF documents with iText.">
+		<meta property="og:description" content="iText: Digital Signatures Hub - Complete guides for the iText PDF SDK for Java and .NET. Documentation, examples and best practices. This area is a central hub to collect our examples, FAQs, articles and other resources related to the topic of digitally signing PDF documents with iText.">
+		<meta property="twitter:description" content="iText: Digital Signatures Hub - Complete guides for the iText PDF SDK for Java and .NET. Documentation, examples and best practices. This area is a central hub to collect our examples, FAQs, articles and other resources related to the topic of digitally signing PDF documents with iText.">
+
+		<meta property="og:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+		<meta property="twitter:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+	<meta property="og:type" content="website">
+	<meta property="twitter:card" content="summary_large_image">
+
+		<meta name="page-last-modified" content="2026-06-24T12:44:09.736Z">
+
+		<script>
+		(function () {
+			const defaultLanguageMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-default-language"]')?.content);
+			const availableLanguagesMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-languages"]')?.content);
+			const fallbackLanguage = defaultLanguageMeta ?? 'en';
+			const supportedLanguagesFromMeta = availableLanguagesMeta?.split(',') ?? [];
+			const supportedLanguages = [...new Set([fallbackLanguage, ...supportedLanguagesFromMeta])].filter(Boolean);
+			const detectedLanguage = new URLSearchParams(self.location.search).get('l') || document.documentElement.lang;
+			const resolvedLanguage = supportedLanguages.includes(detectedLanguage) ? detectedLanguage : fallbackLanguage;
+			document.documentElement.lang = resolvedLanguage;
+			const sheet = new CSSStyleSheet();
+			document.adoptedStyleSheets.push(sheet);
+			// Hide any element with a `data-lang` attribute that does NOT match the detected language
+			sheet.replaceSync('[data-lang]:not([data-lang="' + resolvedLanguage + '"]) { display: none; }');
+		})();
+	</script>
+
+		<script>
+		(function() {
+			/** @typedef {'light'|'dark'} ColorScheme */
+			/** @type {ColorScheme[]} */
+			const availableColorSchemes = document.documentElement.querySelector('meta[name="color-scheme"]').content.split(' ').filter(Boolean);
+			/** @type {ColorScheme|'system'} */
+			const userPreference = localStorage?.getItem('color-scheme-preference') ?? 'system';
+			// Clean-up user preference in case there's nothing to choose from
+			// Fall back to the HTML document's default color theme
+			if (availableColorSchemes.length <= 1 || ![...availableColorSchemes, 'system'].includes(userPreference)) {
+				localStorage?.removeItem('color-scheme-preference');
+				return;
+			}
+			// Override default HTML document with client-side user preference
+			if (userPreference === 'system') {
+				updateThemeAttribute(self.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+			} else {
+				updateThemeAttribute(userPreference)
+			}
+			/** @param {ColorScheme} colorScheme */
+			function updateThemeAttribute(colorScheme) {
+				document.documentElement.setAttribute('data-color-scheme', colorScheme);
+			}
+		})();
+	</script>
+
+		<script>
+		
+		function sortContentSources(a, b) {
+			let result = a.precedence - b.precedence;
+
+			if (result === 0) {
+				result = a.value.localeCompare(b.value);
+			}
+
+			return result;
+		}
+
+		
+		function applyContentSourceOrderToElements({ parent, children }) {
+			const contentSourceElements = [...children];
+
+			contentSourceElements
+				.sort((a, b) => (
+					sortContentSources(
+						{ value: a.dataset.orderValue, precedence: a.dataset.orderPrecedence },
+						{ value: b.dataset.orderValue, precedence: b.dataset.orderPrecedence }
+					)
+				))
+				.forEach((element) => {
+					delete element.dataset.orderValue;
+					delete element.dataset.orderPrecedence;
+				});
+
+			parent.replaceChildren(...contentSourceElements);
+		}
+	</script>
+
+<script>
+	(() => {
+		if (isInAppHelpEnabled()) {
+			document.documentElement.dataset.inAppHelp = 'true';
+
+			if (isTitleHidden()) {
+				document.documentElement.dataset.hideTitle = 'true';
+			}
+		}
+
+		function isInAppHelpEnabled() {
+			return new URLSearchParams(location.search).get('inAppHelp') === 'true';
+		}
+
+		function isTitleHidden() {
+			return new URLSearchParams(location.search).get('title') === 'false';
+		}
+	})();
+</script>
+
+<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.css"/>
+<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.js"></script>
+
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/styles.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/fonts.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-styles-bundle.css">
+
+
+	<style>
+		@layer overrides {
+			:root {
+				--theme-headline-font: "Roboto";
+				--theme-text-font: "Roboto";
+				--theme-headline-scale: calc(100 / 100);
+				--theme-text-scale: calc(100 / 100);
+			}
+		}
+	</style>
+
+	<style>
+		@layer overrides {
+			:root, :host {
+					--theme-header-logo-size: 24px;
+					--theme-footer-logo-size: 28px;
+			}
+
+			:root[data-color-scheme='light'],
+			:host([data-color-scheme='light']) {
+					--theme-header-text-color: #000c34;
+					--theme-header-background-color: #ffffff;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #477bb6;
+			}
+
+			:root[data-color-scheme='dark'],
+			:host([data-color-scheme='dark']) {
+					--theme-header-text-color: #FFFFFF;
+					--theme-header-background-color: #0a0b0c;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #0a0b0c;
+			}
+		}
+	</style>
+
+	 
+
+
+
+
+
+<script data-site-data="content-sources" type="application/json">
+{
+	"collection": {
+		"members": [
+
+
+	{
+	"name": "iText",
+	"id": "b8e6446e-9541-48e7-9f7c-63425ff58e76",
+	"key": "IT7KB",
+	"path": "/itext",
+		"prefix": "/itext",
+		"current": true,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText DITO",
+	"id": "48e0d55c-a9ff-4fb3-9437-698d1fec9562",
+	"key": "DITOKB",
+	"path": "/ditokb",
+		"prefix": "/ditokb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText pdf2Data",
+	"id": "bf49a43e-a311-494a-bc8c-8d0eb84b75bc",
+	"key": "2DATA",
+	"path": "/2data",
+		"prefix": "/2data",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText 5",
+	"id": "2b6a097e-2988-4c1f-a04f-901c41b207e6",
+	"key": "IT5KB",
+	"path": "/it5kb",
+		"prefix": "/it5kb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+
+		]
+	}
+}
+</script>
+
+
+<script data-theme-placeholder="site" type="application/json">
+	{
+		"id": "7fea8421-aa1f-4eeb-9938-6be4ad5b04ef",
+		"path": "/",
+		"url": "/",
+		"domain": "kb.itextpdf.com",
+		"aiSearchEnabled": false,
+		"visibleToSearchEngines": true
+	}
+</script>
+ 
+<script data-config="cookieconsent" type="application/json">
+{
+	"enabled": true,
+	"mode": "opt-in",
+	"heading": "",
+	"description": "",
+	"links": [
+	]
+}
+</script>
+
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/main.js"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/page-tree.js" fetchpriority="high"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-bundle.js"></script>
+
+							<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/article.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.js"></script>
+
+
+
+
+
+
+<template data-custom-overrides data-type="code-asset">
+	<link rel="stylesheet" href="../__site/660125f2-82ac-4965-bb39-0be62e9db4a1/code_custom_css_override_asset.css">
+</template>
+
+<template data-custom-overrides data-type="code-asset">
+		<script src="../__site/28d64cce-9cb5-4091-90c8-9552383d17bc/code_custom_js_override_asset.js"></script>
+</template>
+
+<script>
+	(() => {
+		if (new URLSearchParams(location.search).has('disable-custom-overrides')) {
+			return;
+		}
+
+		document.querySelectorAll('[data-custom-overrides]').forEach(template => {
+			const type = template.getAttribute('data-type');
+
+			if (type === 'code-asset') {
+				const assetElement = template.content.cloneNode(true).firstElementChild;
+				const appendAsset = () => document.head.appendChild(assetElement);
+
+				if (assetElement.tagName === 'SCRIPT') {
+															if (document.readyState === 'complete') {
+						appendAsset();
+					} else {
+												document.addEventListener('DOMContentLoaded', appendAsset, { once: true });
+					}
+				} else {
+					appendAsset();
+				}
+			}
+		});
+	})();
+</script>
+
+
+			
+		<script data-config="integration:ga" type="application/json">
+			{
+				"enabled": true,
+				"tagId": "G-R5ENF9PVSJ"
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="analytics"
+			data-service="ga"
+			data-src="https://www.googletagmanager.com/gtag/js?id=G-R5ENF9PVSJ"
+			async
+		></script>
+
+
+
+
+		<script data-config="integration:gtm" type="application/json">
+			{
+				"enabled": true
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="marketing"
+			data-service="gtm"
+			data-src="https://www.googletagmanager.com/gtm.js?id=GTM-KLFZM24W"
+			async
+		></script>
+
+
+
+
+
+
+
+
+			</head>
+<body>
+	<a href="digital-signatures-hub.html#content" class="skip-link">
+		<i18n-message i18nkey="navigation.skip.to.main.label">Skip to main content</i18n-message>
+	</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="72627900ce2df3bb-2" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="72627900ce2df3bb-2">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+	<div class="header-content">
+			<div class="header-links">
+				<ul>
+						<li><a href="https://itextpdf.com/">iText Website</a></li>
+						<li><a href="https://itextpdf.com/en/blog">Blog</a></li>
+						<li><a href="https://itextpdf.com/en/support">Support</a></li>
+						<li><a href="https://itextpdf.com/en/welcome-itext-community">Community</a></li>
+				</ul>
+			</div>
+
+		<div class="header-pickers">
+
+		</div>
+
+			<div class="header-search">
+				<search-bar quicksearch></search-bar>
+			</div>
+
+
+				<button type="button" aria-controls="drawer-72627900ce2df3bb-1" aria-haspopup="dialog" aria-expanded="false" class="header-nav-toggle" onclick="self['drawer-72627900ce2df3bb-1'].showModal()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+			<i18n-message class="sr-only" i18nkey="navigation.main.label">Main navigation</i18n-message>
+		</button>
+	</div>
+
+	
+
+<dialog id="drawer-72627900ce2df3bb-1" class="drawer">
+	<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="72627900ce2df3bb-3" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="72627900ce2df3bb-3">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+
+		<div class="header-content">
+			<button type="button" aria-controls="drawer-72627900ce2df3bb-1" aria-haspopup="dialog" aria-expanded="true" autofocus class="drawer-toggle" onclick="self['drawer-72627900ce2df3bb-1'].close()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-close ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#close"></use>
+	</svg>
+				<i18n-message class="sr-only" i18nkey="navigation.close.label">Close navigation</i18n-message>
+			</button>
+		</div>
+	</header>
+
+	<div class="drawer-section drawer-search">
+		<search-bar quicksearch></search-bar>
+	</div>
+
+
+	<nav id="drawer-nav" class="drawer-section drawer-nav tree" aria-labelledby="drawer-nav-label">
+		<i18n-message id="drawer-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+
+						<copy-page-tree target="articleTree"></copy-page-tree>
+	</nav>
+
+			<div class="drawer-section drawer-links tree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-4" href="https://itextpdf.com/" >iText Website</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-5" href="https://itextpdf.com/en/blog" >Blog</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-6" href="https://itextpdf.com/en/support" >Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-7" href="https://itextpdf.com/en/welcome-itext-community" >Community</a>
+			</div>
+
+		</li>
+</ul>
+		</div>
+</dialog>
+
+</header>
+		<section class="article-page body">
+		<theme-navigator class="navigator">
+			<button id="navigator-toggle" class="navigator-toggle" aria-controls="navigator-nav" aria-labelledby="navigator-nav-label" aria-expanded="true">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu navigator-icon-closed">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-chevron_left navigator-icon-opened">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#chevron_left"></use>
+	</svg>
+			</button>
+						<nav id="navigator-nav" class="navigator-body tree" aria-labelledby="navigator-nav-label">
+				<i18n-message id="navigator-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+				<theme-page-tree id="articleTree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-8"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-8" href="cves.html" >CVEs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="true"
+aria-controls="72627900ce2df3bb-11"						aria-labelledby="72627900ce2df3bb-10"
+					></button>
+				<a id="72627900ce2df3bb-10" href="digital-signatures-hub.html" aria-current="page">Digital Signatures Hub</a>
+			</div>
+
+<ul  id="72627900ce2df3bb-11" >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-12" href="https://kb.itextpdf.com/itext/digital-signatures-for-pdf-documents" >Digital Signatures for PDF Documents</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-13" href="https://kb.itextpdf.com/itext/blockchain-for-pdf-documents-ebook" >Blockchain for PDF Documents (ebook)</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-14" href="https://kb.itextpdf.com/itext/itext-core-pdf-digital-signature-extensions-suppor" >iText Core PDF Digital Signature Extensions Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-15" href="https://kb.itextpdf.com/itext/itext-signature-validation-policy-details" >iText Signature Validation Policy Details</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-16" href="https://kb.itextpdf.com/itext/european-union-list-of-trusted-lists-in-validation" >European Union List of Trusted Lists in Validation</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="72627900ce2df3bb-17" href="https://kb.itextpdf.com/itext/post-quantum-cryptography-pqc-support-in-itext" >Post-Quantum Cryptography (PQC) support in iText</a>
+			</div>
+
+		</li>
+</ul>
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-18"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-18" href="releases.html" >Releases</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-20"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-20" href="installation-guidelines.html" >Installation guidelines</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-22"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-22" href="examples.html" >Examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-24"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-24" href="breaking-changes.html" >Breaking changes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-26"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-26" href="ebooks.html" >Ebooks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-28"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-28" href="faq.html" >FAQ</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-30"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-30" href="technical-tales.html" >Technical Tales</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="72627900ce2df3bb-32"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="72627900ce2df3bb-32" href="technical-reference.html" >Technical Reference</a>
+			</div>
+
+		</li>
+</ul>
+				</theme-page-tree>
+			</nav>
+		</theme-navigator>
+
+		<main class="main-content">
+			<div class="topbar">
+
+
+
+
+	<theme-breadcrumbs class="breadcrumbs" itemsbeforecollapse="2" maxitems="4">
+		<i18n-message id="72627900ce2df3bb-34" class="sr-only" i18nkey="breadcrumbs.label">Breadcrumbs</i18n-message>
+		<nav aria-labelledby="72627900ce2df3bb-34">
+				<ol>
+							<li>
+								<a href="https://kb.itextpdf.com/">
+										<i18n-message key="breadcrumbs.home.label">Home</i18n-message>
+								</a>
+							</li>
+							<li>
+								<a href="https://kb.itextpdf.com/itext">
+										iText
+								</a>
+							</li>
+				</ol>
+		</nav>
+	</theme-breadcrumbs>
+					<script src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/breadcrumbs.js"></script>
+					<ai-actions class="ai-actions"></ai-actions>
+			</div>
+		<nav class="toc sticky" data-component="toc" aria-labelledby="72627900ce2df3bb-35">
+			<h2 class="toc-heading" id="72627900ce2df3bb-35">
+				<i18n-message i18nkey="page.article.toc.label">On this Page</i18n-message>
+			</h2>
+			<theme-toc for="content"></theme-toc>
+		</nav>
+			<article id="content" tabindex="-1" class="fb-layout-container">
+				<header>
+					<h1>Digital Signatures Hub</h1>
+				</header>
+				<section class="article-body fb-layout-body" data-searchable-content>
+		
+	
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+		
+		
+	
+	
+	
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+	
+	
+	
+	<p>This area is a central hub to collect our examples, FAQs, articles and other resources related to the topic of digitally signing PDF documents with iText.</p>
+<h2 id="eBooks"><span id="DigitalSignaturesHub-eBooks"></span>eBooks
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#eBooks">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="Digital-Signatures-for-PDF-Documents"><span id="DigitalSignaturesHub-DigitalSignaturesforPDFDocuments"></span>Digital Signatures for PDF Documents
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Digital-Signatures-for-PDF-Documents">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>Our&nbsp;<a href="https://itextpdf.com/en/resources/books/digital-signatures-pdf" data-scope="external" rel="external noreferrer">Digital Signatures eBook</a> is available as a free download from the linked page. Although it was originally written for iText 5/iTextSharp, many of the described concepts and operations are still relevant and transferable to the current versions of iText.</p>
+<div data-component="panel" role="note" data-appearance="note">
+ <div class="panel-content">
+  <p><strong>NOTE:</strong> The iText 5-based code snippets included in the eBook were accompanied by complete examples available on our website. Since then, they have been completely updated and rewritten for iText Core. This meant significant changes in some cases, and some examples were no longer applicable.</p>
+ </div>
+</div>
+<h3 id="Digital-Signatures-for-PDF-Documents-Examples"><span id="DigitalSignaturesHub-DigitalSignaturesforPDFDocumentsExamples"></span>Digital Signatures for PDF Documents Examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Digital-Signatures-for-PDF-Documents-Examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>The following Java and .NET (C#) examples apply to the latest releases of iText.</p>
+<div data-component="filter-by-label">
+ <ul>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/digital-signatures-chapter-1" data-scope="internal">Digital signatures - chapter 1</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/digital-signatures-chapter-2" data-scope="internal">Digital signatures - chapter 2</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/digital-signatures-chapter-3" data-scope="internal">Digital signatures - chapter 3</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/digital-signatures-chapter-4" data-scope="internal">Digital signatures - chapter 4</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/digital-signatures-chapter-5" data-scope="internal">Digital signatures - chapter 5</a></li>
+ </ul>
+</div>
+<h3 id="Blockchain-for-PDF-Documents"><span id="DigitalSignaturesHub-BlockchainforPDFDocuments"></span>Blockchain for PDF Documents
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Blockchain-for-PDF-Documents">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>You've paid a digital invoice of your supplier, and afterwards it seemed to be fake - you were a victim of invoicing fraud.&nbsp;These issues and many more can now be solved by Blockchain. This eBook focuses on how you can use Blockchain in combination with PDFs to write applications.</p>
+<ul>
+ <li>
+  <p><a href="blockchain-for-pdf-documents.html" data-scope="internal">Introduction</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/use-cases" data-scope="internal">Use cases</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/why-itext-and-blockchain" data-scope="internal">Why iText and Blockchain?</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/basic-concepts-glossary" data-scope="internal">Basic Concepts (Glossary)</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/pdf-and-digital-signatures" data-scope="internal">PDF and Digital Signatures</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/advantages-of-using-blockchain-for-signing-pdf-doc" data-scope="internal">Advantages of using Blockchain for Signing PDF documents</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/when-contracts-aren-t-smart-contracts" data-scope="internal">When Contracts aren't Smart Contracts</a></p>
+ </li>
+</ul>
+<h2 id="Examples"><span id="DigitalSignaturesHub-Examples"></span>Examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="Spotlighted-Examples"><span id="DigitalSignaturesHub-SpotlightedExamples"></span>Spotlighted Examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Spotlighted-Examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/digital-signing-with-itext" data-scope="internal">Digital Signing with iText</a></p>
+ </li>
+</ul>
+<p>To make porting old digital signing solutions and creating new ones from scratch easier, this series of articles describes the iText high level signing API and provides examples for using it with many kinds of signing devices currently in use.</p>
+<div data-component="child-pages" class="child-pages" data-levels="1">
+ <ul>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-i-overview-and-simple-cases" data-scope="internal">Part I - Overview and Simple Cases</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-ii-proprietary-apis-and-custom-providers" data-scope="internal">Part II - Proprietary APIs and Custom Providers</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-iii-pkcs-11" data-scope="internal">Part III - PKCS#11</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-iv-appearances" data-scope="internal">Part IV - Appearances</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-v-csc-api" data-scope="internal">Part V - CSC API</a>
+   </article>
+  </li>
+ </ul>
+</div>
+<h3 id="iText-Core-Examples"><span id="DigitalSignaturesHub-iTextCoreExamples"></span>iText Core Examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#iText-Core-Examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<div data-component="filter-by-label">
+ <ul>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/post-quantum-cryptography-pqc-support-in-itext" data-scope="internal">Post-Quantum Cryptography (PQC) support in iText</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/adding-a-digital-signature-placeholder-in-html-tem" data-scope="internal">Adding a digital signature placeholder in HTML templates</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/workaround-for-required-extension-missing-or-incor" data-scope="internal">Workaround for Required Extension Missing or Incorrect</a></li>
+  <li data-confluence-content-type="page"><a href="itext-9-signing-improvements.html" data-scope="internal">iText 9 Signing Improvements</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/advanced-examples-for-signaturefieldappearance" data-scope="internal">Advanced examples for SignatureFieldAppearance</a></li>
+ </ul>
+</div>
+<h2 id="Resources"><span id="DigitalSignaturesHub-Resources"></span>Resources
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Resources">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<p>This table represents the current support in iText Core for the&nbsp;<a href="https://www.iso.org/standard/45874.html" data-scope="external" rel="external noreferrer"><u>ISO/TS 32001</u></a>, <a href="https://www.iso.org/standard/45875.html" data-scope="external" rel="external noreferrer"><u>ISO/TS 32002</u></a>, <a href="https://www.iso.org/standard/45876.html" data-scope="external" rel="external noreferrer"><u>ISO/TS 32003</u></a> and <a href="https://www.iso.org/standard/45877.html" data-scope="external" rel="external noreferrer"><u>ISO/TS 32004:2024</u></a> extensions to the ISO 32000-2 (PDF 2.0) specification. For more information on the ISO/TS 32001 and ISO/TS 32002 extension standards and their initial implementation in iText Core version 8, see our <a href="https://itextpdf.com/blog/technical-notes/itext-8-supports-latest-digital-signature-extensions" data-scope="external" rel="external noreferrer"><u>article</u></a> on the subject.</p>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/itext-core-pdf-digital-signature-extensions-suppor" data-scope="internal">iText Core PDF Digital Signature Extensions Support</a></p>
+ </li>
+</ul>
+<p>For details on how to use the dedicated signature validation module available in iText Core version 9 (and previewed in version 8.0.5), you can see the following articles.</p>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/signature-module-refactoring-built-in-signature-va" data-scope="internal">Signature Module Refactoring &amp; Built-in Signature Validation API</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/itext-signature-validation-policy-details" data-scope="internal">iText Signature Validation Policy Details</a></p>
+ </li>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/european-union-list-of-trusted-lists-in-validation" data-scope="internal">European Union List of Trusted Lists in Validation</a></p>
+ </li>
+</ul>
+<p><a href="release-itext-core-9-5-0.html" data-scope="internal">iText Core 9.5.0</a> added preliminary support for creating and validating quantum-resistant digital signatures using Bouncy Castle. This is intended for experimentation and preparation as this is a pre-standard implementation, and so PQC-signed PDFs are not yet standards-compliant. Once the PDF standard is finalized, we will move from this proof-of-concept to a full implementation.</p>
+<p>However, you can use this implementation to familiarize yourself with the post-quantum cryptography algorithms supported by Bouncy Castle, and develop internal expertise on the API and larger signature sizes required by PQC algorithms.</p>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/post-quantum-cryptography-pqc-support-in-itext" data-scope="internal">Post-Quantum Cryptography (PQC) support in iText</a></p>
+ </li>
+</ul>
+<h2 id="FAQs"><span id="DigitalSignaturesHub-FAQs"></span>FAQs
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#FAQs">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="iText-FAQs"><span id="DigitalSignaturesHub-iTextFAQs"></span>iText FAQs
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#iText-FAQs">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<div data-component="filter-by-label">
+ <ul>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/how-can-i-create-a-reader-enabled-pdf-with-a-signa" data-scope="internal">How can I create a Reader enabled PDF with a signature field that can be signed in Adobe Reader</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/how-to-enable-ltv-for-a-timestamp-signature" data-scope="internal">How to enable LTV for a timestamp signature?</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/what-is-the-connection-between-ltv-and-document-ti" data-scope="internal">What is the connection between LTV and document timestamps?</a></li>
+ </ul>
+</div>
+<h2 id="Articles/Tutorials"><span id="DigitalSignaturesHub-Articles/Tutorials"></span>Articles/Tutorials
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Articles/Tutorials">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="Digital-Signing-with-iText"><span id="DigitalSignaturesHub-DigitalSigningwithiText"></span>Digital Signing with iText
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Digital-Signing-with-iText">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>To make porting old digital signing solutions and creating new ones from scratch easier, this series of articles describes the iText high level signing API and provides examples for using it with many kinds of signing devices currently in use.</p>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/digital-signing-with-itext" data-scope="internal">Introduction to Digital Signing with iText</a></p>
+ </li>
+</ul>
+<div data-component="child-pages" class="child-pages" data-levels="1">
+ <ul>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-i-overview-and-simple-cases" data-scope="internal">Part I - Overview and Simple Cases</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-ii-proprietary-apis-and-custom-providers" data-scope="internal">Part II - Proprietary APIs and Custom Providers</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-iii-pkcs-11" data-scope="internal">Part III - PKCS#11</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-iv-appearances" data-scope="internal">Part IV - Appearances</a>
+   </article>
+  </li>
+  <li>
+   <article>
+    <a href="https://kb.itextpdf.com/itext/part-v-csc-api" data-scope="internal">Part V - CSC API</a>
+   </article>
+  </li>
+ </ul>
+</div>
+<h3 id="Digitally-Signing-PDFs-with-AWS-KMS-and-iText"><span id="DigitalSignaturesHub-DigitallySigningPDFswithAWSKMSandiText"></span>Digitally Signing PDFs with AWS KMS and iText
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Digitally-Signing-PDFs-with-AWS-KMS-and-iText">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>Securing and automating digital document workflows is increasingly important in the modern business world. A crucial part of creating secure digital signatures is generating public and private keys for signing, and cloud providers such as Amazon, Google, and Microsoft now offer highly-secure cryptographic key management services. Since iText is used by many businesses and signing services to integrate secure digital signatures into PDFs, this step-by-step article shows developers how to use iText and the AWS KMS APIs to generate a digital signature and add it to a PDF document.</p>
+<ul>
+ <li>
+  <p><a href="https://itextpdf.com/en/blog/technical-notes/using-itext-and-aws-kms-digitally-sign-pdf-document" data-scope="external" rel="external noreferrer">Digitally sign a PDF using AWS KMS and iText</a></p>
+ </li>
+</ul>
+<h3 id="Related-code-examples"><span id="DigitalSignaturesHub-Relatedcodeexamples"></span>Related code examples
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Related-code-examples">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<div data-component="filter-by-label">
+ <ul>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pdf-" data-scope="internal">Using iText and AWS KMS to digitally sign a PDF document: Part 1</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-1" data-scope="internal">Using iText and AWS KMS to digitally sign a PDF document: Part 2</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-2" data-scope="internal">Using iText and AWS KMS to digitally sign a PDF document: Part 3</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-3" data-scope="internal">Using iText and AWS KMS to digitally sign a PDF document: Part 4</a></li>
+  <li data-confluence-content-type="page"><a href="https://kb.itextpdf.com/itext/using-itext-7-and-aws-kms-to-digitally-sign-a-pd-4" data-scope="internal">Using iText and AWS KMS to digitally sign a PDF document: Part 5</a></li>
+ </ul>
+</div>
+<h3 id="Digital-Signing-Services-and-iText"><span id="DigitalSignaturesHub-DigitalSigningServicesandiText"></span>Digital Signing Services and iText
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Digital-Signing-Services-and-iText">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>When we want to sign a PDF with a digital signature, we need to generate a hash from the document’s data and sign it with a private key. A Digital Signing Service (or DSS) is usually cloud-based software that takes the responsibility of signing the document hash. One such signing service is GlobalSign, a widely-used WebTrust-certified certificate authority and provider of Identity Services. This tutorial demonstrates how to use the GlobalSign API and iText Core to sign a PDF document’s hash and then add the digital signature to the PDF.</p>
+<ul>
+ <li>
+  <p><a href="https://kb.itextpdf.com/itext/how-to-use-a-digital-signing-service-dss-such-as-g" data-scope="internal">How to use a Digital Signing Service (DSS) such as GlobalSign, with iText</a></p>
+ </li>
+</ul>
+<h3 id="PDF-Digital-Signature-Vulnerabilities-and-Attacks"><span id="DigitalSignaturesHub-PDFDigitalSignatureVulnerabilitiesandAttacks"></span>PDF Digital Signature Vulnerabilities and Attacks
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#PDF-Digital-Signature-Vulnerabilities-and-Attacks">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>In February 2019, a team of security researchers <a href="https://www.pdf-insecurity.org/index.html" data-scope="external" rel="external noreferrer">published details of vulnerabilities</a>&nbsp;in the digital signing system of many PDF viewers and online PDF digital signing services. After investigating these vulnerabilities, we found that updates to iText introduced in version 7.1.5 and the iText 5.5.13.1 maintenance release meant we were not vulnerable to the described attacks.</p>
+<p>However, it was determined that the current names of the methods for checking and verifying signatures could be improved to better reflect their functionality. Therefore we decided to deprecate the&nbsp;<code>SignatureUtil#verifySignature</code> and&nbsp;<code>PdfPKCS7#verify</code> methods, and replace them with&nbsp;<code>SignatureUtil#readSignatureData</code> and&nbsp;<code>PdfPKCS7#verifySignatureIntegrityAndAuthenticity</code> which were introduced in&nbsp;<a href="https://kb.itextpdf.com/home/it7kb/releases/release-itext-7-1-6" data-scope="external" rel="external noreferrer">iText 7.1.6</a>. This blog was written for those who would like to know more about the three types of attacks described in the report and how iText document verification works.</p>
+<ul>
+ <li>
+  <p><a href="https://itextpdf.com/en/blog/technical-notes/avoiding-pdf-digital-signature-vulnerabilities-itext" data-scope="external" rel="external noreferrer">Avoiding the PDF Digital Signature Vulnerabilities with iText</a></p>
+ </li>
+</ul>
+<h3 id="Investigating-PDF-Shadow-Attacks"><span id="DigitalSignaturesHub-InvestigatingPDFShadowAttacks"></span>Investigating PDF Shadow Attacks
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Investigating-PDF-Shadow-Attacks">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>On 22 July 2020, the same team of security researchers announced a novel series of vulnerabilities which they coined the PDF Shadow Attacks. Unlike the earlier vulnerabilities, the shadow attacks aren’t of a cryptographic nature, but are situated in the visual realm of PDF. As a result, independent PDF expert Michael Klink was invited on board as a technical consultant to vet iText against these new attacks.</p>
+<p>Following a clean bill of health, we published a three-part series of articles dedicated to PDF Shadow Attacks, and highlighting how iText can be turned into an invaluable defense asset against such attacks.</p>
+<ul>
+ <li>
+  <p><a href="https://itextpdf.com/blog/technical-notes/investigating-pdf-shadow-attacks-what-are-shadow-attacks-part-1" data-scope="external" rel="external noreferrer">Investigating PDF Shadow Attacks: What are Shadow Attacks? (Part 1)</a></p>
+ </li>
+ <li>
+  <p><a href="https://itextpdf.com/blog/technical-notes/investigating-pdf-shadow-attacks-depth-pdf-security-using-itext-part-2" data-scope="external" rel="external noreferrer">Investigating PDF Shadow Attacks: In-Depth PDF Security using iText (Part 2)</a></p>
+ </li>
+ <li>
+  <p><a href="https://itextpdf.com/blog/technical-notes/investigating-pdf-shadow-attacks-depth-pdf-security-using-itext-part-3" data-scope="external" rel="external noreferrer">Investigating PDF Shadow Attacks: In-Depth PDF Security using iText (Part 3)</a></p>
+ </li>
+</ul>
+<h2 id="Videos/Webinars"><span id="DigitalSignaturesHub-Videos/Webinars"></span>Videos/Webinars
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/digital-signatures-hub#Videos/Webinars">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<ul>
+ <li>
+  <p><a href="https://www.youtube.com/watch?v=3wFtQiU86EU" data-scope="external" rel="external noreferrer">How (not) to make a mockery of trust</a></p>
+ </li>
+</ul>
+<p>In this talk by Matthias Valvekens at FOSDEM 2022, we explore how the ever-continuing push for digitalization has increased our reliance on trust services of various kinds, filling various needs relating to document signing, code signing, authorization tokens, and so forth. Many of these trust services rely on public-key infrastructure (PKI) and X.509 certificates, however, the sensitive nature of these tools makes them difficult to use in a testing environment. On the one hand, exposing access to production keys in your CI is obviously a terrible idea. But on the other hand, setting up and maintaining a fully functional "mock" PKI environment is also pretty tricky. What can you do about that?</p>
+<ul>
+ <li>
+  <p><a href="https://www.youtube.com/watch?v=IbiCK6hNQK0" data-scope="external" rel="external noreferrer">Document security and digital signatures in PDF</a></p>
+ </li>
+</ul>
+<p>The push for paperless bureaucracy has been going on for quite some time, but the circumstances of the past year made the issue even more pressing than it already was. In this talk presented by iText Research Engineer Matthias Valvekens at FOSDEM 2021, we discuss how you can leverage PDF to build secure, yet user-friendly document workflows. We go over what it means to "trust" a digital signature, and how that trust is validated in practice. In addition, we touch upon some of the common pitfalls in PDF security that you should be aware of to prevent your documents from being exploited.</p>
+<ul>
+ <li>
+  <p><a href="https://www.youtube.com/watch?v=SOsM5jP7v3U" data-scope="external" rel="external noreferrer">PDF Security: Encryption and Digital Signatures Webinar with the PDF Association</a></p>
+ </li>
+</ul>
+<p>In this webinar from March 2020, iText Research Manager Michaël Demey and Duff Johnson from the PDF Association discuss PDF security options, focusing on encryption and digital signatures and how you can get started in securing your workflows and user experience right away with real examples using iText.</p>
+<ul>
+ <li>
+  <p><a href="https://youtu.be/0VX66NUoBRo?si=5qINNCy0rSY0JwUu" data-scope="external" rel="external noreferrer">Digital Signatures - How does digital signing work in PDFs?</a></p>
+ </li>
+</ul>
+<p>iText has always been at the forefront of digital signatures in PDF by supporting PAdES and being one of the first to support signatures in the latest PDF 2.0 specification. In this introduction to PDF digital signatures, Text Research Manager and digital signatures enthusiast Michaël Demey explores what digital signing is all about, and explains the key goals of integrity, authenticity, and non-repudiation. He then takes you through the core concepts of of hashing, encryption, and certificate authorities, before getting into the technical nitty-gritty like server and client-side signing and deferred signing, and demonstrates the Smart Certificate use case from our customer CVTrust.
+ <br></p>
+<p>
+ <br>
+</p>
+
+
+																				<script>
+						// Mark block images on the first level as breakout so they can grow wider than the article content.
+						document.querySelectorAll('.article-body > .theme-block-image [data-component="image"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--width');
+							if (!propertyValue) {
+								return;
+							}
+							if (parseInt(propertyValue) >= 760) {
+								element.closest('.theme-block-image').classList.add('theme-block-image--breakout');
+							}
+						});
+
+						// Remove the inline size on page layouts as this would lead to layouts breaking out of the article content.
+						document.querySelectorAll('.article-body [data-component="layout-section"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--inline-size');
+							if (!propertyValue) {
+								return;
+							}
+							// ONLY for this very specific width (Confluence default)
+							if (parseInt(propertyValue) === 760) {
+								element.style.removeProperty('--inline-size');
+							}
+						})
+
+						// Set the initial state of the navigation toggle to prevent shifting in the UI
+						try {
+							const navigationToggle = document.querySelector('#navigator-toggle');
+							const navigationState = localStorage.getItem('theme-navigation-state');
+
+							if (navigationState === 'collapsed' && navigationToggle) {
+								navigationToggle.setAttribute('aria-expanded', 'false');
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					</script>
+																			</section>
+				<footer>
+
+
+	<i18n-message id="72627900ce2df3bb-36" class="sr-only" i18nkey="pagination.label">Pagination</i18n-message>
+	<nav data-component="page-pagination" class="page-pagination" aria-labelledby="72627900ce2df3bb-36">
+		<ul class="page-pagination-items">
+				<li class="page-pagination-item">
+					<a rel="prev" href="https://kb.itextpdf.com/itext/statement-regarding-cve-2022-24198-and-2023-6298">
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_left ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_left"></use>
+	</svg>
+						</div>
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.prev.label">Previous Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Statement regarding CVE 2022-24198 and 2023-6298</div>
+						</div>
+					</a>
+				</li>
+				<li class="page-pagination-item">
+					<a rel="next" href="https://kb.itextpdf.com/itext/digital-signatures-for-pdf-documents">
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.next.label">Next Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Digital Signatures for PDF Documents</div>
+						</div>
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_right ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_right"></use>
+	</svg>
+						</div>
+					</a>
+				</li>
+		</ul>
+	</nav>
+
+				</footer>
+			</article>
+		</main>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer data-component="footer" class="footer">
+
+
+
+
+
+		<img class="footer-logo footer-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="footer-logo footer-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+		<ul class="footer-links">
+				<li><a href="https://itextpdf.com/en/about-us" target="_blank" rel="noopener">About Us </a></li>
+				<li><a href="https://itextpdf.com/en/blog" target="_blank" rel="noopener">News</a></li>
+				<li><a href="https://itextpdf.com/en/jobs" target="_blank" rel="noopener">Jobs</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy/agpl-license">Open Source AGPL license</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy">Commercial &amp; OEM licenses</a></li>
+		</ul>
+	<ul class="footer-content">
+		<li><i18n-message i18nkey="footer.copyright.label">Copyright</i18n-message> <current-year></current-year> Apryse</li>		<li><i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message> <a href="https://www.k15t.com/products/scroll-sites-for-confluence?utm_campaign=k15t-sts-attribution-line&utm_source=k15t-apps" rel="external nofollow">Scroll&nbsp;Sites</a> & <a href="https://www.atlassian.com/software/confluence" rel="external nofollow">Atlassian&nbsp;Confluence</a></li>
+			<li>
+				<button type="button" data-cc="show-preferencesModal">
+					<i18n-message i18nkey="cookieConsent.showPreferences">Manage cookie preferences</i18n-message>
+				</button>
+			</li>
+	</ul>
+
+</footer>
+
+
+</body>
+</html>

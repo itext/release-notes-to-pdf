@@ -278,7 +278,7 @@ namespace ReleaseNotesGenerator {
             document.Flush();
 
             AddDynamicMarginsAndWebPImage(document);
-            
+
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("validation-sample", "Signature validation example");
 

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kb.itextpdf.com/sitemap.xml

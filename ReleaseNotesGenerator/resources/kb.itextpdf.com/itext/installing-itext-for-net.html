@@ -1,0 +1,1370 @@
+
+								
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<!DOCTYPE html>
+<html
+	lang="en"
+	data-page-template="article"
+	
+ data-page-id="ci_a5341c8cd6574d26bf3353d543b27c21eb601700e9a2d0c92f998cad7003d9d8" data-confluence-content-id="327680086"
+		data-color-scheme="light"
+>
+<head>
+	<meta charset="UTF-8">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta name="color-scheme" content="light">
+
+						<link id="pageTreeSource" rel="preload" href="__pagetree.json" as="fetch" type="application/json" crossorigin="anonymous">
+
+		<meta name="site-path" content="/">
+
+					<link rel="x-site-path" href="https://kb.itextpdf.com/">
+	<link rel="x-root-path" href="https://kb.itextpdf.com/">
+
+	<meta name="site-default-language" content="en">
+		<meta name="site-languages" content="en">
+		<meta name="confluence-content-type" content="page">
+		<meta name="confluence-base-url" content="https://apryse.atlassian.net/wiki">
+		<meta name="confluence-space-key" content="IT7KB">
+
+		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
+
+
+
+	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
+
+
+
+
+
+
+
+
+
+
+
+		<title>Installing iText for .NET | iText Knowledge Base</title>
+		<meta property="og:title" content="Installing iText for .NET | iText Knowledge Base">
+		<meta property="twitter:title" content="Installing iText for .NET | iText Knowledge Base">
+
+		<link rel="canonical" href="installing-itext-for-net.html">
+		<meta property="og:url" content="https://kb.itextpdf.com/itext/installing-itext-for-net">
+
+		<meta name="description" content="iText: Installing iText for .NET - Complete guide for iText developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+		<meta property="og:description" content="iText: Installing iText for .NET - Complete guide for iText developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+		<meta property="twitter:description" content="iText: Installing iText for .NET - Complete guide for iText developers. Latest PDF library for Java and .NET. Documentation, examples and best practices.">
+
+		<meta property="og:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+		<meta property="twitter:image" content="https://kb.itextpdf.com/__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png">
+
+	<meta property="og:type" content="website">
+	<meta property="twitter:card" content="summary_large_image">
+
+		<meta name="page-last-modified" content="2026-04-24T09:21:49.439Z">
+
+		<script>
+		(function () {
+			const defaultLanguageMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-default-language"]')?.content);
+			const availableLanguagesMeta = /** @type {string|undefined} */(document.querySelector('meta[name="site-languages"]')?.content);
+			const fallbackLanguage = defaultLanguageMeta ?? 'en';
+			const supportedLanguagesFromMeta = availableLanguagesMeta?.split(',') ?? [];
+			const supportedLanguages = [...new Set([fallbackLanguage, ...supportedLanguagesFromMeta])].filter(Boolean);
+			const detectedLanguage = new URLSearchParams(self.location.search).get('l') || document.documentElement.lang;
+			const resolvedLanguage = supportedLanguages.includes(detectedLanguage) ? detectedLanguage : fallbackLanguage;
+			document.documentElement.lang = resolvedLanguage;
+			const sheet = new CSSStyleSheet();
+			document.adoptedStyleSheets.push(sheet);
+			// Hide any element with a `data-lang` attribute that does NOT match the detected language
+			sheet.replaceSync('[data-lang]:not([data-lang="' + resolvedLanguage + '"]) { display: none; }');
+		})();
+	</script>
+
+		<script>
+		(function() {
+			/** @typedef {'light'|'dark'} ColorScheme */
+			/** @type {ColorScheme[]} */
+			const availableColorSchemes = document.documentElement.querySelector('meta[name="color-scheme"]').content.split(' ').filter(Boolean);
+			/** @type {ColorScheme|'system'} */
+			const userPreference = localStorage?.getItem('color-scheme-preference') ?? 'system';
+			// Clean-up user preference in case there's nothing to choose from
+			// Fall back to the HTML document's default color theme
+			if (availableColorSchemes.length <= 1 || ![...availableColorSchemes, 'system'].includes(userPreference)) {
+				localStorage?.removeItem('color-scheme-preference');
+				return;
+			}
+			// Override default HTML document with client-side user preference
+			if (userPreference === 'system') {
+				updateThemeAttribute(self.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+			} else {
+				updateThemeAttribute(userPreference)
+			}
+			/** @param {ColorScheme} colorScheme */
+			function updateThemeAttribute(colorScheme) {
+				document.documentElement.setAttribute('data-color-scheme', colorScheme);
+			}
+		})();
+	</script>
+
+		<script>
+		
+		function sortContentSources(a, b) {
+			let result = a.precedence - b.precedence;
+
+			if (result === 0) {
+				result = a.value.localeCompare(b.value);
+			}
+
+			return result;
+		}
+
+		
+		function applyContentSourceOrderToElements({ parent, children }) {
+			const contentSourceElements = [...children];
+
+			contentSourceElements
+				.sort((a, b) => (
+					sortContentSources(
+						{ value: a.dataset.orderValue, precedence: a.dataset.orderPrecedence },
+						{ value: b.dataset.orderValue, precedence: b.dataset.orderPrecedence }
+					)
+				))
+				.forEach((element) => {
+					delete element.dataset.orderValue;
+					delete element.dataset.orderPrecedence;
+				});
+
+			parent.replaceChildren(...contentSourceElements);
+		}
+	</script>
+
+<script>
+	(() => {
+		if (isInAppHelpEnabled()) {
+			document.documentElement.dataset.inAppHelp = 'true';
+
+			if (isTitleHidden()) {
+				document.documentElement.dataset.hideTitle = 'true';
+			}
+		}
+
+		function isInAppHelpEnabled() {
+			return new URLSearchParams(location.search).get('inAppHelp') === 'true';
+		}
+
+		function isTitleHidden() {
+			return new URLSearchParams(location.search).get('title') === 'false';
+		}
+	})();
+</script>
+
+<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.css"/>
+<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/in-app-help.js"></script>
+
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/styles.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/fonts.css">
+	<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-styles-bundle.css">
+
+
+	<style>
+		@layer overrides {
+			:root {
+				--theme-headline-font: "Roboto";
+				--theme-text-font: "Roboto";
+				--theme-headline-scale: calc(100 / 100);
+				--theme-text-scale: calc(100 / 100);
+			}
+		}
+	</style>
+
+	<style>
+		@layer overrides {
+			:root, :host {
+					--theme-header-logo-size: 24px;
+					--theme-footer-logo-size: 28px;
+			}
+
+			:root[data-color-scheme='light'],
+			:host([data-color-scheme='light']) {
+					--theme-header-text-color: #000c34;
+					--theme-header-background-color: #ffffff;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #477bb6;
+			}
+
+			:root[data-color-scheme='dark'],
+			:host([data-color-scheme='dark']) {
+					--theme-header-text-color: #FFFFFF;
+					--theme-header-background-color: #0a0b0c;
+					--theme-footer-text-color: #FFFFFF;
+					--theme-footer-background-color: #0a0b0c;
+			}
+		}
+	</style>
+
+	 
+
+
+
+
+
+<script data-site-data="content-sources" type="application/json">
+{
+	"collection": {
+		"members": [
+
+
+	{
+	"name": "iText",
+	"id": "b8e6446e-9541-48e7-9f7c-63425ff58e76",
+	"key": "IT7KB",
+	"path": "/itext",
+		"prefix": "/itext",
+		"current": true,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText DITO",
+	"id": "48e0d55c-a9ff-4fb3-9437-698d1fec9562",
+	"key": "DITOKB",
+	"path": "/ditokb",
+		"prefix": "/ditokb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText pdf2Data",
+	"id": "bf49a43e-a311-494a-bc8c-8d0eb84b75bc",
+	"key": "2DATA",
+	"path": "/2data",
+		"prefix": "/2data",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+,
+
+
+	{
+	"name": "iText 5",
+	"id": "2b6a097e-2988-4c1f-a04f-901c41b207e6",
+	"key": "IT5KB",
+	"path": "/it5kb",
+		"prefix": "/it5kb",
+		"current": false,
+	"versions": {
+		"available": [
+		]
+	},
+	"variants": {
+		"available": [
+		]
+	},
+	"languages": {
+		"available": [
+		]
+	}
+}
+
+		]
+	}
+}
+</script>
+
+
+<script data-theme-placeholder="site" type="application/json">
+	{
+		"id": "7fea8421-aa1f-4eeb-9938-6be4ad5b04ef",
+		"path": "/",
+		"url": "/",
+		"domain": "kb.itextpdf.com",
+		"aiSearchEnabled": false,
+		"visibleToSearchEngines": true
+	}
+</script>
+ 
+<script data-config="cookieconsent" type="application/json">
+{
+	"enabled": true,
+	"mode": "opt-in",
+	"heading": "",
+	"description": "",
+	"links": [
+	]
+}
+</script>
+
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/main.js"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/page-tree.js" fetchpriority="high"></script>
+	<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/search-bundle.js"></script>
+
+							<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/article.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/ai-actions.js"></script>
+
+		<link rel="stylesheet" href="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/code-snippet.css">
+		<script type="module" src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/code-snippet.js"></script>
+
+
+
+
+
+<template data-custom-overrides data-type="code-asset">
+	<link rel="stylesheet" href="../__site/660125f2-82ac-4965-bb39-0be62e9db4a1/code_custom_css_override_asset.css">
+</template>
+
+<template data-custom-overrides data-type="code-asset">
+		<script src="../__site/28d64cce-9cb5-4091-90c8-9552383d17bc/code_custom_js_override_asset.js"></script>
+</template>
+
+<script>
+	(() => {
+		if (new URLSearchParams(location.search).has('disable-custom-overrides')) {
+			return;
+		}
+
+		document.querySelectorAll('[data-custom-overrides]').forEach(template => {
+			const type = template.getAttribute('data-type');
+
+			if (type === 'code-asset') {
+				const assetElement = template.content.cloneNode(true).firstElementChild;
+				const appendAsset = () => document.head.appendChild(assetElement);
+
+				if (assetElement.tagName === 'SCRIPT') {
+															if (document.readyState === 'complete') {
+						appendAsset();
+					} else {
+												document.addEventListener('DOMContentLoaded', appendAsset, { once: true });
+					}
+				} else {
+					appendAsset();
+				}
+			}
+		});
+	})();
+</script>
+
+
+			
+		<script data-config="integration:ga" type="application/json">
+			{
+				"enabled": true,
+				"tagId": "G-R5ENF9PVSJ"
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="analytics"
+			data-service="ga"
+			data-src="https://www.googletagmanager.com/gtag/js?id=G-R5ENF9PVSJ"
+			async
+		></script>
+
+
+
+
+		<script data-config="integration:gtm" type="application/json">
+			{
+				"enabled": true
+			}
+		</script>
+		<script
+			type="text/plain"
+			data-category="marketing"
+			data-service="gtm"
+			data-src="https://www.googletagmanager.com/gtm.js?id=GTM-KLFZM24W"
+			async
+		></script>
+
+
+
+
+
+
+
+
+			</head>
+<body>
+	<a href="installing-itext-for-net.html#content" class="skip-link">
+		<i18n-message i18nkey="navigation.skip.to.main.label">Skip to main content</i18n-message>
+	</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="90f4e7c3f49c2404-2" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="90f4e7c3f49c2404-2">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+	<div class="header-content">
+			<div class="header-links">
+				<ul>
+						<li><a href="https://itextpdf.com/">iText Website</a></li>
+						<li><a href="https://itextpdf.com/en/blog">Blog</a></li>
+						<li><a href="https://itextpdf.com/en/support">Support</a></li>
+						<li><a href="https://itextpdf.com/en/welcome-itext-community">Community</a></li>
+				</ul>
+			</div>
+
+		<div class="header-pickers">
+
+		</div>
+
+			<div class="header-search">
+				<search-bar quicksearch></search-bar>
+			</div>
+
+
+				<button type="button" aria-controls="drawer-90f4e7c3f49c2404-1" aria-haspopup="dialog" aria-expanded="false" class="header-nav-toggle" onclick="self['drawer-90f4e7c3f49c2404-1'].showModal()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+			<i18n-message class="sr-only" i18nkey="navigation.main.label">Main navigation</i18n-message>
+		</button>
+	</div>
+
+	
+
+<dialog id="drawer-90f4e7c3f49c2404-1" class="drawer">
+	<header data-component="header" class="header">
+
+	<div class="header-site-branding">
+		<i18n-message id="90f4e7c3f49c2404-3" class="sr-only" i18nkey="header.home.label"></i18n-message>
+
+		<a href="https://kb.itextpdf.com/" aria-labelledby="90f4e7c3f49c2404-3">
+
+
+
+
+		<img class="header-logo header-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="header-logo header-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		</a>
+
+			<a href="https://kb.itextpdf.com/itext" class="header-site-name">
+				iText
+			</a>
+	</div>
+
+		<div class="header-content">
+			<button type="button" aria-controls="drawer-90f4e7c3f49c2404-1" aria-haspopup="dialog" aria-expanded="true" autofocus class="drawer-toggle" onclick="self['drawer-90f4e7c3f49c2404-1'].close()">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-close ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#close"></use>
+	</svg>
+				<i18n-message class="sr-only" i18nkey="navigation.close.label">Close navigation</i18n-message>
+			</button>
+		</div>
+	</header>
+
+	<div class="drawer-section drawer-search">
+		<search-bar quicksearch></search-bar>
+	</div>
+
+
+	<nav id="drawer-nav" class="drawer-section drawer-nav tree" aria-labelledby="drawer-nav-label">
+		<i18n-message id="drawer-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+
+						<copy-page-tree target="articleTree"></copy-page-tree>
+	</nav>
+
+			<div class="drawer-section drawer-links tree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-4" href="https://itextpdf.com/" >iText Website</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-5" href="https://itextpdf.com/en/blog" >Blog</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-6" href="https://itextpdf.com/en/support" >Support</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-7" href="https://itextpdf.com/en/welcome-itext-community" >Community</a>
+			</div>
+
+		</li>
+</ul>
+		</div>
+</dialog>
+
+</header>
+		<section class="article-page body">
+		<theme-navigator class="navigator">
+			<button id="navigator-toggle" class="navigator-toggle" aria-controls="navigator-nav" aria-labelledby="navigator-nav-label" aria-expanded="true">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-menu navigator-icon-closed">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#menu"></use>
+	</svg>
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-chevron_left navigator-icon-opened">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#chevron_left"></use>
+	</svg>
+			</button>
+						<nav id="navigator-nav" class="navigator-body tree" aria-labelledby="navigator-nav-label">
+				<i18n-message id="navigator-nav-label" class="sr-only" i18nkey="navigation.main.label">Main</i18n-message>
+				<theme-page-tree id="articleTree">
+<ul  >
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-8"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-8" href="cves.html" >CVEs</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-10"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-10" href="digital-signatures-hub.html" >Digital Signatures Hub</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-12"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-12" href="releases.html" >Releases</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="true"
+aria-controls="90f4e7c3f49c2404-15"						aria-labelledby="90f4e7c3f49c2404-14"
+					></button>
+				<a id="90f4e7c3f49c2404-14" href="installation-guidelines.html" >Installation guidelines</a>
+			</div>
+
+<ul  id="90f4e7c3f49c2404-15" >
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-16" href="installing-itext-for-net.html" aria-current="page">Installing iText for .NET</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-17" href="installing-itext-for-java.html" >Installing iText for Java</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-18" href="https://kb.itextpdf.com/itext/installing-the-itext-license-key-and-license-key-l" >Installing the iText license key and license key library for Java and .NET</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-19" href="https://kb.itextpdf.com/itext/installing-itext-free-trial-for-java-and-net-devel" >Installing iText free trial for Java and .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-20" href="https://kb.itextpdf.com/itext/volume-counter-installation-guide" >Volume Counter installation guide</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-21" href="https://kb.itextpdf.com/itext/deploying-itext-suite-sdk-api-on-amazon-web-servic" >Deploying iText Suite SDK/API on Amazon Web Services</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-22" href="https://kb.itextpdf.com/itext/installing-itext-on-android" >Installing iText on Android</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-23" href="https://kb.itextpdf.com/itext/installing-itext-community-for-java-developers" >Installing iText Community for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-24" href="https://kb.itextpdf.com/itext/installing-itext-community-for-net-developers" >Installing iText Community for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-25" href="https://kb.itextpdf.com/itext/installing-itext-pdfcalligraph-for-java-developers" >Installing iText pdfCalligraph for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-26" href="https://kb.itextpdf.com/itext/installing-itext-pdfcalligraph-for-net-developers" >Installing iText pdfCalligraph  for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-27" href="https://kb.itextpdf.com/itext/installing-itext-pdfhtml-for-java-developers" >Installing iText pdfHTML for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-28" href="https://kb.itextpdf.com/itext/installing-itext-pdfhtml-for-net-developers" >Installing iText pdfHTML for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-29" href="https://kb.itextpdf.com/itext/installing-itext-pdfocr-for-java-developers" >Installing iText pdfOCR for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-30" href="https://kb.itextpdf.com/itext/installing-itext-pdfocr-for-net-developers" >Installing iText pdfOCR for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-31" href="https://kb.itextpdf.com/itext/installing-itext-pdfoffice-for-java-developers" >Installing iText pdfOffice for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-32" href="https://kb.itextpdf.com/itext/installing-itext-pdfoptimizer-for-java-developers" >Installing iText pdfOptimizer for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-33" href="https://kb.itextpdf.com/itext/installing-itext-pdfoptimizer-for-net-developers" >Installing iText pdfOptimizer for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-34" href="https://kb.itextpdf.com/itext/installing-itext-pdfrender-for-java-developers" >Installing iText pdfRender for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-35" href="https://kb.itextpdf.com/itext/installing-itext-pdfsweep-for-java-developers" >Installing iText pdfSweep for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-36" href="https://kb.itextpdf.com/itext/installing-itext-pdfsweep-for-net-developers" >Installing iText pdfSweep for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-37" href="https://kb.itextpdf.com/itext/installing-itext-pdfxfa-for-java-developers" >Installing iText pdfXFA for Java developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-38" href="https://kb.itextpdf.com/itext/installing-itext-pdfxfa-for-net-developers" >Installing iText pdfXFA for .NET developers</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-39" href="https://kb.itextpdf.com/itext/itext-7-1-migration-guide-for-net" >iText 7.1 - Migration guide for .NET</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-40" href="https://kb.itextpdf.com/itext/itext-7-1-migration-guide-for-java" >iText 7.1 - Migration guide for Java</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-41" href="https://kb.itextpdf.com/itext/migration-guide-from-itext-5-to-itext-7" >Migration guide from iText 5 to iText 7</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-42" href="https://kb.itextpdf.com/itext/installing-itext-core-7-2-x-on-android" >Installing iText Core 7.2.x on Android</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+				<a id="90f4e7c3f49c2404-43" href="https://kb.itextpdf.com/itext/how-to-load-itext-licenses-correctly-with-gradle" >Installing iText Licenses with Gradle</a>
+			</div>
+
+		</li>
+</ul>
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-44"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-44" href="examples.html" >Examples</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-46"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-46" href="breaking-changes.html" >Breaking changes</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-48"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-48" href="ebooks.html" >Ebooks</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-50"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-50" href="faq.html" >FAQ</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-52"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-52" href="technical-tales.html" >Technical Tales</a>
+			</div>
+
+		</li>
+		<li class="tree-item">
+			<div class="tree-item-header">
+					<button
+						class="tree-action"
+						type="button"
+						aria-expanded="false"
+						aria-labelledby="90f4e7c3f49c2404-54"
+aria-busy="true" aria-disabled="true"					></button>
+				<a id="90f4e7c3f49c2404-54" href="technical-reference.html" >Technical Reference</a>
+			</div>
+
+		</li>
+</ul>
+				</theme-page-tree>
+			</nav>
+		</theme-navigator>
+
+		<main class="main-content">
+			<div class="topbar">
+
+
+
+
+	<theme-breadcrumbs class="breadcrumbs" itemsbeforecollapse="2" maxitems="4">
+		<i18n-message id="90f4e7c3f49c2404-56" class="sr-only" i18nkey="breadcrumbs.label">Breadcrumbs</i18n-message>
+		<nav aria-labelledby="90f4e7c3f49c2404-56">
+				<ol>
+							<li>
+								<a href="https://kb.itextpdf.com/">
+										<i18n-message key="breadcrumbs.home.label">Home</i18n-message>
+								</a>
+							</li>
+							<li>
+								<a href="https://kb.itextpdf.com/itext">
+										iText
+								</a>
+							</li>
+							<li>
+								<a href="installation-guidelines.html">
+										Installation guidelines
+								</a>
+							</li>
+				</ol>
+		</nav>
+	</theme-breadcrumbs>
+					<script src="../__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/breadcrumbs.js"></script>
+					<ai-actions class="ai-actions"></ai-actions>
+			</div>
+		<nav class="toc sticky" data-component="toc" aria-labelledby="90f4e7c3f49c2404-57">
+			<h2 class="toc-heading" id="90f4e7c3f49c2404-57">
+				<i18n-message i18nkey="page.article.toc.label">On this Page</i18n-message>
+			</h2>
+			<theme-toc for="content"></theme-toc>
+		</nav>
+			<article id="content" tabindex="-1" class="fb-layout-container">
+				<header>
+					<h1>Installing iText for .NET</h1>
+				</header>
+				<section class="article-body fb-layout-body" data-searchable-content>
+		
+			
+
+
+
+	
+
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+		
+		
+	
+	
+	
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+						
+		
+
+
+				
+
+
+	
+	
+	
+	<h2 id="How-to-install-iText-.NET-version"><span id="InstallingiTextfor.NET-HowtoinstalliText.NETversion"></span>How to install iText .NET version
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#How-to-install-iText-.NET-version">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<p>Thank you for your interest in our open-source PDF library, we hope you will enjoy using our product and share your experiences with us and the iText community. We will walk you through the installation process, from downloading iText Core to adding the dependencies to your .NET build tool.</p>
+<p>If you require any&nbsp;extra help please have a look at our&nbsp;<a href="faq.html" data-scope="internal">FAQs</a>&nbsp;or the community discussion at&nbsp;<a href="https://stackoverflow.com/questions/tagged/itext7" data-scope="external" rel="external noreferrer">StackOverflow</a>. If you are interested in getting support from&nbsp;our in-house developers and/or a license key for commercial iText products, you will need to&nbsp;acquire a commercial license.</p>
+<h2 id="Before-you-install-(commercial-license-users-only)"><span id="InstallingiTextfor.NET-Beforeyouinstall(commerciallicenseusersonly)"></span>Before you install (commercial license users only)
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Before-you-install-(commercial-license-users-only)">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<ul>
+ <li>
+  <p>Make sure you have purchased a commercial license for iText. All downloads we offer closed-source come with&nbsp;<a href="https://itextpdf.com/en/how-buy" data-scope="external" rel="external noreferrer">our commercial license</a>&nbsp;model.</p>
+ </li>
+ <li>
+  <p>If you do not use the "Automated dependency management" method to install iText, you will need to download the proper license key library. You can find the installation guide&nbsp;<a href="https://kb.itextpdf.com/itext/installing-the-itext-license-key-and-license-key-l" data-scope="internal">here</a>.</p>
+ </li>
+ <li>
+  <p>Important remark: In the installation guide, we use NuGet as a build&nbsp;tool for .NET. -&nbsp;<a href="https://www.nuget.org/packages/itext" data-scope="external" rel="external noreferrer">iText</a></p>
+ </li>
+</ul>
+<h2 id="Installation"><span id="InstallingiTextfor.NET-Installation"></span>Installation
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Installation">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<h3 id="Automated-dependency-management"><span id="InstallingiTextfor.NET-Automateddependencymanagement"></span>Automated dependency management
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Automated-dependency-management">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>iText Core is available on NuGet.&nbsp;To install the core&nbsp;iText modules, you can install them with a single NuGetPackage by typing the following command in the NuGet Package Manager:&nbsp;<code>Install-Package itext</code>. You will also need to install the Bouncy Castle Adapter, by issuing the following command: <code>Install-Package itext.bouncy-castle-adapter</code> (as the kernel module has it as a dependency).</p>
+<p>If you have a trial or a commercial license you will also need the iText license key library. You can install this&nbsp;typing&nbsp;the following command in the NuGet Package Manager:&nbsp;<code>Install-Package itext.licensing.base</code>.</p>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p><strong>NOTE:</strong>&nbsp;This&nbsp;is a required dependency for&nbsp;the closed-source add-ons, so it will automatically be installed&nbsp;when you install an add-on that needs the license key library.</p>
+ </div>
+</div>
+<h4 id="Using-sign-functionality"><span id="InstallingiTextfor.NET-Usingsignfunctionality"></span>Using&nbsp;<em>sign</em>&nbsp;functionality
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Using-sign-functionality">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h4>
+<p>All the necessary bouncy-castle related classes are grouped into two modules:&nbsp;<code>bouncy-castle-adapter</code>&nbsp;and&nbsp;<code>bouncy-castle-fips-adapter</code>.</p>
+<p>One of these modules is required to be in a classpath for the correct usage of cryptographic and signatures-related logic of our&nbsp;<code>kernel</code>&nbsp;and&nbsp;<code>sign</code>&nbsp;modules.</p>
+<div data-component="panel" role="note" data-appearance="warning">
+ <div class="panel-content">
+  <p>It is important not to add them both as a dependency since they are not compatible.</p>
+ </div>
+</div>
+<p><code>itext.bouncy-castle-adapter</code>&nbsp;NuGet package encapsulates bouncy-castle related classes for this NuGet dependency:</p>
+<ul>
+ <li>
+  <p><code>BouncyCastle.Cryptography</code></p>
+ </li>
+</ul>
+<div data-component="panel" role="note" data-appearance="note">
+ <div class="panel-content">
+  <p>The <code>itext.bouncy-castle-adapter</code> previously relied upon the <code>Portable.BouncyCastle</code> dependency. However, as of the release of<a href="release-itext-core-8-0-2.html" data-scope="internal"> iText version 8.0.2</a>, we transitioned to use the newer <code>BouncyCastle.Cryptography</code> package officially maintained by the Legion of the Bouncy Castle Inc.</p>
+ </div>
+</div>
+<p><code>itext.bouncy-castle-fips-adapter</code>&nbsp;NuGet package encapsulates bouncy-castle related classes for these two assemblies (dlls taken from&nbsp;<a href="https://www.bouncycastle.org/fips-csharp/" data-scope="external" rel="external noreferrer">https://www.bouncycastle.org/fips-csharp/</a>):</p>
+<ul>
+ <li>
+  <p><code>bc-fips</code></p>
+ </li>
+ <li>
+  <p><code>bcpkix-fips</code></p>
+ </li>
+</ul>
+<p>Since those two dll files are not signed, we can't use them with .NET Framework and therefore the only supported target framework for&nbsp;<code>bouncy-castle-fips-adapter</code>&nbsp;project is&nbsp;<code>netstandard2.0</code>.</p>
+<p>You can read more about it&nbsp;<a href="https://kb.itextpdf.com/itext/bouncy-castle-changes" data-scope="internal">here</a>.</p>
+<h3 id="Using-the-iText-Artifactory-Server"><span id="InstallingiTextfor.NET-UsingtheiTextArtifactoryServer"></span>Using the iText Artifactory Server
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Using-the-iText-Artifactory-Server">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>iText NuGet packages are also available on the iText Artifactory server. You can add it as a custom NuGet repository to Visual Studio. In the NuGet Package Manager, go to the settings and add the following URL as a package source:&nbsp;<a href="https://repo.itextsupport.com/api/nuget/nuget" data-scope="external" rel="external noreferrer">https://repo.itextsupport.com/api/nuget/nuget</a>. You can also browse the iText Artifactory server and download NuGet packages manually.</p>
+<h3 id="After-Installation"><span id="InstallingiTextfor.NET-AfterInstallation"></span>After Installation
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#After-Installation">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p><span style="--color: var(--bold-gray, #172b4d);">Check out</span>&nbsp;the&nbsp;<a href="itext-jump-start-tutorial-for-net.html" data-scope="internal">.NET jump-start tutorial</a>&nbsp;and&nbsp;<a href="examples.html" data-scope="internal">helpful code examples</a>&nbsp;<span style="--color: var(--bold-gray, #172b4d);">here on the Knowledge Base, or you can find&nbsp;our&nbsp;</span><a href="https://itextpdf.com/itext-suite-net-c" data-scope="external" rel="external noreferrer"><span style="--color: var(--bold-gray, #172b4d);">API documentation</span></a><span style="--color: var(--bold-gray, #172b4d);">,in the&nbsp;</span><a href="https://itextpdf.com/en/resources" data-scope="external" rel="external noreferrer"><span style="--color: var(--bold-gray, #172b4d);">Resources&nbsp;</span></a><span style="--color: var(--bold-gray, #172b4d);">section of our website.</span></p>
+<h3 id="iText-Core-.NET-on-GitHub"><span id="InstallingiTextfor.NET-iTextCore.NETonGitHub"></span>iText Core .NET on GitHub
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#iText-Core-.NET-on-GitHub">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>The source code is available on&nbsp;<a href="https://github.com/itext/" data-scope="external" rel="external noreferrer">GitHub</a>.</p>
+<p>You can download the modules (.nupkg) of iText Core in a single&nbsp;<a href="https://github.com/itext/itext7-dotnet/releases/latest" data-scope="external" rel="external noreferrer">ZIP file for .NET: iText</a>.</p>
+<p>Developers can clone the following git projects to access the&nbsp;<a href="https://github.com/itext/itext7-dotnet" data-scope="external" rel="external noreferrer">source code for .NET: iText.</a></p>
+<h3 id="Installing-SNAPSHOT-builds"><span id="InstallingiTextfor.NET-InstallingSNAPSHOTbuilds"></span>Installing SNAPSHOT builds
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Installing-SNAPSHOT-builds">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h3>
+<p>During development we release SNAPSHOT builds which you can install if you require a fix for a specific issue, before it is made available on an official RELEASE. Snapshots can be downloaded from the iText Artifactory and are appended with a&nbsp;<code>-SNAPSHOT</code>&nbsp;suffix.</p>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p>Our SNAPSHOT builds pass the same quality control as RELEASE versions. We don't introduce breaking changes between minor releases (<code>0.x.0</code>), so the main difference from a&nbsp;<code>RELEASE</code>&nbsp;version is that a&nbsp;<code>SNAPSHOT</code>&nbsp;version will be continually updated and includes all the fixes and improvements introduced since the latest release.</p>
+ </div>
+</div>
+<p>If you’re using NuGet you can add the iText Artifactory as a NuGet packages server for your solution and download the SNAPSHOT version via the NuGet Package Manager.</p>
+<p>To do this you need to create a file in the same folder as your solution (<code>.sln</code>) file with the name: "<code>nuget.config</code>". Its content should be as follows:</p>
+<code-snippet class="theme-code-snippet" style="--width: 1800px;">
+ <div class="theme-code-snippet-header">XML</div>
+ <scroll-shadow>
+  <div data-component="code" data-language="xml" data-align="wide">
+   <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;configuration&gt;
+  &lt;packageSources&gt;
+    &lt;add key="iText Artifactory" value="https://repo.itextsupport.com/api/nuget/nuget" /&gt;
+  &lt;/packageSources&gt;
+&lt;/configuration&gt;
+</code></pre>
+  </div>
+ </scroll-shadow>
+ <copy-clipboard class="theme-code-snippet-copy">
+  <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-copy_content copy-icon">
+   <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#copy_content"></use>
+  </svg>
+ </copy-clipboard>
+</code-snippet>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p><strong>NOTE:</strong>&nbsp;If you do not see any snapshots listed, you should configure the NuGet Package Manager to include prerelease versions.</p>
+ </div>
+</div>
+<p>Alternatively you can browse the&nbsp;<a href="https://repo.itextsupport.com/webapp/#/artifacts/browse/tree/General/nuget" data-scope="external" rel="external noreferrer">iText Artifactory</a>&nbsp;if you want to manually download the&nbsp;<code>.nupkg</code>&nbsp;file. You can open this file like a ZIP file to extract the dlls.</p>
+<div data-component="panel" role="note" data-appearance="info">
+ <div class="panel-content">
+  <p><strong>NOTE:</strong>&nbsp;If you’ve previously installed a SNAPSHOT build you may need to clear your local cache. In NuGet you can run&nbsp;<code>dotnet nuget locals all --clear</code>&nbsp;from the&nbsp;NuGet Package Manager console.</p>
+ </div>
+</div>
+<h2 id="Adding-our-iText-Core-add-ons"><span id="InstallingiTextfor.NET-AddingouriTextCoreadd-ons"></span>Adding our iText Core add-ons
+ <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
+  <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/installing-itext-for-net#Adding-our-iText-Core-add-ons">
+   <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
+    <use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#link"></use>
+   </svg>
+  </copy-clipboard>
+ </i18n-message></h2>
+<p>If you would like to add one of our add-ons, please first have a look at the&nbsp;<a href="compatibility-matrix.html" data-scope="internal">compatibility matrix</a>&nbsp;and the&nbsp;<a href="installation-guidelines.html" data-scope="internal">installation guides</a>&nbsp;of each of these add-ons.</p>
+
+
+																				<script>
+						// Mark block images on the first level as breakout so they can grow wider than the article content.
+						document.querySelectorAll('.article-body > .theme-block-image [data-component="image"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--width');
+							if (!propertyValue) {
+								return;
+							}
+							if (parseInt(propertyValue) >= 760) {
+								element.closest('.theme-block-image').classList.add('theme-block-image--breakout');
+							}
+						});
+
+						// Remove the inline size on page layouts as this would lead to layouts breaking out of the article content.
+						document.querySelectorAll('.article-body [data-component="layout-section"]').forEach((element) => {
+							const propertyValue = element.style.getPropertyValue('--inline-size');
+							if (!propertyValue) {
+								return;
+							}
+							// ONLY for this very specific width (Confluence default)
+							if (parseInt(propertyValue) === 760) {
+								element.style.removeProperty('--inline-size');
+							}
+						})
+
+						// Set the initial state of the navigation toggle to prevent shifting in the UI
+						try {
+							const navigationToggle = document.querySelector('#navigator-toggle');
+							const navigationState = localStorage.getItem('theme-navigation-state');
+
+							if (navigationState === 'collapsed' && navigationToggle) {
+								navigationToggle.setAttribute('aria-expanded', 'false');
+							}
+						} catch (error) {
+							console.error(error);
+						}
+					</script>
+																			</section>
+				<footer>
+
+
+	<i18n-message id="90f4e7c3f49c2404-58" class="sr-only" i18nkey="pagination.label">Pagination</i18n-message>
+	<nav data-component="page-pagination" class="page-pagination" aria-labelledby="90f4e7c3f49c2404-58">
+		<ul class="page-pagination-items">
+				<li class="page-pagination-item">
+					<a rel="prev" href="installation-guidelines.html">
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_left ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_left"></use>
+	</svg>
+						</div>
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.prev.label">Previous Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Installation guidelines</div>
+						</div>
+					</a>
+				</li>
+				<li class="page-pagination-item">
+					<a rel="next" href="installing-itext-for-java.html">
+						<div>
+							<div class="page-pagination-label">
+								<i18n-message i18nkey="pagination.next.label">Next Page</i18n-message>
+							</div>
+							<div class="page-pagination-title">Installing iText for Java</div>
+						</div>
+						<div class="page-pagination-icon">
+	<svg role="img" aria-hidden="true" data-component="icon" class="icon icon-arrow_right ">
+		<use href="/__theme/b_8ca5a7d7-80f3-41c8-bea7-75cce14ad14f/scroll-sites-help-center-theme/45/icons.svg#arrow_right"></use>
+	</svg>
+						</div>
+					</a>
+				</li>
+		</ul>
+	</nav>
+
+				</footer>
+			</article>
+		</main>
+	</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer data-component="footer" class="footer">
+
+
+
+
+
+		<img class="footer-logo footer-logo--dark" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+
+		<img class="footer-logo footer-logo--light" src="../__site/584e3a1c-0ce3-4780-a115-fe1c2521f119/ITSC-Logo-Horizontal-RGB-300dpi.png" alt="">
+		<ul class="footer-links">
+				<li><a href="https://itextpdf.com/en/about-us" target="_blank" rel="noopener">About Us </a></li>
+				<li><a href="https://itextpdf.com/en/blog" target="_blank" rel="noopener">News</a></li>
+				<li><a href="https://itextpdf.com/en/jobs" target="_blank" rel="noopener">Jobs</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy/agpl-license">Open Source AGPL license</a></li>
+				<li><a href="https://itextpdf.com/en/how-buy">Commercial &amp; OEM licenses</a></li>
+		</ul>
+	<ul class="footer-content">
+		<li><i18n-message i18nkey="footer.copyright.label">Copyright</i18n-message> <current-year></current-year> Apryse</li>		<li><i18n-message i18nkey="footer.poweredBy.label">Powered by</i18n-message> <a href="https://www.k15t.com/products/scroll-sites-for-confluence?utm_campaign=k15t-sts-attribution-line&utm_source=k15t-apps" rel="external nofollow">Scroll&nbsp;Sites</a> & <a href="https://www.atlassian.com/software/confluence" rel="external nofollow">Atlassian&nbsp;Confluence</a></li>
+			<li>
+				<button type="button" data-cc="show-preferencesModal">
+					<i18n-message i18nkey="cookieConsent.showPreferences">Manage cookie preferences</i18n-message>
+				</button>
+			</li>
+	</ul>
+
+</footer>
+
+
+</body>
+</html>
