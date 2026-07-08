@@ -21,6 +21,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -28,13 +29,19 @@ using System.Text;
 using HtmlAgilityPack;
 using iText.Html2pdf;
 using iText.Html2pdf.Attach.Impl;
-using iText.Kernel.Font;
+using iText.IO.Image;
+using iText.Kernel.Colors;
 using iText.Kernel.Mac;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Event;
 using iText.Kernel.Pdf.Filespec;
 using iText.Kernel.Validation;
 using iText.Kernel.XMP;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Layout.Properties.Margins;
 using iText.Layout.Tagging;
 using iText.Licensing.Base;
 using iText.Pdfa;
@@ -249,13 +256,13 @@ namespace ReleaseNotesGenerator {
             var pageNumberHandler = new AddPdfACompliantPageNumbers(font);
             pdfDocument.AddEventHandler(PdfDocumentEvent.END_PAGE, pageNumberHandler);
 
-            var htmDocument = new HtmlDocument();
-            htmDocument.LoadHtml(html);
+            var htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(html);
 
-            var htmlProcessor = new HtmlProcessor(htmDocument);
+            var htmlProcessor = new HtmlProcessor(htmlDocument);
             htmlProcessor.PreProcess(Version);
 
-            var customContentInjector = new CustomContentInjector(htmDocument, ResourceRootPath);
+            var customContentInjector = new CustomContentInjector(htmlDocument, ResourceRootPath);
             var pathToCustomStyle = ReleaseNotesDiscoveryUtil.ReplaceVersionPlaceholdersInCustomStyle(ResourceRootPath);
             customContentInjector.Inject(pathToCustomStyle, "//head", 0);
             customContentInjector.Inject("customhtml/footer.html", "//body", 0);
@@ -264,11 +271,13 @@ namespace ReleaseNotesGenerator {
             customContentInjector.Inject("customhtml/custom_content_at_end.html", "//body");
 
             // We need full html before post-processing.
-            new TocAndBookMarkGenerator(htmDocument, pdfDocument).AddTocAndBookmarks();
+            new TocAndBookMarkGenerator(htmlDocument, pdfDocument).AddTocAndBookmarks();
             htmlProcessor.PostProcess();
 
-            var document = HtmlConverter.ConvertToDocument(htmDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
+            var document = HtmlConverter.ConvertToDocument(htmlDocument.DocumentNode.OuterHtml, pdfDocument, converterProperties);
             document.Flush();
+
+            AddDynamicMarginsAndWebPImage(document);
             
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
             lcg.AddCodeSample("validation-sample", "Signature validation example");
@@ -283,6 +292,91 @@ namespace ReleaseNotesGenerator {
             // If you keep layered code samples, ensure they also read resources via ResourceRootPath (see note below).
             document.Close();
             pdfDocument.Close();
+        }
+
+        private static void AddDynamicMarginsAndWebPImage(Document document) {
+
+            document.Add(new SectionBreak(new PageMarginBoxes(new List<PageMarginContent>() {
+                new PageMarginContent(MarginBoxName.TOP, TopMarginContent()),
+                new PageMarginContent(MarginBoxName.LEFT, LeftMarginContent()),
+                new PageMarginContent(MarginBoxName.RIGHT, RightMarginContent()),
+            })));
+
+            document.Add(new Paragraph("WebP image in the PDF document")
+                .SetFontSize(20)
+                .SetFontColor(new DeviceRgb(60, 60, 150))
+                .SetMarginBottom(20)
+                .SetMarginTop(15)
+                .SetTextAlignment(TextAlignment.CENTER));
+
+            Image webpImage = new Image(ImageDataFactory.Create(Path.Combine(ResourceRootPath, "images/logo.webp")));
+            webpImage.GetAccessibilityProperties().SetActualText("iText logo in WebP format");
+
+            Paragraph p1 = new Paragraph()
+                .Add("To enable WebP image support in your PDF, " + 
+                     "you must first include the official iText WebP package in your project. " +
+                     "Simply add the following NuGet package reference to your project file " +
+                     "(or use the Package Manager Console):")
+                .SetMarginBottom(15);
+            Paragraph p2 = new Paragraph()
+                .Add(new Text("<PackageReference Include=\"itext.webp-image-support\" Version=\"9.7.0\" />")
+                    .SetFontColor(new DeviceRgb(1, 65, 103)))
+                .SetBackgroundColor(new DeviceRgb(254, 145, 47))
+                .SetBorderRadius(new BorderRadius(5))
+                .SetHeight(20)
+                .SetMarginBottom(15);
+            Paragraph p3 = new Paragraph()
+                .Add("Once this dependency is in place, you can seamlessly embed WebP images into your PDF documents " +
+                     "using the standard ImageDataFactory, " +
+                     "and iText will automatically handle the decoding and rendering.")
+                .SetMarginBottom(100);
+            document.Add(p1).Add(p2).Add(p3).Add(webpImage.SetHorizontalAlignment(HorizontalAlignment.CENTER));
+        }
+
+        // Top margin: a tall, bold banner with a thick bottom border, like a page header.
+        private static Div TopMarginContent() {
+            return new Div()
+                    .Add(new Paragraph("Dynamic TOP page margin")
+                            .SetFontColor(new DeviceRgb(255, 158, 183))
+                            .SetFontSize(16)
+                            .SetTextAlignment(TextAlignment.CENTER)
+                            .SetMargin(0))
+                    .SetBackgroundColor(new DeviceRgb(250, 223, 231))
+                    .SetHeight(50)
+                    .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .SetBorderBottom(new SolidBorder(new DeviceRgb(255, 180, 204), 4));
+        }
+
+        // Left margin: a narrow vertical sidebar, text aligned to the left rather than centered,
+        // with a colored left edge bar.
+        private static Div LeftMarginContent() {
+            return new Div()
+                    .Add(new Paragraph("Dynamic LEFT page margin")
+                            .SetFontColor(new DeviceRgb(20, 130, 100))
+                            .SetFontSize(11)
+                            .SetTextAlignment(TextAlignment.LEFT)
+                            .SetMargin(0))
+                    .SetBackgroundColor(new DeviceRgb(225, 250, 240))
+                    .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .SetPaddingLeft(6)
+                    .SetPaddingRight(6)
+                    .SetBorderRight(new SolidBorder(new DeviceRgb(140, 255, 200), 5));
+        }
+
+        // Right margin: a narrow vertical sidebar, mirrored from the left, text aligned right,
+        // with a colored right edge bar.
+        private static Div RightMarginContent() {
+            return new Div()
+                    .Add(new Paragraph("Dynamic RIGHT page margin")
+                            .SetFontColor(new DeviceRgb(180, 110, 0))
+                            .SetFontSize(11)
+                            .SetTextAlignment(TextAlignment.RIGHT)
+                            .SetMargin(0))
+                    .SetBackgroundColor(new DeviceRgb(255, 245, 225))
+                    .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .SetPaddingLeft(6)
+                    .SetPaddingRight(6)
+                    .SetBorderLeft(new SolidBorder(new DeviceRgb(255, 220, 140), 5));
         }
     }
 }
