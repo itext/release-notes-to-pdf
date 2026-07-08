@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Java Code — Syntax Highlighted</title>
+  <style>
+    body { margin: 0; background: #FFFFFF; }
+    header { padding: 20px 24px; border-bottom: 1px solid #1f2937; background: #0f172a; position: sticky; top: 0; }
+    .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+    .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+    p { padding-left: 10px; }
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #090909; min-height: 16.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #001da4}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #116d12}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #090909}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #797979}
+    span.s1 {color: #001da4}
+    span.s2 {color: #090909}
+    span.s3 {color: #000000}
+    span.s4 {color: #720082}
+    span.s5 {color: #0a4f67}
+    span.s6 {color: #797979}
+    span.s7 {color: #1233e6}
+    span.s8 {color: #116d12}
+  </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Add footnotes using iText (Java)</header>
+<p class="p1"><span class="s1">package </span>com.itextpdf.samples.sandbox.layout<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.colors.ColorConstants<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.colors.DeviceRgb<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.pdf.PdfDocument<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.pdf.PdfWriter<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.Document<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.Style<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.borders.SolidBorder<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.element.Paragraph<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.properties.margins.<span class="s2">*;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">import </span>java.io.IOException<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p3">public class <span class="s3">Footnotes </span><span class="s2">{</span></p>
+<p class="p4"><span class="s2"><span>    </span></span><span class="s1">public static final </span><span class="s3">String </span><span class="s4"><i>DEST </i></span><span class="s2">= </span>"./target/sandbox/layout/footnotes.pdf"<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p3"><span class="s2"><span>    </span></span>public static void <span class="s5">main</span><span class="s2">(</span><span class="s3">String args</span><span class="s2">[]) </span>throws <span class="s3">IOException </span><span class="s2">{</span></p>
+<p class="p5"><span>        </span><span class="s1">try </span>(<span class="s3">PdfDocument pdfDoc </span>= <span class="s1">new </span>PdfDocument(<span class="s1">new </span>PdfWriter(<span class="s4"><i>DEST</i></span>));</p>
+<p class="p5"><span>             </span><span class="s3">Document doc </span>= <span class="s1">new </span>Document(<span class="s3">pdfDoc</span>)) {</p>
+<p class="p6"><span class="s2"><span>            </span></span><i>// Configure automatic numbering (i, ii, iii, ...) resetting on each page and styles.</i></p>
+<p class="p5"><span class="s6"><i><span>            </span></i></span><span class="s3">doc</span>.setFootnotesProperties(<span class="s1">new </span>FootnotesProperties()</p>
+<p class="p5"><span>                    </span>.setFootnoteNumberingType(<span class="s3">FootnoteNumberingType</span>.<span class="s4"><i>ROMAN_LOWER</i></span>)</p>
+<p class="p5"><span>                    </span>.setFootnoteNumberingConfig(<span class="s3">FootnoteNumberingConfig</span>.<span class="s4"><i>PER_PAGE</i></span>)</p>
+<p class="p5"><span>                    </span>.setFootnotesContainerStyle(<span class="s1">new </span>Style()</p>
+<p class="p5"><span>                            </span>.setBorderTop(<span class="s1">new </span>SolidBorder(<span class="s3">ColorConstants</span>.<span class="s4"><i>LIGHT_GRAY</i></span>, <span class="s7">1</span>))</p>
+<p class="p5"><span>                            </span>.setBackgroundColor(<span class="s1">new </span>DeviceRgb(<span class="s7">250</span>, <span class="s7">250</span>, <span class="s7">250</span>))</p>
+<p class="p5"><span>                            </span>.setPaddingTop(<span class="s7">8</span>)));</p>
+<p class="p2"><br></p>
+<p class="p4"><span class="s2"><span>            </span></span><span class="s3">Footnote fn1 </span><span class="s2">= </span><span class="s1">new </span><span class="s2">Footnote(</span>"Coffee was first cultivated in Ethiopia."<span class="s2">);</span></p>
+<p class="p4"><span class="s2"><span>            </span></span><span class="s3">Footnote fn2 </span><span class="s2">= </span><span class="s1">new </span><span class="s2">Footnote(</span>"Decaffeination removes at least 97% of caffeine."<span class="s2">);</span></p>
+<p class="p4"><span class="s2"><span>            </span></span><span class="s3">Footnote fn3 </span><span class="s2">= </span><span class="s1">new </span><span class="s2">Footnote(</span>"Arabica and Robusta are the most important species."<span class="s2">);</span></p>
+<p class="p2"><br></p>
+<p class="p5"><span>            </span><span class="s3">doc</span>.add(<span class="s1">new </span>Paragraph()</p>
+<p class="p5"><span>                    </span>.add(<span class="s8">"Coffee"</span>).add(<span class="s1">new </span>FootnoteAnchor(<span class="s3">fn1</span>))</p>
+<p class="p5"><span>                    </span>.add(<span class="s8">" is widely consumed. Some prefer decaffeinated"</span>).add(<span class="s1">new </span>FootnoteAnchor(<span class="s3">fn2</span>))</p>
+<p class="p4"><span class="s2"><span>                    </span>.add(</span>" for the taste without the stimulant effect."<span class="s2">)</span></p>
+<p class="p5"><span>                    </span>.setMarginBottom(<span class="s7">15</span>));</p>
+<p class="p5"><span>            </span><span class="s3">doc</span>.add(<span class="s1">new </span>Paragraph()</p>
+<p class="p5"><span>                    </span>.add(<span class="s8">"There are dozens of coffee species"</span>).add(<span class="s1">new </span>FootnoteAnchor(<span class="s3">fn3</span>))</p>
+<p class="p4"><span class="s2"><span>                    </span>.add(</span>", but only a few are grown at commercial scale."<span class="s2">));</span></p>
+<p class="p5"><span>        </span>}</p>
+<p class="p5"><span>    </span>}</p>
+<p class="p5">}</p>
+<p class="p2"><br></p>
+</section>
+</main>
+</body>
+</html>

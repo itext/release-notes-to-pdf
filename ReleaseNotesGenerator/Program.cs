@@ -280,7 +280,7 @@ namespace ReleaseNotesGenerator {
             AddDynamicMarginsAndWebPImage(document);
 
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
-            lcg.AddCodeSample("validation-sample", "Signature validation example");
+            lcg.AddCodeSample("footnotes-sample", "Footnotes example");
 
             // Update document info.
             var info = pdfDocument.GetDocumentInfo();

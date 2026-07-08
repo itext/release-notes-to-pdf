@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>C# Code — Syntax Highlighted</title>
+  <style>
+    body { margin: 0; background: #FFFFFF; }
+    .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+    .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+    p { padding-left: 10px; }
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #0e3acc}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #5714ac}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #2a2a2a; min-height: 16.0px}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #795932}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #2a2a2a}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #207703}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; color: #0f744d}
+    span.s1 {color: #5714ac}
+    span.s2 {color: #2a2a2a}
+    span.s3 {color: #0e3acc}
+    span.s4 {color: #828282}
+    span.s5 {color: #118290}
+    span.s6 {color: #207703}
+    span.s7 {color: #0f744d}
+    span.s8 {color: #230060}
+    span.s9 {color: #991a58}
+    span.s10 {color: #795932}
+  </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Add footnotes using iText (C#)</header>
+<p class="p3"><br></p>
+<p class="p1">using <span class="s1">System</span><span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Colors<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Pdf<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">.</span>Borders<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">.</span>Element<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">.</span>Properties<span class="s2">.</span>Margins<span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p2"><span class="s3">namespace </span>iText<span class="s2">.</span>Samples<span class="s2">.</span>Sandbox<span class="s2">.</span>Layout <span class="s2">{</span></p>
+<p class="p1"><span class="s2"><span>    </span></span>public class <span class="s4">Footnotes </span><span class="s2">{</span></p>
+<p class="p4"><span class="s2"><span>        </span></span><span class="s3">public static readonly string </span><span class="s5">DEST </span><span class="s2">= </span>"results/sandbox/layout/footnotes.pdf"<span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p1"><span class="s2"><span>        </span></span>public static void <span class="s4">Main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s4">args</span><span class="s2">) {</span></p>
+<p class="p2"><span class="s2"><span>            </span></span><span class="s3">using </span><span class="s2">(</span>PdfDocument <span class="s2">pdfDoc = </span><span class="s3">new </span>PdfDocument<span class="s2">(</span><span class="s3">new </span>PdfWriter<span class="s2">(</span><span class="s5">DEST</span><span class="s2">)))</span></p>
+<p class="p5"><span>            </span><span class="s3">using </span>(<span class="s1">Document </span>doc = <span class="s3">new </span><span class="s1">Document</span>(pdfDoc)) {</p>
+<p class="p6"><span class="s2"><span>                </span></span><i>// Configure automatic numbering (i, ii, iii, ...) resetting on each page and styles.</i></p>
+<p class="p7"><span class="s6"><i><span>                </span></i></span><span class="s2">doc.</span>SetFootnotesProperties<span class="s2">(</span><span class="s3">new </span><span class="s1">FootnotesProperties</span><span class="s2">()</span></p>
+<p class="p5"><span>                    </span>.<span class="s7">SetFootnoteNumberingType</span>(<span class="s8">FootnoteNumberingType</span>.<span class="s5"><b>ROMAN_LOWER</b></span>)</p>
+<p class="p7"><span class="s2"><span>                    </span>.</span>SetFootnoteNumberingConfig<span class="s2">(</span><span class="s8">FootnoteNumberingConfig</span><span class="s2">.</span><span class="s5"><b>PER_PAGE</b></span><span class="s2">)</span></p>
+<p class="p7"><span class="s2"><span>                    </span>.</span>SetFootnotesContainerStyle<span class="s2">(</span><span class="s3">new </span><span class="s1">Style</span><span class="s2">()</span></p>
+<p class="p5"><span>                        </span>.<span class="s7">SetBorderTop</span>(<span class="s3">new </span><span class="s1">SolidBorder</span>(<span class="s1">ColorConstants</span>.<span class="s5">LIGHT_GRAY</span>, <span class="s9">1</span>))</p>
+<p class="p5"><span>                        </span>.<span class="s7">SetBackgroundColor</span>(<span class="s3">new </span><span class="s1">DeviceRgb</span>(<span class="s9">250</span>, <span class="s9">250</span>, <span class="s9">250</span>))</p>
+<p class="p5"><span>                        </span>.<span class="s7">SetPaddingTop</span>(<span class="s9">8</span>)));</p>
+<p class="p3"><br></p>
+<p class="p4"><span class="s2"><span>                </span></span><span class="s1">Footnote </span><span class="s2">fn1 = </span><span class="s3">new </span><span class="s1">Footnote</span><span class="s2">(</span>"Coffee was first cultivated in Ethiopia."<span class="s2">);</span></p>
+<p class="p4"><span class="s2"><span>                </span></span><span class="s1">Footnote </span><span class="s2">fn2 = </span><span class="s3">new </span><span class="s1">Footnote</span><span class="s2">(</span>"Decaffeination removes at least 97% of caffeine."<span class="s2">);</span></p>
+<p class="p4"><span class="s2"><span>                </span></span><span class="s1">Footnote </span><span class="s2">fn3 = </span><span class="s3">new </span><span class="s1">Footnote</span><span class="s2">(</span>"Arabica and Robusta are the most important species."<span class="s2">);</span></p>
+<p class="p3"><br></p>
+<p class="p5"><span>                </span>doc.<span class="s7">Add</span>(<span class="s3">new </span><span class="s1">Paragraph</span>()</p>
+<p class="p5"><span>                    </span>.<span class="s7">Add</span>(<span class="s10">"Coffee"</span>)</p>
+<p class="p5"><span>                    </span>.<span class="s7">Add</span>(<span class="s3">new </span><span class="s1">FootnoteAnchor</span>(fn1))</p>
+<p class="p4"><span class="s2"><span>                    </span>.</span><span class="s7">Add</span><span class="s2">(</span>" is widely consumed. Some prefer decaffeinated"<span class="s2">)</span></p>
+<p class="p5"><span>                    </span>.<span class="s7">Add</span>(<span class="s3">new </span><span class="s1">FootnoteAnchor</span>(fn2))</p>
+<p class="p4"><span class="s2"><span>                    </span>.</span><span class="s7">Add</span><span class="s2">(</span>" for the taste without the stimulant effect."<span class="s2">)</span></p>
+<p class="p5"><span>                    </span>.<span class="s7">SetMarginBottom</span>(<span class="s9">15</span>));</p>
+<p class="p5"><span>                </span>doc.<span class="s7">Add</span>(<span class="s3">new </span><span class="s1">Paragraph</span>()</p>
+<p class="p4"><span class="s2"><span>                    </span>.</span><span class="s7">Add</span><span class="s2">(</span>"There are dozens of coffee species"<span class="s2">)</span></p>
+<p class="p5"><span>                    </span>.<span class="s7">Add</span>(<span class="s3">new </span><span class="s1">FootnoteAnchor</span>(fn3))</p>
+<p class="p4"><span class="s2"><span>                    </span>.</span><span class="s7">Add</span><span class="s2">(</span>", but only a few are grown at commercial scale."<span class="s2">));</span></p>
+<p class="p5"><span>            </span>}</p>
+<p class="p5"><span>        </span>}</p>
+<p class="p5"><span>    </span>}</p>
+<p class="p5">}</p>
+<p class="p3"><br></p>
+</section>
+</main>
+</body>
+</html>
