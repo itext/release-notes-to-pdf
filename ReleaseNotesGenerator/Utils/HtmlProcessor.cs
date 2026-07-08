@@ -99,13 +99,20 @@ namespace ReleaseNotesGenerator.Utils {
         private static bool IsUnwantedNode(HtmlNode node) {
             // Keep only the main article header; remove other headers.
             if (string.Equals(node.Name, "header", StringComparison.Ordinal) &&
-                !string.Equals(node.GetAttributeValue("class", ""), "article-header", StringComparison.Ordinal)) {
+                !string.Equals(node.ParentNode.Name, "article", StringComparison.Ordinal)) {
                 return true;
             }
 
             if (string.Equals(node.Name, "footer", StringComparison.Ordinal) ||
                 string.Equals(node.Name, "script", StringComparison.Ordinal) ||
-                string.Equals(node.Name, "nav", StringComparison.Ordinal)) {
+                string.Equals(node.Name, "nav", StringComparison.Ordinal) ||
+                string.Equals(node.Name, "theme-breadcrumbs", StringComparison.Ordinal) ||
+                string.Equals(node.Name, "theme-navigator", StringComparison.Ordinal) ||
+                string.Equals(node.Name, "i18n-message", StringComparison.Ordinal)) {
+                return true;
+            }
+            
+            if (string.Equals(node.Name, "div", StringComparison.Ordinal) && HasClass(node, "topbar")) {
                 return true;
             }
 
@@ -116,20 +123,12 @@ namespace ReleaseNotesGenerator.Utils {
 
             // class="..." comparisons should be token-based (order-insensitive and tolerant to extra classes)
             if (string.Equals(node.Name, "button", StringComparison.Ordinal) &&
-                HasClass(node, "vp-a11y-skip-trigger") &&
-                HasClass(node, "vp-js-a11y-navigation-toggle")) {
+                HasClass(node, "header-nav-toggle") &&
+                HasClass(node, "drawer-toggle")) {
                 return true;
             }
 
-            if (string.Equals(node.Name, "div", StringComparison.Ordinal) && HasClass(node, "vp-error-log")) {
-                return true;
-            }
-
-            if (string.Equals(node.Name, "div", StringComparison.Ordinal) && HasClassContaining(node, "table-overlay")) {
-                return true;
-            }
-
-            if (string.Equals(node.Name, "vp-a11y-skip-controller", StringComparison.Ordinal)) {
+            if (string.Equals(node.Name, "a", StringComparison.Ordinal) && HasClass(node, "skip-link")) {
                 return true;
             }
 
@@ -184,7 +183,7 @@ namespace ReleaseNotesGenerator.Utils {
         }
 
         private void InsertIdForContributorsTable(string version) {
-            var h2 = htmlDocument.DocumentNode.SelectSingleNode($"//h2[@id='ReleaseiTextCore{version}-Contributors']");
+            var h2 = htmlDocument.DocumentNode.SelectSingleNode($"//h2[@id='Contributors']");
             if (h2 == null) {
                 throw new InvalidOperationException("Target h2 not found.");
             }

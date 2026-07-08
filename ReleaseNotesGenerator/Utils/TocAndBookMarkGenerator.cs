@@ -40,20 +40,20 @@ namespace ReleaseNotesGenerator.Utils {
     /// (bookmarks). It only sets the outline root title.
     /// </summary>
     public class TocAndBookMarkGenerator {
-        private readonly HtmlDocument htmDocument;
+        private readonly HtmlDocument htmlDocument;
         private readonly PdfDocument pdfDocument;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TocAndBookMarkGenerator"/> class.
         /// </summary>
-        /// <param name="htmDocument">
+        /// <param name="htmlDocument">
         /// The HTML document that will be modified in-place (IDs, injected TOC nodes, and injected CSS).
         /// </param>
         /// <param name="pdfDocument">
         /// The target PDF document used for outline (bookmark) metadata updates.
         /// </param>
-        public TocAndBookMarkGenerator(HtmlDocument htmDocument, PdfDocument pdfDocument) {
-            this.htmDocument = htmDocument;
+        public TocAndBookMarkGenerator(HtmlDocument htmlDocument, PdfDocument pdfDocument) {
+            this.htmlDocument = htmlDocument;
             this.pdfDocument = pdfDocument;
         }
 
@@ -72,7 +72,7 @@ namespace ReleaseNotesGenerator.Utils {
         /// </remarks>
         public void AddTocAndBookmarks()
         {
-            var tocElements = htmDocument.DocumentNode.SelectNodes("//h2 | //h1 | //h3 | //h4");
+            var tocElements = htmlDocument.DocumentNode.SelectNodes("//h2 | //h1 | //h3 | //h4");
             if (tocElements == null || tocElements.Count == 0) {
                 return;
             }
@@ -93,10 +93,10 @@ namespace ReleaseNotesGenerator.Utils {
             var tableOfContentsTitle = "Table of Contents";
 
             var tocTitleNode =
-                new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "h2", InnerHtml = tableOfContentsTitle };
-            htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(3, tocTitleNode);
+                new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "h2", InnerHtml = tableOfContentsTitle };
+            htmlDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(3, tocTitleNode);
 
-            var tocTableNode = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "table" };
+            var tocTableNode = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "table" };
             tocTableNode.SetAttributeValue(TagConstants.STYLE, "width: 100%; border: none; border-collapse: collapse; page-break-after: always;");
 
             var outlinesRoot = pdfDocument.GetOutlines(false);
@@ -111,14 +111,14 @@ namespace ReleaseNotesGenerator.Utils {
                     node.Id = Guid.NewGuid().ToString();
                 }
 
-                var tocRow = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "tr" };
+                var tocRow = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "tr" };
                 tocRow.SetAttributeValue("data-toc-id", node.Id);
                 tocRow.SetAttributeValue(TagConstants.STYLE, "border: none;");
 
-                var titleCell = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "td" };
+                var titleCell = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "td" };
                 titleCell.SetAttributeValue(TagConstants.STYLE, "border: none;");
 
-                var titleLink = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = "a", InnerHtml = node.InnerText };
+                var titleLink = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = "a", InnerHtml = node.InnerText };
                 titleLink.SetAttributeValue(AttributeConstants.HREF, "#" + node.Id);
 
                 if (TagConstants.H3.Equals(node.Name) || "h4".Equals(node.Name)) {
@@ -128,13 +128,13 @@ namespace ReleaseNotesGenerator.Utils {
                 titleCell.AppendChild(titleLink);
                 tocRow.AppendChild(titleCell);
 
-                var pageCell = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = TagConstants.TD };
+                var pageCell = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = TagConstants.TD };
                 pageCell.SetAttributeValue(TagConstants.STYLE, "border: none; text-align: right;");
 
-                var pageLink = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = TagConstants.A };
+                var pageLink = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = TagConstants.A };
                 pageLink.SetAttributeValue(AttributeConstants.HREF, "#" + node.Id);
 
-                var pageRef = new HtmlNode(HtmlNodeType.Element, htmDocument, -1) { Name = TagConstants.SPAN };
+                var pageRef = new HtmlNode(HtmlNodeType.Element, htmlDocument, -1) { Name = TagConstants.SPAN };
                 pageRef.SetAttributeValue(CommonAttributeConstants.CLASS, "toc-page-ref");
 
                 pageLink.AppendChild(pageRef);
@@ -144,8 +144,8 @@ namespace ReleaseNotesGenerator.Utils {
                 tocTableNode.AppendChild(tocRow);
             }
 
-            htmDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(4, tocTableNode);
-            htmDocument.DocumentNode.SelectSingleNode("//head")
+            htmlDocument.DocumentNode.SelectSingleNode("//body")?.ChildNodes.Insert(4, tocTableNode);
+            htmlDocument.DocumentNode.SelectSingleNode("//head")
                 ?.ChildNodes.Insert(0, HtmlNode.CreateNode("<style>\n\n " + tocStyles + "</style>"));
         }
     }

@@ -8,7 +8,7 @@
         border-collapse: collapse;
     }
 
-    .panel-macro {
+    .panel-content {
         border-left: 4.5pt solid #fe9132;
         padding-left: 11.95pt;
         vertical-align: top;
@@ -41,30 +41,27 @@
     }
 
     h1, h2, h3, h4 {
-        margin-top: 36pt;
         margin-bottom: 6pt;
         page-break-inside: avoid;
         page-break-after: avoid;
     }
 
-    h1, h2, h3 {
+    h1, h2 {
+        margin-top: 36pt;
         font-size: 14pt;
         color: #0f4761;
     }
 
-    h4 {
-        font-size: 11.5pt;
-        /*color: #0f4761;*/
-        color: #fe9132;
+    h3 {
+        margin-top: 18pt;
+        font-size: 13pt;
+        color: #0f4761;
     }
 
-    ul:nth-of-type(1),
-    ul:nth-of-type(2) {
-        padding-top: 14.2pt;
-        padding-bottom: 14.2pt;
-        padding-left: 100pt;
-        background-color: #e8eff6;
-        list-style-type: none;
+    h4 {
+        margin-top: 18pt;
+        font-size: 11.5pt;
+        color: #fe9132;
     }
 
     li > p {
@@ -78,12 +75,13 @@
         display: none;
     }
 
-    #ReleasepdfXFAVERSION-Downloads + .table-wrap td,
-    #ReleasepdfSweepVERSION-Downloads + .table-wrap td,
-    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap td,
-    #ReleasepdfOCRVERSION-Downloads + .table-wrap td,
-    #ReleasepdfHTMLVERSION-Downloads + .table-wrap td,
-    #ReleaseiTextCoreVERSION-Downloads + .table-wrap td,
+    #Downloads + .theme-table td,
+    #ReleasepdfXFAVERSION-Downloads + .theme-table td,
+    #ReleasepdfSweepVERSION-Downloads + .theme-table td,
+    #ReleasepdfOptimizerVERSION-Downloads + .theme-table td,
+    #ReleasepdfOCRVERSION-Downloads + .theme-table td,
+    #ReleasepdfHTMLVERSION-Downloads + .theme-table td,
+    #ReleaseiTextCoreVERSION-Downloads + .theme-table td,
     #DigitalSignaturesHub-Videos\/Webinars + .sectionColumnWrapper td,
     #DigitalSignaturesHub-Articles\/Tutorials + .sectionColumnWrapper td,
     #DigitalSignaturesHub-Resources + .sectionColumnWrapper td,
@@ -99,32 +97,35 @@
         vertical-align: middle;
     }
 
-    #ReleasepdfXFAVERSION-Downloads + .table-wrap th,
-    #ReleasepdfSweepVERSION-Downloads + .table-wrap th,
-    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap th,
-    #ReleasepdfOCRVERSION-Downloads + .table-wrap th,
-    #ReleasepdfHTMLVERSION-Downloads + .table-wrap th,
-    #ReleaseiTextCoreVERSION-Downloads + .table-wrap th
+    #Downloads + .theme-table th,
+    #ReleasepdfXFAVERSION-Downloads + .theme-table th,
+    #ReleasepdfSweepVERSION-Downloads + .theme-table th,
+    #ReleasepdfOptimizerVERSION-Downloads + .theme-table th,
+    #ReleasepdfOCRVERSION-Downloads + .theme-table th,
+    #ReleasepdfHTMLVERSION-Downloads + .theme-table th,
+    #ReleaseiTextCoreVERSION-Downloads + .theme-table th
     {
         border: 0.75pt solid #e8eff6;
     }
 
-    #ReleasepdfXFAVERSION-Downloads + .table-wrap tr:first-child th:first-child,
-    #ReleasepdfSweepVERSION-Downloads + .table-wrap tr:first-child th:first-child,
-    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap tr:first-child th:first-child,
-    #ReleasepdfOCRVERSION-Downloads + .table-wrap tr:first-child th:first-child,
-    #ReleasepdfHTMLVERSION-Downloads + .table-wrap tr:first-child th:first-child,
-    #ReleaseiTextCoreVERSION-Downloads + .table-wrap tr:first-child th:first-child
+    #Downloads + .theme-table tr:first-child th:first-child,
+    #ReleasepdfXFAVERSION-Downloads + .theme-table tr:first-child th:first-child,
+    #ReleasepdfSweepVERSION-Downloads + .theme-table tr:first-child th:first-child,
+    #ReleasepdfOptimizerVERSION-Downloads + .theme-table tr:first-child th:first-child,
+    #ReleasepdfOCRVERSION-Downloads + .theme-table tr:first-child th:first-child,
+    #ReleasepdfHTMLVERSION-Downloads + .theme-table tr:first-child th:first-child,
+    #ReleaseiTextCoreVERSION-Downloads + .theme-table tr:first-child th:first-child
     {
         border: none;
     }
 
-    #ReleasepdfXFAVERSION-Downloads + .table-wrap tr:last-child td,
-    #ReleasepdfSweepVERSION-Downloads + .table-wrap tr:last-child td,
-    #ReleasepdfOptimizerVERSION-Downloads + .table-wrap tr:last-child td,
-    #ReleasepdfOCRVERSION-Downloads + .table-wrap tr:last-child td,
-    #ReleasepdfHTMLVERSION-Downloads + .table-wrap tr:last-child td,
-    #ReleaseiTextCoreVERSION-Downloads + .table-wrap tr:last-child td,
+    #Downloads + .theme-table tr:last-child td,
+    #ReleasepdfXFAVERSION-Downloads + .theme-table tr:last-child td,
+    #ReleasepdfSweepVERSION-Downloads + .theme-table tr:last-child td,
+    #ReleasepdfOptimizerVERSION-Downloads + .theme-table tr:last-child td,
+    #ReleasepdfOCRVERSION-Downloads + .theme-table tr:last-child td,
+    #ReleasepdfHTMLVERSION-Downloads + .theme-table tr:last-child td,
+    #ReleaseiTextCoreVERSION-Downloads + .theme-table tr:last-child td,
     #DigitalSignaturesHub-Videos\/Webinars + .sectionColumnWrapper tr:last-child td,
     #DigitalSignaturesHub-Articles\/Tutorials + .sectionColumnWrapper tr:last-child td,
     #DigitalSignaturesHub-Resources + .sectionColumnWrapper tr:last-child td,
@@ -134,8 +135,10 @@
         background-color: #f8fbff;
     }
 
-    #ReleaseiTextCoreVERSION-Changelog + .table-wrap table,
-    #ReleaseiTextCoreVERSION-Changelog + .table-wrap td {
+    #Changelog + .theme-table table,
+    #Changelog + .theme-table td,
+    #ReleaseiTextCoreVERSION-Changelog + .theme-table table,
+    #ReleaseiTextCoreVERSION-Changelog + .theme-table td {
         background-color: #f7e1ce !important;
         border-left: 4.5pt solid #fe9132;
         padding-top: 6pt;
@@ -144,13 +147,15 @@
         margin-bottom: 0;
     }
 
-    #ReleaseiTextCoreVERSION-Changelog + .table-wrap td h3 {
+    #Changelog + .theme-table td h3,
+    #ReleaseiTextCoreVERSION-Changelog + .theme-table td h3 {
         margin-top: 6pt;
         margin-bottom: 6pt;
         font-size: 12pt;
     }
 
-    #ReleaseiTextCoreVERSION-Changelog + .table-wrap ul {
+    #Changelog + .theme-table ul,
+    #ReleaseiTextCoreVERSION-Changelog + .theme-table ul {
         padding-top: 6pt;
         padding-bottom: 6pt;
         padding-left: 20pt;
