@@ -133,7 +133,7 @@ namespace ReleaseNotesGenerator {
                 "sRGB IEC61964-2.1", iccStream
             );
             var writerProperties = new WriterProperties().SetPdfVersion(PdfVersion.PDF_2_0);
-            var pdfDocument = new PdfADocument(new PdfWriter(FileName, writerProperties), PdfAConformance.PDF_A_4F, outputIntent);
+            var pdfDocument = new UniqueHandlerInstancePdfADocument(new PdfWriter(FileName, writerProperties), PdfAConformance.PDF_A_4F, outputIntent);
 
             using var xmpStream = File.Open(Path.Combine(ResourceRootPath, "simplePdfUA2.xmp"), FileMode.Open, FileAccess.Read);
             var xmpMeta = XMPMetaFactory.Parse(xmpStream);
@@ -225,7 +225,7 @@ namespace ReleaseNotesGenerator {
                 .SetStandardEncryption(passWordBytes, passWordBytes, 0,
                     EncryptionConstants.ENCRYPTION_AES_256,
                     new MacProperties(MacProperties.MacDigestAlgorithm.SHA_256));
-            var pdfDocument = new PdfDocument(new PdfWriter(MacProtectedName, writerProperties));
+            var pdfDocument = new UniqueHandlerInstancePdfDocument(new PdfWriter(MacProtectedName, writerProperties));
             GeneratePdfFromHtml(pdfDocument);
             pdfDocument.Close();
         }
@@ -290,7 +290,6 @@ namespace ReleaseNotesGenerator {
 
             // If you keep layered code samples, ensure they also read resources via ResourceRootPath (see note below).
             document.Close();
-            pdfDocument.Close();
         }
 
         private static void AddDynamicMarginsFootnotesAndWebPImage(Document document) {
