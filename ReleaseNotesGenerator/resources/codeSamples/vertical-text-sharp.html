@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Vertical text C# example</title>
+  <style>
+    @font-face {
+      font-family: "Noto Sans JP";
+      src: url("../font/NotoSansCJKjp-Regular.otf");
+    }
+    body { margin: 0; background: #FFFFFF; }
+    header { padding: 20px 24px; border-bottom: 1px solid #1f2937; background: #0f172a; position: sticky; top: 0; }
+    .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+    .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+    p { padding-left: 10px; }
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #0e3acc}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #5714ac}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #2a2a2a; min-height: 16.0px}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #207703}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #795932}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #2a2a2a}
+    span.s1 {color: #5714ac}
+    span.s2 {color: #2a2a2a}
+    span.s3 {color: #0e3acc}
+    span.s4 {color: #207703}
+    span.s5 {color: #828282}
+    span.s6 {color: #118290}
+    span.s7 {color: #0f744d}
+    span.s8 {color: #80007d}
+    span.s9 {font: 13.0px 'PingFang SC'}
+    span.s10 {color: #795932}
+    span.s11 {font: 13.0px 'PingFang SC'; color: #795932}
+    span.s12 {font: 13.0px 'Apple SD Gothic Neo'; color: #795932}
+    span.s13 {color: #991a58}
+  </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Add vertical text using iText (C#)</header>
+<p class="p1">using <span class="s1">System</span><span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>IO<span class="s2">.</span>Font<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Colors<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Font<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Kernel<span class="s2">.</span>Pdf<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">.</span>Element<span class="s2">;</span></p>
+<p class="p2"><span class="s3">using </span>iText<span class="s2">.</span>Layout<span class="s2">.</span>Renderer<span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p2"><span class="s3">namespace </span>iText<span class="s2">.</span>Samples<span class="s2">.</span>Sandbox<span class="s2">.</span>Layout <span class="s2">{</span></p>
+<p class="p4"><span class="s2"><span>    </span></span><i>// Example showing how to render text vertically using VerticalParagraph.</i></p>
+<p class="p4"><i><span>    </span>// Demonstrates both VERTICAL_LR and VERTICAL_RL, mixing English and CJK characters.</i></p>
+<p class="p1"><span class="s4"><i><span>    </span></i></span>public class <span class="s5">VerticalText </span><span class="s2">{</span></p>
+<p class="p5"><span class="s2"><span>        </span></span><span class="s3">public static readonly string </span><span class="s6">DEST </span><span class="s2">= </span>"results/sandbox/layout/verticalText.pdf"<span class="s2">;</span></p>
+<p class="p5"><span class="s2"><span>        </span></span><span class="s3">public static readonly string </span><span class="s6">FONT </span><span class="s2">= </span>"../../../resources/font/NotoSansCJKjp-Regular.otf"<span class="s2">;</span></p>
+<p class="p3"><br></p>
+<p class="p1"><span class="s2"><span>        </span></span>public static void <span class="s5">Main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s5">args</span><span class="s2">) {</span></p>
+<p class="p2"><span class="s2"><span>            </span></span><span class="s3">using </span><span class="s2">(</span>PdfDocument <span class="s2">pdfDoc = </span><span class="s3">new </span>PdfDocument<span class="s2">(</span><span class="s3">new </span>PdfWriter<span class="s2">(</span><span class="s6">DEST</span><span class="s2">))) {</span></p>
+<p class="p6"><span>                </span><span class="s3">using </span>(<span class="s1">Document </span>doc = <span class="s3">new </span><span class="s1">Document</span>(pdfDoc)) {</p>
+<p class="p6"><span>                    </span>doc.<span class="s7">SetFont</span>(<span class="s1">PdfFontFactory</span>.<span class="s7">CreateFont</span>(<span class="s6">FONT</span>, <span class="s1">PdfEncodings</span>.<span class="s6"><b>IDENTITY_H</b></span>));</p>
+<p class="p3"><br></p>
+<p class="p4"><span class="s2"><span>                    </span></span><i>// Left-to-right lines writing progression for vertical text.</i></p>
+<p class="p2"><span class="s4"><i><span>                    </span></i></span>VerticalParagraph <span class="s2">ltr = </span><span class="s3">new </span>VerticalParagraph<span class="s2">(</span><span class="s3">false</span><span class="s2">);</span></p>
+<p class="p5"><span class="s2"><span>                    </span>ltr.</span><span class="s7">Add</span><span class="s2">(</span>"VERTICAL_LR<span class="s8">\n</span>"<span class="s2">).</span><span class="s7">Add</span><span class="s2">(</span>"<span class="s9">左から右へ</span><span class="s8">\n</span>"<span class="s2">).</span><span class="s7">Add</span><span class="s2">(</span>"Columns: left to right.<span class="s8">\n</span>"<span class="s2">)</span></p>
+<p class="p6"><span>                        </span>.<span class="s7">Add</span>(<span class="s10">"</span><span class="s11">日本語・中文・</span><span class="s12">한국어</span><span class="s8">\n</span><span class="s10">"</span>);</p>
+<p class="p6"><span>                    </span>ltr.<span class="s7">SetFontSize</span>(<span class="s13">14</span>).<span class="s7">SetBackgroundColor</span>(<span class="s3">new </span><span class="s1">DeviceRgb</span>(<span class="s13">235</span>, <span class="s13">245</span>, <span class="s13">255</span>))</p>
+<p class="p6"><span>                        </span>.<span class="s7">SetFontColor</span>(<span class="s3">new </span><span class="s1">DeviceRgb</span>(<span class="s13">40</span>, <span class="s13">60</span>, <span class="s13">120</span>)).<span class="s7">SetHeight</span>(<span class="s13">400</span>).<span class="s7">SetMarginRight</span>(<span class="s13">30</span>);</p>
+<p class="p3"><br></p>
+<p class="p4"><span class="s2"><span>                    </span></span><i>// Right-to-left lines writing progression — standard for CJK vertical typography.</i></p>
+<p class="p2"><span class="s4"><i><span>                    </span></i></span>VerticalParagraph <span class="s2">rtl = </span><span class="s3">new </span>VerticalParagraph<span class="s2">(</span><span class="s3">true</span><span class="s2">);</span></p>
+<p class="p5"><span class="s2"><span>                    </span>rtl.</span><span class="s7">Add</span><span class="s2">(</span>"VERTICAL_RL<span class="s8">\n</span>"<span class="s2">).</span><span class="s7">Add</span><span class="s2">(</span>"<span class="s9">右から左へ</span><span class="s8">\n</span>"<span class="s2">).</span><span class="s7">Add</span><span class="s2">(</span>"Columns: right to left.<span class="s8">\n</span>"<span class="s2">)</span></p>
+<p class="p6"><span>                        </span>.<span class="s7">Add</span>(<span class="s10">"</span><span class="s11">日本語・中文・</span><span class="s12">한국어</span><span class="s8">\n</span><span class="s10">"</span>);</p>
+<p class="p6"><span>                    </span>rtl.<span class="s7">SetFontSize</span>(<span class="s13">14</span>).<span class="s7">SetBackgroundColor</span>(<span class="s3">new </span><span class="s1">DeviceRgb</span>(<span class="s13">235</span>, <span class="s13">250</span>, <span class="s13">238</span>))</p>
+<p class="p6"><span>                        </span>.<span class="s7">SetFontColor</span>(<span class="s3">new </span><span class="s1">DeviceRgb</span>(<span class="s13">20</span>, <span class="s13">100</span>, <span class="s13">60</span>)).<span class="s7">SetHeight</span>(<span class="s13">400</span>);<span>   </span></p>
+<p class="p3"><br></p>
+<p class="p6"><span>                    </span><span class="s1">Div </span>columns = <span class="s3">new </span><span class="s1">Div</span>().<span class="s7">Add</span>(ltr).<span class="s7">Add</span>(rtl);</p>
+<p class="p6"><span>                    </span>columns.<span class="s7">SetNextRenderer</span>(<span class="s3">new </span><span class="s1">FlexContainerRenderer</span>(columns));</p>
+<p class="p6"><span>                    </span>doc.<span class="s7">Add</span>(columns);</p>
+<p class="p6"><span>                </span>}</p>
+<p class="p6"><span>            </span>}</p>
+<p class="p6"><span>        </span>}</p>
+<p class="p6"><span>    </span>}</p>
+<p class="p6">}</p>
+<p class="p3"><br></p>
+</section>
+</main>
+</body>
+</html>

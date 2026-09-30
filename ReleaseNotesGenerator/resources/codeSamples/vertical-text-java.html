@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title>Vertical text Java example</title>
+  <style>
+    @font-face {
+      font-family: "Noto Sans JP";
+      src: url("../font/NotoSansCJKjp-Regular.otf");
+    }
+    body { margin: 0; background: #FFFFFF; }
+    header { padding: 20px 24px; border-bottom: 1px solid #1f2937; background: #0f172a; position: sticky; top: 0; }
+    .container { max-width: 1100px; padding: 24px; margin: 0 auto; }
+    .card { background: #ffffff; border: 1px solid #1f2937; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .card header { position: initial; background: transparent; border-bottom: 1px solid #1f2937; padding: 8px 12px; font-size: 9px; color: #116d12; }
+    p { padding-left: 10px; }
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #090909; min-height: 16.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #797979}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #001da4}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #116d12}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px "Noto Sans JP"; color: #090909}
+    span.s1 {color: #001da4}
+    span.s2 {color: #090909}
+    span.s3 {color: #000000}
+    span.s4 {color: #720082}
+    span.s5 {color: #0a4f67}
+    span.s6 {color: #797979}
+    span.s7 {color: #022295}
+    span.s8 {color: #1233e6}
+  </style>
+</head>
+<body>
+<main class="container">
+<section class="card">
+<header>Addendum: Add vertical text using iText (Java)</header>
+<p class="p1"><span class="s1">package </span>com.itextpdf.samples.sandbox.layout<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.colors.DeviceRgb<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.font.PdfFontFactory<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.kernel.pdf.PdfDocument<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.element.Div<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.element.VerticalParagraph<span class="s2">;</span></p>
+<p class="p1"><span class="s1">import </span>com.itextpdf.layout.renderer.FlexContainerRenderer<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p3"><i>/*</i></p>
+<p class="p3"><i><span> </span>* Example showing how to render text vertically using VerticalParagraph.</i></p>
+<p class="p3"><i><span> </span>* Demonstrates both VERTICAL_LR and VERTICAL_RL, mixing English and CJK characters.</i></p>
+<p class="p3"><i><span> </span>*/</i></p>
+<p class="p4">public class <span class="s3">VerticalText </span><span class="s2">{</span></p>
+<p class="p5"><span class="s2"><span>    </span></span><span class="s1">public static final </span><span class="s3">String </span><span class="s4"><i>DEST </i></span><span class="s2">= </span>"./target/sandbox/layout/verticalText.pdf"<span class="s2">;</span></p>
+<p class="p5"><span class="s2"><span>    </span></span><span class="s1">public static final </span><span class="s3">String </span><span class="s4"><i>FONT </i></span><span class="s2">= </span>"./src/main/resources/font/NotoSansCJKjp-Regular.otf"<span class="s2">;</span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="s2"><span>    </span></span><span class="s1">public static void </span><span class="s5">main</span><span class="s2">(</span>String args<span class="s2">[]) </span><span class="s1">throws </span>java.io.IOException <span class="s2">{</span></p>
+<p class="p1"><span class="s2"><span>        </span></span><span class="s1">try </span><span class="s2">(</span>PdfDocument pdfDoc <span class="s2">= </span><span class="s1">new </span><span class="s2">PdfDocument(</span><span class="s1">new </span>com.itextpdf.kernel.pdf.<span class="s2">PdfWriter(</span><span class="s4"><i>DEST</i></span><span class="s2">));</span></p>
+<p class="p1"><span class="s2"><span>             </span></span>com.itextpdf.layout.Document doc <span class="s2">= </span><span class="s1">new </span>com.itextpdf.layout.<span class="s2">Document(</span>pdfDoc<span class="s2">)) {</span></p>
+<p class="p1"><span class="s2"><span>            </span></span>doc<span class="s2">.setFont(</span>PdfFontFactory<span class="s2">.<i>createFont</i>(</span><span class="s4"><i>FONT</i></span><span class="s2">, </span>com.itextpdf.io.font.PdfEncodings<span class="s2">.</span><span class="s4"><i>IDENTITY_H</i></span><span class="s2">));</span></p>
+<p class="p2"><br></p>
+<p class="p3"><span class="s2"><span>            </span></span><i>// Left-to-right lines writing progression for vertical text.</i></p>
+<p class="p6"><span class="s6"><i><span>            </span></i></span><span class="s3">VerticalParagraph ltr </span>= <span class="s1">new </span>VerticalParagraph(<span class="s1">false</span>);</p>
+<p class="p5"><span class="s2"><span>            </span></span><span class="s3">ltr</span><span class="s2">.add(</span>"VERTICAL_LR<span class="s7">\n</span>"<span class="s2">).add(</span>"左から右へ<span class="s7">\n</span>"<span class="s2">).add(</span>"Columns: left to right.<span class="s7">\n</span>"<span class="s2">)</span></p>
+<p class="p6"><span>                    </span>.add(<span class="s8">"日本語・中文・한국어</span><span class="s7">\n</span><span class="s8">"</span>);</p>
+<p class="p6"><span>            </span><span class="s3">ltr</span>.setFontSize(<span class="s9">14</span>).setBackgroundColor(<span class="s1">new </span>DeviceRgb(<span class="s9">235</span>, <span class="s9">245</span>, <span class="s9">255</span>))</p>
+<p class="p6"><span>                    </span>.setFontColor(<span class="s1">new </span>DeviceRgb(<span class="s9">40</span>, <span class="s9">60</span>, <span class="s9">120</span>)).setHeight(<span class="s9">400</span>).setMarginRight(<span class="s9">30</span>);</p>
+<p class="p2"><br></p>
+<p class="p3"><span class="s2"><span>            </span></span><i>// Right-to-left lines writing progression — standard for CJK vertical typography.</i></p>
+<p class="p6"><span class="s6"><i><span>            </span></i></span><span class="s3">VerticalParagraph rtl </span>= <span class="s1">new </span>VerticalParagraph(<span class="s1">true</span>);</p>
+<p class="p5"><span class="s2"><span>            </span></span><span class="s3">rtl</span><span class="s2">.add(</span>"VERTICAL_RL<span class="s7">\n</span>"<span class="s2">).add(</span>"右から左へ<span class="s7">\n</span>"<span class="s2">).add(</span>"Columns: right to left.<span class="s7">\n</span>"<span class="s2">)</span></p>
+<p class="p6"><span>                    </span>.add(<span class="s8">"日本語・中文・한국어</span><span class="s7">\n</span><span class="s8">"</span>);</p>
+<p class="p6"><span>            </span><span class="s3">rtl</span>.setFontSize(<span class="s9">14</span>).setBackgroundColor(<span class="s1">new </span>DeviceRgb(<span class="s9">235</span>, <span class="s9">250</span>, <span class="s9">238</span>))</p>
+<p class="p6"><span>                    </span>.setFontColor(<span class="s1">new </span>DeviceRgb(<span class="s9">20</span>, <span class="s9">100</span>, <span class="s9">60</span>)).setHeight(<span class="s9">400</span>);</p>
+<p class="p2"><br></p>
+<p class="p6"><span>            </span><span class="s3">Div columns </span>= <span class="s1">new </span>Div().add(<span class="s3">ltr</span>).add(<span class="s3">rtl</span>);</p>
+<p class="p6"><span>            </span><span class="s3">columns</span>.setNextRenderer(<span class="s1">new </span>FlexContainerRenderer(<span class="s3">columns</span>));</p>
+<p class="p6"><span>            </span><span class="s3">doc</span>.add(<span class="s3">columns</span>);</p>
+<p class="p6"><span>        </span>}</p>
+<p class="p6"><span>    </span>}</p>
+<p class="p6">}</p>
+<p class="p2"><br></p>
+</section>
+</main>
+</body>
+</html>

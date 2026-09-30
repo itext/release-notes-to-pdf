@@ -292,7 +292,7 @@ namespace ReleaseNotesGenerator {
             var fontProvider = new BasicFontProvider(false, false, false);
 
             var fontsDir = Path.Combine(ResourceRootPath, "font");
-            Directory.GetFiles(fontsDir, "*.ttf")
+            Directory.GetFiles(fontsDir, "*.*tf")
                 .OrderBy(p => p, StringComparer.Ordinal)
                 .ToList()
                 .ForEach(file => fontProvider.AddFont(file));
@@ -336,7 +336,7 @@ namespace ReleaseNotesGenerator {
             document.Flush();
 
             var lcg = new LayeredCodeSamplesGenerator(pdfDocument, fontProvider, ResourceDirectory);
-            lcg.AddCodeSample("footnotes-sample", "Footnotes example");
+            lcg.AddCodeSample("vertical-text", "Vertical text example");
 
             // Update document info.
             var info = pdfDocument.GetDocumentInfo();
