@@ -1,54 +1,3 @@
-
-								
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
 <!DOCTYPE html>
 <html
 	lang="en"
@@ -79,19 +28,7 @@
 
 		<meta name="google-site-verification" content="l76ZT92e4rMF7de4SMhWmj1CmPOKwQcwx7awkQ9Rh_4"/>
 
-
-
 	<link rel="icon" href="../__site/c5e1dc6d-2579-4eb3-8143-3ef7361eb691/favicon-itextpdf.ico" type="image/svg+xml">
-
-
-
-
-
-
-
-
-
-
 
 		<title>Release iText Core 9.8.0 | iText Knowledge Base</title>
 		<meta property="og:title" content="Release iText Core 9.8.0 | iText Knowledge Base">
@@ -249,6 +186,32 @@
 					--theme-footer-background-color: #0a0b0c;
 			}
 		}
+    
+    .vert {
+          writing-mode: vertical-lr;
+          text-orientation: upright;
+          margin-block-start: 0;
+    }
+    .break-before {
+      page-break-before: always;
+    }
+    
+    .rot {
+          transform: rotate(10deg);
+          padding-top: 60px;
+          padding-bottom: 60px;
+    
+    }
+    
+    .flexrow {
+        display: flex;
+        gap: 16px;
+    }
+    .sidebox {
+        padding-right: 20px;
+        flex: 0 0 auto;
+    }
+    
 	</style>
 
 	 
@@ -2261,6 +2224,8 @@ aria-busy="true" aria-disabled="true"					></button>
   </copy-clipboard>
  </i18n-message></h4>
 <p>We are pleased to announce the release of iText Core 9.8.0. This release introduces support for vertical text layout and CJK writing modes, radial gradients and SVG mask support, and advanced SVG stroke properties. In addition, we’ve introduced a higher-level transformation API with more user-friendly affine transform capabilities in the Layout module, enhanced footnote navigation, critical security updates across key cryptographic and utility dependencies, and substantial performance and standards-conformance improvements.</p>
+
+
 <h2 id="Vertical-Text-Layout-&amp;-CJK-Writing-Modes"><span id="ReleaseiTextCore9.8.0-VerticalTextLayout&amp;amp;CJKWritingModes"></span>Vertical Text Layout &amp; CJK Writing Modes
  <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
   <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-core-9-8-0#Vertical-Text-Layout-&amp;amp;-CJK-Writing-Modes">
@@ -2269,9 +2234,17 @@ aria-busy="true" aria-disabled="true"					></button>
    </svg>
   </copy-clipboard>
  </i18n-message></h2>
+<div Class="flexrow">
+<p class="vert sidebox"><span>你好世界</span><br></br><span>こんにちは世界</span><br></br><span>안녕하세요, 여러분!</span><span></span></p>
+<div>
+
+
 <p>iText Core 9.8.0 introduces initial support for vertical writing modes in the Layout module, primarily aimed at CJK (Chinese, Japanese, and Korean) layouts. Whilst the implementation is not yet complete, the API has been finalized and supports line breaking, baseline adjustments, right-to-left vertical progression, accessibility tagging, and improved sizing behavior in tables, flex containers, inline blocks, and text renderers.</p>
 <p>The current implementation also covers word and character spacing, text alignment, overflow handling, text decorations, and text-rise behavior, with related pdfHTML alignment for CSS vertical writing modes.</p>
-<h2 id="Layout,-Rotations-&amp;-Transformations"><span id="ReleaseiTextCore9.8.0-Layout,Rotations&amp;amp;Transformations"></span>Layout, Rotations &amp; Transformations
+</div>
+</div>
+
+<h2 id="Layout,-Rotations-&amp;-Transformations" class="break-before"><span id="ReleaseiTextCore9.8.0-Layout,Rotations&amp;amp;Transformations"></span>Layout, Rotations &amp; Transformations
  <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
   <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-core-9-8-0#Layout,-Rotations-&amp;amp;-Transformations">
    <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
@@ -2279,7 +2252,7 @@ aria-busy="true" aria-disabled="true"					></button>
    </svg>
   </copy-clipboard>
  </i18n-message></h2>
-<p>The Layout module now includes more user-friendly affine transformation capabilities, with simplified API options for <code>Property.TRANSFORM</code> (<a href="https://api.itextpdf.com/iText/java/latest/com/itextpdf/layout/properties/Transform.html" data-scope="external" rel="external noreferrer">Java</a>/.<a href="https://api.itextpdf.com/iText/dotnet/latest/classi_text_1_1_layout_1_1_properties_1_1_transform.html" data-scope="external" rel="external noreferrer">NET</a>) . The release also resolves layout issues affecting rotated table cell sizing, content offsets, rotated page coordinates, and relative image positioning with borders.</p>
+<p class="rot">The Layout module now includes more user-friendly affine transformation capabilities, with simplified API options for <code>Property.TRANSFORM</code> (<a href="https://api.itextpdf.com/iText/java/latest/com/itextpdf/layout/properties/Transform.html" data-scope="external" rel="external noreferrer">Java</a>/.<a href="https://api.itextpdf.com/iText/dotnet/latest/classi_text_1_1_layout_1_1_properties_1_1_transform.html" data-scope="external" rel="external noreferrer">NET</a>) . The release also resolves layout issues affecting rotated table cell sizing, content offsets, rotated page coordinates, and relative image positioning with borders.</p>
 <h2 id="Advanced-SVG-&amp;-Graphics-Capabilities"><span id="ReleaseiTextCore9.8.0-AdvancedSVG&amp;amp;GraphicsCapabilities"></span>Advanced SVG &amp; Graphics Capabilities
  <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
   <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-core-9-8-0#Advanced-SVG-&amp;amp;-Graphics-Capabilities">
@@ -2528,7 +2501,7 @@ aria-busy="true" aria-disabled="true"					></button>
   <p>DEVSIX-10025, DEVSIX-10031 – Bi-directional clickable links between footnote anchors and bodies, with custom styling support for footnote anchors</p>
  </li>
 </ul>
-<h3 id="Improvements"><span id="ReleaseiTextCore9.8.0-Improvements"></span>Improvements
+<h3 id="Improvements" class="break-before"><span id="ReleaseiTextCore9.8.0-Improvements"></span>Improvements
  <i18n-message i18nkey="clipboard.copyLink.label" attribute="description">
   <copy-clipboard class="anchor-copy-button" value="https://kb.itextpdf.com/itext/release-itext-core-9-8-0#Improvements">
    <svg role="img" aria-hidden="true" data-component="icon" class="icon icon-link copy-headline-link-icon">
