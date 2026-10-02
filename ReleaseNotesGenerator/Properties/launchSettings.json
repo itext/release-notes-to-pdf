@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ReleaseNotesGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-l \"D:\\Source\\working\\java\\licensekey\\sharedLicenseFiles\\dev_all_products.json\" -n"
+    },
+    "withHelp": {
+      "commandName": "Project",
+      "commandLineArgs": "-?"
+    }
+  }
+}
