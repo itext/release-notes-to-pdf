@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ReleaseNotesGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-s"
+    },
+    "withHelp": {
+      "commandName": "Project",
+      "commandLineArgs": "-?"
+    }
+  }
+}
